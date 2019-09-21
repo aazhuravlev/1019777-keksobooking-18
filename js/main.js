@@ -12,16 +12,16 @@ var SIMILAR_PINS_TEMPLATE = document.querySelector('#pin')
 
 var getPins = function (quantity) {
   var pinsDesc = [];
-  var features = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
-  var photos = ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"];
+  var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+  var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
   for (var i = 0; i < quantity; i++) {
-    pins.push({
+    pinsDesc.push({
       author: {
-        avatar: 'img/avatars/user0' + [i+1] + '.png',
+        avatar: 'img/avatars/user0' + [i + 1] + '.png',
       },
       offer: {
         title: 'заголовок предложения',
-        adress: "600, 350",
+        adress: '600, 350',
         price: '1000',
         type: 'palace',
         rooms: '2',
