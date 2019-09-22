@@ -18,6 +18,16 @@ var SIMILAR_PINS_TEMPLATE = document.querySelector('#pin')
   .content
   .querySelector('.map__pin');
 
+var getRandomIntInclusive = function (min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+var getRandomItem = function (arr) {
+  return arr.splice(Math.floor(Math.random() * arr.length), 1);
+};
+
 var getPins = function (quantity) {
   var pinsDesc = [];
   for (var i = 0; i < quantity; i++) {
