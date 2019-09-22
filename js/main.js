@@ -1,17 +1,25 @@
 'use strict';
 
 var PINS_COUNT = 8;
-var AVATARS = ['img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png', 'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png', 'img/avatars/user07.png', 'img/avatars/user08.png'];
-var TITLES = ['title1', 'title2', 'title3', 'title4', 'title5', 'title6', 'title7', 'title8'];
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var CHECKIN_OUT = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var DESCRIPTIONS = ['description1', 'description2', 'description3', 'description4', 'description5', 'description6', 'description7', 'description8'];
-var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
 var MAP = document.querySelector('.map');
-MAP.classList.remove('map--faded');
 var PINS = document.querySelector('.map__pins');
+
+var createList = function (quantity, part1, part2) {
+  var arr = [];
+  for (var i = 0; i < quantity; i++) {
+    arr[i] = part1 + (i + 1) + part2;
+  }
+  return arr;
+};
+
+var AVATARS = createList(PINS_COUNT, 'img/avatars/user0', '.png');
+var TITLES = createList(PINS_COUNT, 'title', '');
+var DESCRIPTIONS = createList(PINS_COUNT, 'description', '');
+var PHOTOS = createList(PINS_COUNT, 'http://o0.github.io/assets/images/tokyo/hotel', '.jpg');
 
 var SIMILAR_PINS_TEMPLATE = document.querySelector('#pin')
   .content
@@ -73,7 +81,7 @@ var getLocation = function (arr) {
   return 'left: ' + arr.location.x + ';' + ' top: ' + arr.location.y + ';';
 };
 
-var renderPins = function (arr) {
+var preparePin = function (arr) {
   var pinElement = SIMILAR_PINS_TEMPLATE.cloneNode(true);
 
   pinElement.setAttribute('style', getLocation(arr));
@@ -81,13 +89,14 @@ var renderPins = function (arr) {
   return pinElement;
 };
 
-var pasteFragments = function (arr) {
+var renderPins = function (arr) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < arr.length; i++) {
-    fragment.appendChild(renderPins(arr[i]));
+    fragment.appendChild(preparePin(arr[i]));
   }
   return fragment;
 };
 
 var DESC_PINS = getPins(PINS_COUNT);
-PINS.appendChild(pasteFragments(DESC_PINS));
+PINS.appendChild(renderPins(DESC_PINS));
+MAP.classList.remove('map--faded');
