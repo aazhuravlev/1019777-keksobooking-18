@@ -11,7 +11,7 @@ var PINS = document.querySelector('.map__pins');
 var createList = function (quantity, part1, part2) {
   var arr = [];
   for (var i = 0; i < quantity; i++) {
-    arr[i] = part1 + (i + 1) + part2;
+    arr.push(part1 + (i + 1) + part2);
   }
   return arr;
 };
@@ -83,9 +83,11 @@ var getLocation = function (arr) {
 
 var preparePin = function (arr) {
   var pinElement = SIMILAR_PINS_TEMPLATE.cloneNode(true);
+  var pinImage = pinElement.querySelector('img');
 
   pinElement.setAttribute('style', getLocation(arr));
-  pinElement.querySelector('img').setAttribute('src', arr.author.avatar, 'alt', arr.offer.title);
+  pinImage.setAttribute('src', arr.author.avatar);
+  pinImage.setAttribute('alt', arr.offer.title);
   return pinElement;
 };
 
