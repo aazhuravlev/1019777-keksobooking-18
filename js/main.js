@@ -86,8 +86,8 @@ var preparePin = function (arr) {
   var pinImage = pinElement.querySelector('img');
 
   pinElement.setAttribute('style', getLocation(arr));
-  pinImage.setAttribute('src', arr.author.avatar);
-  pinImage.setAttribute('alt', arr.offer.title);
+  pinImage.src = arr.author.avatar;
+  pinImage.alt = arr.offer.title;
   return pinElement;
 };
 
