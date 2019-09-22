@@ -3,11 +3,11 @@
 var PINS_COUNT = 8;
 var AVATARS = ['img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png', 'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png', 'img/avatars/user07.png', 'img/avatars/user08.png'];
 var TITLES = ['title1', 'title2', 'title3', 'title4', 'title5', 'title6', 'title7', 'title8'];
-var TYPE = ['palace', 'flat', 'house', 'bungalo'];
+var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var CHECKIN = ['12:00', '13:00', '14:00'];
 var CHECKOUT = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var DESCRIPTION = ['description1', 'description2', 'description3', 'description4', 'description5', 'description6', 'description7', 'description8'];
+var DESCRIPTIONS = ['description1', 'description2', 'description3', 'description4', 'description5', 'description6', 'description7', 'description8'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
 var MAP = document.querySelector('.map');
@@ -30,27 +30,40 @@ var getRandomItem = function (arr) {
 
 var getPins = function (quantity) {
   var pinsDesc = [];
+  var avatars = AVATARS.slice(0);
+  var titles = TITLES.slice(0);
+  var price = '' + getRandomIntInclusive(0, 100000) + '';
+  var types = TYPES.slice(0);
+  var rooms = '' + getRandomIntInclusive(0, 10) + '';
+  var guests = '' + getRandomIntInclusive(0, 10) + '';
+  var checkin = CHECKIN.slice(0);
+  var checkout = CHECKOUT.slice(0);
+  var features = FEATURES.slice(0);
+  var descriptions = DESCRIPTIONS.slice(0);
+  var locationX = '' + getRandomIntInclusive(0, 1200) + '';
+  var locationY = '' + getRandomIntInclusive(130, 630) + '';
+
   for (var i = 0; i < quantity; i++) {
     pinsDesc.push({
       author: {
-        avatar: 'img/avatars/user0' + [i + 1] + '.png',
+        avatar: getRandomItem(avatars),
       },
       offer: {
-        title: 'заголовок предложения',
-        adress: '600, 350',
-        price: '1000',
-        type: 'palace',
-        rooms: '2',
-        guests: '2',
-        checkin: '12:00',
-        checkout: '12:00',
-        features: FEATURES,
-        description: 'строка',
+        title: getRandomItem(titles),
+        adress: '' + location.x + ', ' + location.y + '',
+        price: price,
+        type: getRandomItem(types),
+        rooms: rooms,
+        guests: guests,
+        checkin: getRandomItem(checkin),
+        checkout: getRandomItem(checkout),
+        features: getRandomItem(features),
+        description: getRandomItem(descriptions),
         photos: PHOTOS
       },
       location: {
-        x: '150px',
-        y: '130px'
+        x: locationX,
+        y: locationY
       }
     });
   }
