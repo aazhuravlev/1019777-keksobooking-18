@@ -31,14 +31,15 @@ var getPins = function (quantity) {
   var pinsDesc = [];
   var avatars = AVATARS.slice(0);
   var titles = TITLES.slice(0);
-  var price = '' + getRandomIntInclusive(0, 100000) + '';
-  var rooms = '' + getRandomIntInclusive(0, 10) + '';
-  var guests = '' + getRandomIntInclusive(0, 10) + '';
   var descriptions = DESCRIPTIONS.slice(0);
 
   for (var i = 0; i < quantity; i++) {
     var types = TYPES.slice(0);
     var checkInOut = CHECKIN_OUT.slice(0);
+    var checkInOutRandom = getRandomItem(checkInOut);
+    var price = '' + getRandomIntInclusive(0, 100000) + '';
+    var rooms = '' + getRandomIntInclusive(0, 10) + '';
+    var guests = '' + getRandomIntInclusive(0, 10) + '';
     var features = FEATURES.slice(0);
     var locationX = '' + getRandomIntInclusive(0, 1200) + '';
     var locationY = '' + getRandomIntInclusive(130, 630) + '';
@@ -53,8 +54,8 @@ var getPins = function (quantity) {
         type: getRandomItem(types),
         rooms: rooms,
         guests: guests,
-        checkin: getRandomItem(checkInOut),
-        checkout: getRandomItem(checkInOut),
+        checkin: checkInOutRandom,
+        checkout: checkInOutRandom,
         features: getRandomItem(features),
         description: getRandomItem(descriptions),
         photos: PHOTOS
@@ -68,24 +69,25 @@ var getPins = function (quantity) {
   return pinsDesc;
 };
 
-var renderPin = function (arr) {
+var getLocation = function (arr) {
+  return 'left: ' + arr.location.x + ';' + ' top: ' + arr.location.y + ';'
+};
+
+var renderPins = function (arr) {
   var pinElement = SIMILAR_PINS_TEMPLATE.cloneNode(true);
 
-  for (var i = 0; i < arr.length; i++) {
-    pinElement.style = 'left: ' + arr[i].location.x + 'top ' + arr[i].location.y;
-    pinElement.querySelector('img').setAttribute('src', arr[i].author.avatar);
-    pinElement.querySelector('img').setAttribute('alt', arr[i].offer.title);
-  }
+  pinElement.setAttribute('style', getLocation(arr));
+  pinElement.querySelector('img').setAttribute('src', arr.author.avatar, 'alt', arr.offer.title);
   return pinElement;
 };
 
-var getFragment = function (arr) {
+var pasteFragments = function (arr) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < arr.length; i++) {
-    fragment.appendChild(renderPin(arr[i]));
+    fragment.appendChild(renderPins(arr[i]));
   }
   return fragment;
 };
 
 var DESC_PINS = getPins(PINS_COUNT);
-PINS.appendChild(getFragment(DESC_PINS));
+PINS.appendChild(pasteFragments(DESC_PINS));
