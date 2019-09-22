@@ -1,12 +1,14 @@
 'use strict';
 
 var PINS_COUNT = 8;
+var HOTEL_PHOTOS_COUNT = 3;
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var CHECKIN_OUT = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
 var MAP = document.querySelector('.map');
 var PINS = document.querySelector('.map__pins');
+var FILTERS = document.querySelector('.map__filters-container');
 
 var createList = function (quantity, part1, part2) {
   var arr = [];
@@ -19,7 +21,7 @@ var createList = function (quantity, part1, part2) {
 var AVATARS = createList(PINS_COUNT, 'img/avatars/user0', '.png');
 var TITLES = createList(PINS_COUNT, 'title', '');
 var DESCRIPTIONS = createList(PINS_COUNT, 'description', '');
-var PHOTOS = createList(PINS_COUNT, 'http://o0.github.io/assets/images/tokyo/hotel', '.jpg');
+var PHOTOS = createList(HOTEL_PHOTOS_COUNT, 'http://o0.github.io/assets/images/tokyo/hotel', '.jpg');
 
 var SIMILAR_PINS_TEMPLATE = document.querySelector('#pin')
   .content
@@ -95,6 +97,22 @@ var preparePin = function (arr) {
   return pinElement;
 };
 
+var prepareCard = function (arr) {
+  var cardElement = SIMILAR_CARDS_TEMPLATE.cloneNode(true);
+
+  cardElement.querySelector('.popup__title').textContent = arr.offer.title;
+  cardElement.querySelector('.popup__text--address').textContent = arr.offer.adress;
+  cardElement.querySelector('.popup__text--price').textContent = arr.offer.price + '₽/ночь';
+  cardElement.querySelector('.popup__type').textContent = arr.offer.type;
+  cardElement.querySelector('.popup__text--capacity').textContent = arr.offer.rooms + ' комнаты для ' + arr.offer.guests + ' гостей';
+  cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + arr.offer.checkin + ', выезд до ' + arr.offer.checkout;
+  cardElement.querySelector('.popup__features').textContent = arr.offer.features;
+  cardElement.querySelector('.popup__description').textContent = arr.offer.description;
+  cardElement.querySelector('.popup__photos').innerHTML = '<img src="' + PHOTOS[0] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья"><img src="' + PHOTOS[1] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья"><img src="' + PHOTOS[2] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
+  cardElement.querySelector('.popup__avatar').src = arr.author.avatar;
+  return cardElement;
+};
+
 var renderPins = function (arr) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < arr.length; i++) {
@@ -103,6 +121,15 @@ var renderPins = function (arr) {
   return fragment;
 };
 
+var renderCards = function (arr) {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < arr.length; i++) {
+    fragment.appendChild(prepareCard(arr[i]));
+  }
+  return fragment;
+};
+
 var DESC_PINS = getPins(PINS_COUNT);
 PINS.appendChild(renderPins(DESC_PINS));
+MAP.insertBefore(renderCards(DESC_PINS), FILTERS);
 MAP.classList.remove('map--faded');
