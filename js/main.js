@@ -25,6 +25,10 @@ var SIMILAR_PINS_TEMPLATE = document.querySelector('#pin')
   .content
   .querySelector('.map__pin');
 
+var SIMILAR_CARDS_TEMPLATE = document.querySelector('#card')
+.content
+.querySelector('.map__card');
+
 var getRandomIntInclusive = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
