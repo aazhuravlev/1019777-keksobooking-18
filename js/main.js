@@ -70,7 +70,7 @@ var getPins = function (quantity) {
 };
 
 var getLocation = function (arr) {
-  return 'left: ' + arr.location.x + ';' + ' top: ' + arr.location.y + ';'
+  return 'left: ' + arr.location.x + ';' + ' top: ' + arr.location.y + ';';
 };
 
 var renderPins = function (arr) {
