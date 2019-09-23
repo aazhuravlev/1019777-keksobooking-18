@@ -2,8 +2,9 @@
 
 var PINS_COUNT = 8;
 var HOTEL_PHOTOS_COUNT = 3;
-var TYPES = ['palace', 'flat', 'house', 'bungalo'];
-var CHECKIN_OUT = ['12:00', '13:00', '14:00'];
+var TYPES = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
+var CHECKIN = ['12:00', '13:00', '14:00'];
+var CHECKOUT = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
 var MAP = document.querySelector('.map');
@@ -46,15 +47,15 @@ var getPins = function (quantity) {
   var avatars = AVATARS.slice(0);
   var titles = TITLES.slice(0);
   var descriptions = DESCRIPTIONS.slice(0);
+  var checkin = CHECKIN[getRandomIntInclusive(0, CHECKIN.length - 1)];
+  var checkout = CHECKOUT[getRandomIntInclusive(0, CHECKOUT.length - 1)];
+  var features = FEATURES[getRandomIntInclusive(0, FEATURES.length - 1)];
 
   for (var i = 0; i < quantity; i++) {
-    var types = TYPES.slice(0);
-    var checkInOut = CHECKIN_OUT.slice(0);
-    var checkInOutRandom = getRandomItem(checkInOut);
+    var types = Object.keys(TYPES)[getRandomIntInclusive(0, Object.keys(TYPES).length - 1)];
     var price = '' + getRandomIntInclusive(1, 100000) + '';
     var rooms = '' + getRandomIntInclusive(1, 10) + '';
     var guests = '' + getRandomIntInclusive(1, 10) + '';
-    var features = FEATURES.slice(0);
     var locationX = '' + getRandomIntInclusive(0, 1200) + '';
     var locationY = '' + getRandomIntInclusive(130, 630) + '';
     pinsDesc.push({
@@ -65,12 +66,12 @@ var getPins = function (quantity) {
         title: getRandomItem(titles),
         adress: '' + locationX + ', ' + locationY + '',
         price: price,
-        type: getRandomItem(types),
+        type: types,
         rooms: rooms,
         guests: guests,
-        checkin: checkInOutRandom,
-        checkout: checkInOutRandom,
-        features: getRandomItem(features),
+        checkin: checkin,
+        checkout: checkout,
+        features: features,
         description: getRandomItem(descriptions),
         photos: PHOTOS
       },
@@ -103,7 +104,7 @@ var prepareCard = function (arr) {
   cardElement.querySelector('.popup__title').textContent = arr.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = arr.offer.adress;
   cardElement.querySelector('.popup__text--price').textContent = arr.offer.price + '₽/ночь';
-  cardElement.querySelector('.popup__type').textContent = arr.offer.type;
+  cardElement.querySelector('.popup__type').textContent = TYPES[arr.offer.type];
   cardElement.querySelector('.popup__text--capacity').textContent = arr.offer.rooms + ' комнаты для ' + arr.offer.guests + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + arr.offer.checkin + ', выезд до ' + arr.offer.checkout;
   cardElement.querySelector('.popup__features').textContent = arr.offer.features;
@@ -115,17 +116,17 @@ var prepareCard = function (arr) {
 
 var renderPins = function (arr) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < arr.length; i++) {
-    fragment.appendChild(preparePin(arr[i]));
-  }
+  arr.forEach(function (item) {
+    fragment.appendChild(preparePin(item));
+  });
   return fragment;
 };
 
 var renderCards = function (arr) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < 1; i++) {
-    fragment.appendChild(prepareCard(arr[i]));
-  }
+  arr.forEach(function (item) {
+    fragment.appendChild(prepareCard(item));
+  });
   return fragment;
 };
 
