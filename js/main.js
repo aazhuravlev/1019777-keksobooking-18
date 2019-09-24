@@ -3,8 +3,7 @@
 var PINS_COUNT = 8;
 var HOTEL_PHOTOS_COUNT = 3;
 var TYPES = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
-var CHECKIN = ['12:00', '13:00', '14:00'];
-var CHECKOUT = ['12:00', '13:00', '14:00'];
+var TIME = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
 var MAP = document.querySelector('.map');
@@ -42,17 +41,21 @@ var getRandomItem = function (arr) {
   return arr.splice(Math.floor(Math.random() * arr.length), 1);
 };
 
+var getRandomArrItem = function (arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+};
+
 var getPins = function (quantity) {
   var pinsDesc = [];
   var avatars = AVATARS.slice(0);
   var titles = TITLES.slice(0);
+  var TYPE_KEYS = getRandomArrItem(Object.keys(TYPES));
   var descriptions = DESCRIPTIONS.slice(0);
-  var checkin = CHECKIN[getRandomIntInclusive(0, CHECKIN.length - 1)];
-  var checkout = CHECKOUT[getRandomIntInclusive(0, CHECKOUT.length - 1)];
-  var features = FEATURES[getRandomIntInclusive(0, FEATURES.length - 1)];
+  var checkin = getRandomArrItem(TIME);
+  var checkout = getRandomArrItem(TIME);
+  var features = getRandomArrItem(FEATURES);
 
   for (var i = 0; i < quantity; i++) {
-    var types = Object.keys(TYPES)[getRandomIntInclusive(0, Object.keys(TYPES).length - 1)];
     var price = '' + getRandomIntInclusive(1, 100000) + '';
     var rooms = '' + getRandomIntInclusive(1, 10) + '';
     var guests = '' + getRandomIntInclusive(1, 10) + '';
@@ -66,7 +69,7 @@ var getPins = function (quantity) {
         title: getRandomItem(titles),
         adress: '' + locationX + ', ' + locationY + '',
         price: price,
-        type: types,
+        type: TYPE_KEYS,
         rooms: rooms,
         guests: guests,
         checkin: checkin,
