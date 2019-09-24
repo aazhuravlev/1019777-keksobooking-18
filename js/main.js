@@ -101,19 +101,77 @@ var preparePin = function (arr) {
   return pinElement;
 };
 
+var TEXT_CONTENT = 'textContent';
+
+var CONTENT = {
+  title: {
+    selector: 'title',
+    target: TEXT_CONTENT
+  },
+  adress: {
+    selector: 'text--address',
+    target: TEXT_CONTENT
+  },
+  price: {
+    selector: 'text--price',
+    target: TEXT_CONTENT
+  },
+  type: {
+    selector: 'type',
+    target: TEXT_CONTENT
+  },
+  capacity: {
+    selector: 'text--capacity',
+    target: TEXT_CONTENT
+  },
+  time: {
+    selector: 'text--time',
+    target: TEXT_CONTENT
+  },
+  features: {
+    selector: 'features',
+    target: TEXT_CONTENT
+  },
+  description: {
+    selector: 'description',
+    target: TEXT_CONTENT
+  },
+  photos: {
+    selector: 'photos',
+    target: 'innerHTML'
+  },
+  avatar: {
+    selector: 'avatar',
+    target: 'src'
+  }
+};
+
 var prepareCard = function (arr) {
   var cardElement = SIMILAR_CARDS_TEMPLATE.cloneNode(true);
 
-  cardElement.querySelector('.popup__title').textContent = arr.offer.title;
-  cardElement.querySelector('.popup__text--address').textContent = arr.offer.adress;
-  cardElement.querySelector('.popup__text--price').textContent = arr.offer.price + '₽/ночь';
-  cardElement.querySelector('.popup__type').textContent = TYPES[arr.offer.type];
-  cardElement.querySelector('.popup__text--capacity').textContent = arr.offer.rooms + ' комнаты для ' + arr.offer.guests + ' гостей';
-  cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + arr.offer.checkin + ', выезд до ' + arr.offer.checkout;
-  cardElement.querySelector('.popup__features').textContent = arr.offer.features;
-  cardElement.querySelector('.popup__description').textContent = arr.offer.description;
-  cardElement.querySelector('.popup__photos').innerHTML = '<img src="' + PHOTOS[0] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья"><img src="' + PHOTOS[1] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья"><img src="' + PHOTOS[2] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
-  cardElement.querySelector('.popup__avatar').src = arr.author.avatar;
+  var values = {
+    title: arr.offer.title,
+    adress: arr.offer.adress,
+    price: arr.offer.price + '₽/ночь',
+    type: TYPES[arr.offer.type],
+    capacity: arr.offer.rooms + ' комнаты для ' + arr.offer.guests + ' гостей',
+    time: 'Заезд после ' + arr.offer.checkin + ', выезд до ' + arr.offer.checkout,
+    features: arr.offer.features,
+    description: arr.offer.description,
+    photos: '<img src="' + PHOTOS[0] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья"><img src="' + PHOTOS[1] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья"><img src="' + PHOTOS[2] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">',
+    avatar: arr.author.avatar
+  };
+
+  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[0]].selector)[CONTENT[Object.keys(CONTENT)[0]].target] = values.title;
+  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[1]].selector).textContent = values.adress;
+  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[2]].selector).textContent = values.price;
+  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[3]].selector).textContent = values.type;
+  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[4]].selector).textContent = values.capacity;
+  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[5]].selector).textContent = values.time;
+  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[6]].selector).textContent = values.features;
+  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[7]].selector).textContent = values.description;
+  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[8]].selector).innerHTML = values.photos;
+  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[9]].selector).src = values.avatar;
   return cardElement;
 };
 
