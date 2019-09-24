@@ -146,6 +146,14 @@ var CONTENT = {
   }
 };
 
+var getPhotos = function (arr) {
+  var photos = [];
+  arr.forEach(function (item) {
+    photos += '<img src="' + item + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
+  });
+  return photos;
+};
+
 var prepareCard = function (arr) {
   var cardElement = SIMILAR_CARDS_TEMPLATE.cloneNode(true);
 
@@ -158,7 +166,7 @@ var prepareCard = function (arr) {
     time: 'Заезд после ' + arr.offer.checkin + ', выезд до ' + arr.offer.checkout,
     features: arr.offer.features,
     description: arr.offer.description,
-    photos: '<img src="' + PHOTOS[0] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья"><img src="' + PHOTOS[1] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья"><img src="' + PHOTOS[2] + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">',
+    photos: getPhotos(PHOTOS),
     avatar: arr.author.avatar
   };
 
