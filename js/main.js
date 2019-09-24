@@ -162,16 +162,12 @@ var prepareCard = function (arr) {
     avatar: arr.author.avatar
   };
 
-  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[0]].selector)[CONTENT[Object.keys(CONTENT)[0]].target] = values.title;
-  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[1]].selector).textContent = values.adress;
-  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[2]].selector).textContent = values.price;
-  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[3]].selector).textContent = values.type;
-  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[4]].selector).textContent = values.capacity;
-  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[5]].selector).textContent = values.time;
-  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[6]].selector).textContent = values.features;
-  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[7]].selector).textContent = values.description;
-  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[8]].selector).innerHTML = values.photos;
-  cardElement.querySelector('.popup__' + CONTENT[Object.keys(CONTENT)[9]].selector).src = values.avatar;
+  var contentKeys = Object.keys(CONTENT);
+
+  contentKeys.forEach(function (item) {
+    var contentIndex = CONTENT[item];
+    cardElement.querySelector('.popup__' + contentIndex.selector)[contentIndex.target] = values[item];
+  });
   return cardElement;
 };
 
