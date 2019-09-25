@@ -153,6 +153,20 @@ var getPhotos = function (arr) {
   return photos;
 };
 
+var getRoomsLetter = function (number) {
+  var letter = '';
+  if (number === 1) {
+    letter = 'a';
+  } else if (number >= 2 && number <= 4) {
+    letter = 'ы';
+  }
+  return letter;
+};
+
+var getGuestsLetter = function (number) {
+  return number === 1 ? 'я' : 'ей';
+};
+
 var prepareCard = function (arr) {
   var cardElement = SIMILAR_CARDS_TEMPLATE.cloneNode(true);
 
@@ -161,7 +175,7 @@ var prepareCard = function (arr) {
     adress: arr.offer.adress,
     price: arr.offer.price + '₽/ночь',
     type: TYPES[arr.offer.type],
-    capacity: arr.offer.rooms + ' комнаты для ' + arr.offer.guests + ' гостей',
+    capacity: arr.offer.rooms + ' комнат' + getRoomsLetter(Number(arr.offer.rooms)) + ' для ' + arr.offer.guests + ' гост' + getGuestsLetter(Number(arr.offer.guests)),
     time: 'Заезд после ' + arr.offer.checkin + ', выезд до ' + arr.offer.checkout,
     features: arr.offer.features,
     description: arr.offer.description,
