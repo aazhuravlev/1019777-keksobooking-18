@@ -169,9 +169,9 @@ var prepareCard = function (arr) {
     avatar: arr.author.avatar
   };
 
-  CONTENT_KEYS.forEach(function (item) {
-    var contentIndex = CONTENT[item];
-    cardElement.querySelector('.popup__' + contentIndex.selector)[contentIndex.target] = values[item];
+  CONTENT_KEYS.forEach(function (key) {
+    var item = CONTENT[key];
+    cardElement.querySelector('.popup__' + item.selector)[item.target] = values[key];
   });
   return cardElement;
 };
