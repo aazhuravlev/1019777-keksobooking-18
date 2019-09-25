@@ -5,6 +5,50 @@ var HOTEL_PHOTOS_COUNT = 3;
 var TYPES = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
 var TIME = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var TEXT_CONTENT = 'textContent';
+var CONTENT = {
+  title: {
+    selector: 'title',
+    target: TEXT_CONTENT
+  },
+  adress: {
+    selector: 'text--address',
+    target: TEXT_CONTENT
+  },
+  price: {
+    selector: 'text--price',
+    target: TEXT_CONTENT
+  },
+  type: {
+    selector: 'type',
+    target: TEXT_CONTENT
+  },
+  capacity: {
+    selector: 'text--capacity',
+    target: TEXT_CONTENT
+  },
+  time: {
+    selector: 'text--time',
+    target: TEXT_CONTENT
+  },
+  features: {
+    selector: 'features',
+    target: TEXT_CONTENT
+  },
+  description: {
+    selector: 'description',
+    target: TEXT_CONTENT
+  },
+  photos: {
+    selector: 'photos',
+    target: 'innerHTML'
+  },
+  avatar: {
+    selector: 'avatar',
+    target: 'src'
+  }
+};
+var CONTENT_KEYS = Object.keys(CONTENT);
 
 var MAP = document.querySelector('.map');
 var PINS = document.querySelector('.map__pins');
@@ -101,51 +145,6 @@ var preparePin = function (arr) {
   return pinElement;
 };
 
-var TEXT_CONTENT = 'textContent';
-
-var CONTENT = {
-  title: {
-    selector: 'title',
-    target: TEXT_CONTENT
-  },
-  adress: {
-    selector: 'text--address',
-    target: TEXT_CONTENT
-  },
-  price: {
-    selector: 'text--price',
-    target: TEXT_CONTENT
-  },
-  type: {
-    selector: 'type',
-    target: TEXT_CONTENT
-  },
-  capacity: {
-    selector: 'text--capacity',
-    target: TEXT_CONTENT
-  },
-  time: {
-    selector: 'text--time',
-    target: TEXT_CONTENT
-  },
-  features: {
-    selector: 'features',
-    target: TEXT_CONTENT
-  },
-  description: {
-    selector: 'description',
-    target: TEXT_CONTENT
-  },
-  photos: {
-    selector: 'photos',
-    target: 'innerHTML'
-  },
-  avatar: {
-    selector: 'avatar',
-    target: 'src'
-  }
-};
-
 var getPhotos = function (arr) {
   var photos = [];
   arr.forEach(function (item) {
@@ -170,9 +169,7 @@ var prepareCard = function (arr) {
     avatar: arr.author.avatar
   };
 
-  var contentKeys = Object.keys(CONTENT);
-
-  contentKeys.forEach(function (item) {
+  CONTENT_KEYS.forEach(function (item) {
     var contentIndex = CONTENT[item];
     cardElement.querySelector('.popup__' + contentIndex.selector)[contentIndex.target] = values[item];
   });
