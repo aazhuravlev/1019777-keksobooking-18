@@ -94,14 +94,14 @@ var getPins = function (quantity) {
   var titles = TITLES.slice(0);
   var TYPE_KEYS = getRandomArrItem(Object.keys(TYPES));
   var descriptions = DESCRIPTIONS.slice(0);
-  var checkin = getRandomArrItem(TIME);
-  var checkout = getRandomArrItem(TIME);
-  var features = getRandomArrItem(FEATURES);
 
   for (var i = 0; i < quantity; i++) {
     var price = '' + getRandomBetween(1, 100000) + '';
     var rooms = '' + getRandomBetween(1, 10) + '';
     var guests = '' + getRandomBetween(1, 10) + '';
+    var checkin = getRandomArrItem(TIME);
+    var checkout = getRandomArrItem(TIME);
+    var features = getRandomArrItem(FEATURES);
     var locationX = '' + getRandomBetween(0, 1200) + '';
     var locationY = '' + getRandomBetween(130, 630) + '';
     pinsDesc.push({
