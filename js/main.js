@@ -44,7 +44,7 @@ var CONTENT = {
   },
   features: {
     selector: 'features',
-    target: TEXT_CONTENT
+    target: 'innerHTML'
   },
   description: {
     selector: 'description',
@@ -161,6 +161,16 @@ var preparePin = function (item) {
   return pinElement;
 };
 
+var prepareFeatures = function (item) {
+  return '<li class="popup__feature popup__feature--' + item + '"></li>';
+};
+
+/*
+На случай, если нужно будет использовать массив
+var getFeatures = function (arr) {
+  return arr.map(prepareFeatures).join('');
+};
+*/
 var preparePhotos = function (item) {
   return '<img src="' + item + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
 };
@@ -191,7 +201,7 @@ var getCardValues = function (cardData) {
     type: TYPES[cardData.offer.type],
     capacity: cardData.offer.rooms + ' комнат' + getRoomsLetter(Number(cardData.offer.rooms)) + ' для ' + cardData.offer.guests + ' гост' + getGuestsLetter(Number(cardData.offer.guests)),
     time: 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout,
-    features: cardData.offer.features,
+    features: prepareFeatures(cardData.offer.features),
     description: cardData.offer.description,
     photos: getPhotos(PHOTOS),
     avatar: cardData.author.avatar
