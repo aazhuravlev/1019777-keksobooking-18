@@ -161,11 +161,12 @@ var preparePin = function (item) {
   return pinElement;
 };
 
+var preparePhotos = function (item) {
+  return '<img src="' + item + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
+};
+
 var getPhotos = function (arr) {
-  var photo = arr.map(function (item) {
-    return '<img src="' + item + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
-  });
-  return photo.join();
+  return arr.map(preparePhotos).join('');
 };
 
 var getRoomsLetter = function (number) {
