@@ -162,11 +162,10 @@ var preparePin = function (item) {
 };
 
 var getPhotos = function (arr) {
-  var photos = [];
-  arr.map(function (item) {
-    photos += '<img src="' + item + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
+  var photo = arr.map(function (item) {
+    return '<img src="' + item + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
   });
-  return photos;
+  return photo.join();
 };
 
 var getRoomsLetter = function (number) {
@@ -183,28 +182,31 @@ var getGuestsLetter = function (number) {
   return number === 1 ? 'я' : 'ей';
 };
 
-var prepareCard = function (arr) {
-  var cardElement = SIMILAR_CARDS_TEMPLATE.cloneNode(true);
-
-  var values = {
-    title: arr.offer.title,
-    adress: arr.offer.adress,
-    price: arr.offer.price + '₽/ночь',
-    type: TYPES[arr.offer.type],
-    capacity: arr.offer.rooms + ' комнат' + getRoomsLetter(Number(arr.offer.rooms)) + ' для ' + arr.offer.guests + ' гост' + getGuestsLetter(Number(arr.offer.guests)),
-    time: 'Заезд после ' + arr.offer.checkin + ', выезд до ' + arr.offer.checkout,
-    features: arr.offer.features,
-    description: arr.offer.description,
+var getCardValues = function (cardData) {
+  return {
+    title: cardData.offer.title,
+    adress: cardData.offer.adress,
+    price: cardData.offer.price + '₽/ночь',
+    type: TYPES[cardData.offer.type],
+    capacity: cardData.offer.rooms + ' комнат' + getRoomsLetter(Number(cardData.offer.rooms)) + ' для ' + cardData.offer.guests + ' гост' + getGuestsLetter(Number(cardData.offer.guests)),
+    time: 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout,
+    features: cardData.offer.features,
+    description: cardData.offer.description,
     photos: getPhotos(PHOTOS),
-    avatar: arr.author.avatar
+    avatar: cardData.author.avatar
   };
+};
+
+var prepareCard = function (item) {
+  var cardElement = SIMILAR_CARDS_TEMPLATE.cloneNode(true);
+  var keys = getCardValues(item);
 
   CONTENT_KEYS.forEach(function (key) {
     var keyItem = CONTENT[key];
-    if (!values[key]) {
+    if (!keys[key]) {
       window['console']['error']('в values отсутствует ключ');
     } else {
-      cardElement.querySelector('.popup__' + keyItem.selector)[keyItem.target] = values[key];
+      cardElement.querySelector('.popup__' + keyItem.selector)[keyItem.target] = keys[key];
     }
   });
   return cardElement;
@@ -218,15 +220,9 @@ var renderPins = function (arr) {
   return fragment;
 };
 
-var renderCards = function (arr) {
-  var fragment = document.createDocumentFragment();
-  fragment.appendChild(prepareCard(arr[0]));
-  return fragment;
-};
-
 var main = function (quantity) {
   PINS.appendChild(renderPins(DESC_PINS));
-  MAP.insertBefore(renderCards(DESC_PINS), FILTERS);
+  MAP.insertBefore(prepareCard(DESC_PINS[0]), FILTERS);
   MAP.classList.remove('map--faded');
   return quantity;
 };
