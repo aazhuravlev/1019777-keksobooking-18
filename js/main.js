@@ -130,6 +130,8 @@ var getPins = function (quantity) {
   return pinsDesc;
 };
 
+var DESC_PINS = getPins(PINS_COUNT);
+
 var getLocation = function (number) {
   return 'left: ' + number.location.x + ';' + ' top: ' + number.location.y + ';';
 };
@@ -166,25 +168,36 @@ var getGuestsLetter = function (number) {
   return number === 1 ? 'я' : 'ей';
 };
 
+var getKeysValues = function (arr) {
+  var values = {};
+  arr.forEach(function (item) {
+    values = {
+      title: item.offer.title,
+      adress: item.offer.adress,
+      price: item.offer.price + '₽/ночь',
+      type: TYPES[item.offer.type],
+      capacity: item.offer.rooms + ' комнат' + getRoomsLetter(Number(item.offer.rooms)) + ' для ' + item.offer.guests + ' гост' + getGuestsLetter(Number(item.offer.guests)),
+      time: 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout,
+      features: item.offer.features,
+      description: item.offer.description,
+      photos: getPhotos(PHOTOS),
+      avatar: item.author.avatar
+    };
+  });
+  return values;
+};
+
 var prepareCard = function (item) {
   var cardElement = SIMILAR_CARDS_TEMPLATE.cloneNode(true);
-
-  var values = {
-    title: item.offer.title,
-    adress: item.offer.adress,
-    price: item.offer.price + '₽/ночь',
-    type: TYPES[item.offer.type],
-    capacity: item.offer.rooms + ' комнат' + getRoomsLetter(Number(item.offer.rooms)) + ' для ' + item.offer.guests + ' гост' + getGuestsLetter(Number(item.offer.guests)),
-    time: 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout,
-    features: item.offer.features,
-    description: item.offer.description,
-    photos: getPhotos(PHOTOS),
-    avatar: item.author.avatar
-  };
+  item = getKeysValues(DESC_PINS);
 
   CONTENT_KEYS.forEach(function (key) {
     var keyItem = CONTENT[key];
-    cardElement.querySelector('.popup__' + keyItem.selector)[keyItem.target] = values[key];
+    if (item[key] === {}) {
+      window['console']['error']('в values отсутствует ключ');
+    } else {
+      cardElement.querySelector('.popup__' + keyItem.selector)[keyItem.target] = item[key];
+    }
   });
   return cardElement;
 };
@@ -204,7 +217,6 @@ var renderCards = function (arr) {
 };
 
 var main = function (quantity) {
-  var DESC_PINS = getPins(quantity);
   PINS.appendChild(renderPins(DESC_PINS));
   MAP.insertBefore(renderCards(DESC_PINS), FILTERS);
   MAP.classList.remove('map--faded');
