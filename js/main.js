@@ -103,6 +103,10 @@ var getRandomArrItem = function (arr) {
   return arr[getRandomItem(arr)];
 };
 
+var getRandomArrRange = function (arr) {
+  return arr.slice(0, getRandomBetween(0, arr.length));
+};
+
 var getPins = function (quantity) {
   var pinsDesc = [];
   var avatars = AVATARS.slice(0);
@@ -110,13 +114,14 @@ var getPins = function (quantity) {
   var TYPE_KEYS = getRandomArrItem(Object.keys(TYPES));
   var descriptions = DESCRIPTIONS.slice(0);
 
+
   for (var i = 0; i < quantity; i++) {
     var price = '' + getRandomBetween(MIN_PRICE, MAX_PRICE) + '';
     var rooms = '' + getRandomBetween(MIN_ROOMS, MAX_ROOMS) + '';
     var guests = '' + getRandomBetween(MIN_GUESTS, MAX_GUESTS) + '';
     var checkin = getRandomArrItem(TIME);
     var checkout = getRandomArrItem(TIME);
-    var features = getRandomArrItem(FEATURES);
+    var features = getRandomArrRange(FEATURES);
     var locationX = '' + getRandomBetween(MIN_LOCATION_X, MAX_LOCATION_X) + '';
     var locationY = '' + getRandomBetween(MIN_LOCATION_Y, MAX_LOCATION_Y) + '';
     pinsDesc.push({
@@ -165,12 +170,10 @@ var prepareFeatures = function (item) {
   return '<li class="popup__feature popup__feature--' + item + '"></li>';
 };
 
-/*
-На случай, если нужно будет использовать массив
 var getFeatures = function (arr) {
   return arr.map(prepareFeatures).join('');
 };
-*/
+
 var preparePhotos = function (item) {
   return '<img src="' + item + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
 };
@@ -201,7 +204,7 @@ var getCardValues = function (cardData) {
     type: TYPES[cardData.offer.type],
     capacity: cardData.offer.rooms + ' комнат' + getRoomsLetter(Number(cardData.offer.rooms)) + ' для ' + cardData.offer.guests + ' гост' + getGuestsLetter(Number(cardData.offer.guests)),
     time: 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout,
-    features: prepareFeatures(cardData.offer.features),
+    features: getFeatures(cardData.offer.features),
     description: cardData.offer.description,
     photos: getPhotos(PHOTOS),
     avatar: cardData.author.avatar
