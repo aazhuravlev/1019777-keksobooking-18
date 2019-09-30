@@ -100,7 +100,7 @@ var spliceRandomItem = function (arr) {
 };
 
 var getRandomArrItem = function (arr) {
-  return arr[getRandomItem(arr.length)];
+  return arr[getRandomItem(arr)];
 };
 
 var getPins = function (quantity) {
@@ -163,7 +163,7 @@ var preparePin = function (item) {
 
 var getPhotos = function (arr) {
   var photos = [];
-  arr.forEach(function (item) {
+  arr.map(function (item) {
     photos += '<img src="' + item + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
   });
   return photos;
