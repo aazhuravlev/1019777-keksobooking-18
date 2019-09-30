@@ -5,6 +5,17 @@ var HOTEL_PHOTOS_COUNT = 3;
 var TYPES = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
 var TIME = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var MIN_PRICE = 1;
+var MAX_PRICE = 100000;
+var MIN_ROOMS = 1;
+var MAX_ROOMS = 10;
+var MIN_GUESTS = 1;
+var MAX_GUESTS = 10;
+var MIN_LOCATION_X = 0;
+var MAX_LOCATION_X = 1200;
+var MIN_LOCATION_Y = 130;
+var MAX_LOCATION_Y = 630;
+
 var TEXT_CONTENT = 'textContent';
 var CONTENT = {
   title: {
@@ -80,12 +91,16 @@ var getRandomBetween = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+var getRandomItem = function (arr) {
+  return Math.floor(Math.random() * arr.length);
+};
+
 var spliceRandomItem = function (arr) {
-  return arr.splice(Math.floor(Math.random() * arr.length), 1);
+  return arr.splice(getRandomItem(arr.length), 1);
 };
 
 var getRandomArrItem = function (arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
+  return arr[getRandomItem(arr.length)];
 };
 
 var getPins = function (quantity) {
@@ -96,14 +111,14 @@ var getPins = function (quantity) {
   var descriptions = DESCRIPTIONS.slice(0);
 
   for (var i = 0; i < quantity; i++) {
-    var price = '' + getRandomBetween(1, 100000) + '';
-    var rooms = '' + getRandomBetween(1, 10) + '';
-    var guests = '' + getRandomBetween(1, 10) + '';
+    var price = '' + getRandomBetween(MIN_PRICE, MAX_PRICE) + '';
+    var rooms = '' + getRandomBetween(MIN_ROOMS, MAX_ROOMS) + '';
+    var guests = '' + getRandomBetween(MIN_GUESTS, MAX_GUESTS) + '';
     var checkin = getRandomArrItem(TIME);
     var checkout = getRandomArrItem(TIME);
     var features = getRandomArrItem(FEATURES);
-    var locationX = '' + getRandomBetween(0, 1200) + '';
-    var locationY = '' + getRandomBetween(130, 630) + '';
+    var locationX = '' + getRandomBetween(MIN_LOCATION_X, MAX_LOCATION_X) + '';
+    var locationY = '' + getRandomBetween(MIN_LOCATION_Y, MAX_LOCATION_Y) + '';
     pinsDesc.push({
       author: {
         avatar: spliceRandomItem(avatars),
