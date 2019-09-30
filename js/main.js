@@ -183,35 +183,28 @@ var getGuestsLetter = function (number) {
   return number === 1 ? 'я' : 'ей';
 };
 
-var getKeysValues = function (arr) {
-  var values = {};
-  arr.forEach(function (item) {
-    values = {
-      title: item.offer.title,
-      adress: item.offer.adress,
-      price: item.offer.price + '₽/ночь',
-      type: TYPES[item.offer.type],
-      capacity: item.offer.rooms + ' комнат' + getRoomsLetter(Number(item.offer.rooms)) + ' для ' + item.offer.guests + ' гост' + getGuestsLetter(Number(item.offer.guests)),
-      time: 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout,
-      features: item.offer.features,
-      description: item.offer.description,
-      photos: getPhotos(PHOTOS),
-      avatar: item.author.avatar
-    };
-  });
-  return values;
-};
-
-var prepareCard = function (item) {
+var prepareCard = function (arr) {
   var cardElement = SIMILAR_CARDS_TEMPLATE.cloneNode(true);
-  item = getKeysValues(DESC_PINS);
+
+  var values = {
+    title: arr.offer.title,
+    adress: arr.offer.adress,
+    price: arr.offer.price + '₽/ночь',
+    type: TYPES[arr.offer.type],
+    capacity: arr.offer.rooms + ' комнат' + getRoomsLetter(Number(arr.offer.rooms)) + ' для ' + arr.offer.guests + ' гост' + getGuestsLetter(Number(arr.offer.guests)),
+    time: 'Заезд после ' + arr.offer.checkin + ', выезд до ' + arr.offer.checkout,
+    features: arr.offer.features,
+    description: arr.offer.description,
+    photos: getPhotos(PHOTOS),
+    avatar: arr.author.avatar
+  };
 
   CONTENT_KEYS.forEach(function (key) {
     var keyItem = CONTENT[key];
-    if (item[key] === {}) {
+    if (!values[key]) {
       window['console']['error']('в values отсутствует ключ');
     } else {
-      cardElement.querySelector('.popup__' + keyItem.selector)[keyItem.target] = item[key];
+      cardElement.querySelector('.popup__' + keyItem.selector)[keyItem.target] = values[key];
     }
   });
   return cardElement;
