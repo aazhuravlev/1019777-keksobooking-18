@@ -91,16 +91,16 @@ var getRandomBetween = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-var getRandomItem = function (arr) {
-  return Math.floor(Math.random() * arr.length);
+var getRandomIndex = function (arr) {
+  return getRandomBetween(0, arr.length);
 };
 
 var spliceRandomItem = function (arr) {
-  return arr.splice(getRandomItem(arr.length), 1);
+  return arr.splice(getRandomIndex(arr.length), 1);
 };
 
 var getRandomArrItem = function (arr) {
-  return arr[getRandomItem(arr)];
+  return arr[getRandomIndex(arr)];
 };
 
 var getRandomArrRange = function (arr) {
