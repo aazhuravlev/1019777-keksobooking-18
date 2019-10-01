@@ -116,21 +116,21 @@ var getPins = function (quantity) {
 
 
   for (var i = 0; i < quantity; i++) {
-    var price = '' + getRandomBetween(MIN_PRICE, MAX_PRICE) + '';
-    var rooms = '' + getRandomBetween(MIN_ROOMS, MAX_ROOMS) + '';
-    var guests = '' + getRandomBetween(MIN_GUESTS, MAX_GUESTS) + '';
+    var price = getRandomBetween(MIN_PRICE, MAX_PRICE);
+    var rooms = getRandomBetween(MIN_ROOMS, MAX_ROOMS);
+    var guests = getRandomBetween(MIN_GUESTS, MAX_GUESTS);
     var checkin = getRandomArrItem(TIME);
     var checkout = getRandomArrItem(TIME);
     var features = getRandomArrRange(FEATURES);
-    var locationX = '' + getRandomBetween(MIN_LOCATION_X, MAX_LOCATION_X) + '';
-    var locationY = '' + getRandomBetween(MIN_LOCATION_Y, MAX_LOCATION_Y) + '';
+    var locationX = getRandomBetween(MIN_LOCATION_X, MAX_LOCATION_X);
+    var locationY = getRandomBetween(MIN_LOCATION_Y, MAX_LOCATION_Y);
     pinsDesc.push({
       author: {
         avatar: spliceRandomItem(avatars),
       },
       offer: {
         title: spliceRandomItem(titles),
-        adress: '' + locationX + ', ' + locationY + '',
+        adress: locationX + ', ' + locationY,
         price: price,
         type: TYPE_KEYS,
         rooms: rooms,
