@@ -99,11 +99,11 @@ var spliceRandomItem = function (arr) {
   return arr.splice(getRandomIndex(arr.length - 1), 1);
 };
 
-var getRandomArrItem = function (arr) {
+var getRandomItem = function (arr) {
   return arr[getRandomIndex(arr)];
 };
 
-var getRandomArrRange = function (arr) {
+var getRandomSlice = function (arr) {
   return arr.slice(0, getRandomIndex(arr));
 };
 
@@ -111,7 +111,7 @@ var getPins = function (quantity) {
   var pinsDesc = [];
   var avatars = AVATARS.slice(0);
   var titles = TITLES.slice(0);
-  var TYPE_KEYS = getRandomArrItem(Object.keys(TYPES));
+  var TYPE_KEYS = getRandomItem(Object.keys(TYPES));
   var descriptions = DESCRIPTIONS.slice(0);
 
 
@@ -119,9 +119,9 @@ var getPins = function (quantity) {
     var price = getRandomBetween(MIN_PRICE, MAX_PRICE);
     var rooms = getRandomBetween(MIN_ROOMS, MAX_ROOMS);
     var guests = getRandomBetween(MIN_GUESTS, MAX_GUESTS);
-    var checkin = getRandomArrItem(TIME);
-    var checkout = getRandomArrItem(TIME);
-    var features = getRandomArrRange(FEATURES);
+    var checkin = getRandomItem(TIME);
+    var checkout = getRandomItem(TIME);
+    var features = getRandomSlice(FEATURES);
     var locationX = getRandomBetween(MIN_LOCATION_X, MAX_LOCATION_X);
     var locationY = getRandomBetween(MIN_LOCATION_Y, MAX_LOCATION_Y);
     pinsDesc.push({
@@ -166,20 +166,20 @@ var preparePin = function (item) {
   return pinElement;
 };
 
-var prepareFeatures = function (item) {
+var getFeature = function (item) {
   return '<li class="popup__feature popup__feature--' + item + '"></li>';
 };
 
 var getFeatures = function (arr) {
-  return arr.map(prepareFeatures).join('');
+  return arr.map(getFeature).join('');
 };
 
-var preparePhotos = function (item) {
+var getPhoto = function (item) {
   return '<img src="' + item + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
 };
 
 var getPhotos = function (arr) {
-  return arr.map(preparePhotos).join('');
+  return arr.map(getPhoto).join('');
 };
 
 var getRoomsLetter = function (number) {
@@ -218,7 +218,7 @@ var prepareCard = function (item) {
   CONTENT_KEYS.forEach(function (key) {
     var keyItem = CONTENT[key];
     if (!keys[key]) {
-      window['console']['error']('в values отсутствует ключ');
+      window['console']['error']('в keys отсутствует ключ');
     } else {
       cardElement.querySelector('.popup__' + keyItem.selector)[keyItem.target] = keys[key];
     }
