@@ -92,11 +92,11 @@ var getRandomBetween = function (min, max) {
 };
 
 var getRandomIndex = function (arr) {
-  return getRandomBetween(0, arr.length);
+  return getRandomBetween(0, arr.length - 1);
 };
 
 var spliceRandomItem = function (arr) {
-  return arr.splice(getRandomIndex(arr.length), 1);
+  return arr.splice(getRandomIndex(arr.length - 1), 1);
 };
 
 var getRandomArrItem = function (arr) {
@@ -104,7 +104,7 @@ var getRandomArrItem = function (arr) {
 };
 
 var getRandomArrRange = function (arr) {
-  return arr.slice(0, getRandomBetween(0, arr.length));
+  return arr.slice(0, getRandomIndex(arr));
 };
 
 var getPins = function (quantity) {
@@ -235,10 +235,9 @@ var renderPins = function (arr) {
 };
 
 var main = function (quantity) {
-  PINS.appendChild(renderPins(DESC_PINS));
+  PINS.appendChild(renderPins(getPins(quantity)));
   MAP.insertBefore(prepareCard(DESC_PINS[0]), FILTERS);
   MAP.classList.remove('map--faded');
-  return quantity;
 };
 
 main(PINS_COUNT);
