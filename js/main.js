@@ -91,8 +91,8 @@ var getRandomBetween = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-var getRandomIndex = function (arr) {
-  return getRandomBetween(0, arr.length - 1);
+var getRandomIndex = function (max) {
+  return getRandomBetween(0, max - 1);
 };
 
 var spliceRandomItem = function (arr) {
@@ -100,11 +100,11 @@ var spliceRandomItem = function (arr) {
 };
 
 var getRandomItem = function (arr) {
-  return arr[getRandomIndex(arr)];
+  return arr[getRandomIndex(arr.length)];
 };
 
 var getRandomSlice = function (arr) {
-  return arr.slice(0, getRandomIndex(arr));
+  return arr.slice(0, getRandomIndex(arr.length));
 };
 
 var getPins = function (quantity) {
