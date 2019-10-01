@@ -213,14 +213,14 @@ var getCardValues = function (cardData) {
 
 var prepareCard = function (item) {
   var cardElement = SIMILAR_CARDS_TEMPLATE.cloneNode(true);
-  var keys = getCardValues(item);
+  var values = getCardValues(item);
 
   CONTENT_KEYS.forEach(function (key) {
     var keyItem = CONTENT[key];
-    if (!keys[key]) {
-      window['console']['error']('в keys отсутствует ключ');
+    if (!values[key]) {
+      window['console']['error']('в values отсутствует ключ ' + key);
     } else {
-      cardElement.querySelector('.popup__' + keyItem.selector)[keyItem.target] = keys[key];
+      cardElement.querySelector('.popup__' + keyItem.selector)[keyItem.target] = values[key];
     }
   });
   return cardElement;
