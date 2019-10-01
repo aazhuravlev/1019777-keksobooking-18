@@ -104,7 +104,22 @@ var getRandomItem = function (arr) {
 };
 
 var getRandomSlice = function (arr) {
-  return arr.slice(0, getRandomIndex(arr.length));
+  return arr.slice(0, 2 + getRandomIndex(arr.length - 2));
+};
+
+var pluralize = function (number, arr) {
+  number %= 100;
+  if (number >= 5 && number <= 20) {
+    return arr[2];
+  }
+  number %= 10;
+  if (number === 1) {
+    return arr[0];
+  }
+  if (number >= 2 && number <= 4) {
+    return arr[1];
+  }
+  return arr[2];
 };
 
 var getPins = function (quantity) {
@@ -116,12 +131,6 @@ var getPins = function (quantity) {
 
 
   for (var i = 0; i < quantity; i++) {
-    var price = getRandomBetween(MIN_PRICE, MAX_PRICE);
-    var rooms = getRandomBetween(MIN_ROOMS, MAX_ROOMS);
-    var guests = getRandomBetween(MIN_GUESTS, MAX_GUESTS);
-    var checkin = getRandomItem(TIME);
-    var checkout = getRandomItem(TIME);
-    var features = getRandomSlice(FEATURES);
     var locationX = getRandomBetween(MIN_LOCATION_X, MAX_LOCATION_X);
     var locationY = getRandomBetween(MIN_LOCATION_Y, MAX_LOCATION_Y);
     pinsDesc.push({
@@ -131,13 +140,13 @@ var getPins = function (quantity) {
       offer: {
         title: spliceRandomItem(titles),
         adress: locationX + ', ' + locationY,
-        price: price,
+        price: getRandomBetween(MIN_PRICE, MAX_PRICE),
         type: TYPE_KEYS,
-        rooms: rooms,
-        guests: guests,
-        checkin: checkin,
-        checkout: checkout,
-        features: features,
+        rooms: getRandomBetween(MIN_ROOMS, MAX_ROOMS),
+        guests: getRandomBetween(MIN_GUESTS, MAX_GUESTS),
+        checkin: getRandomItem(TIME),
+        checkout: getRandomItem(TIME),
+        features: getRandomSlice(FEATURES),
         description: spliceRandomItem(descriptions),
         photos: PHOTOS
       },
@@ -182,27 +191,13 @@ var getPhotos = function (arr) {
   return arr.map(getPhoto).join('');
 };
 
-var getRoomsLetter = function (number) {
-  var letter = '';
-  if (number === 1) {
-    letter = 'a';
-  } else if (number >= 2 && number <= 4) {
-    letter = 'ы';
-  }
-  return letter;
-};
-
-var getGuestsLetter = function (number) {
-  return number === 1 ? 'я' : 'ей';
-};
-
 var getCardValues = function (cardData) {
   return {
     title: cardData.offer.title,
     adress: cardData.offer.adress,
     price: cardData.offer.price + '₽/ночь',
     type: TYPES[cardData.offer.type],
-    capacity: cardData.offer.rooms + ' комнат' + getRoomsLetter(Number(cardData.offer.rooms)) + ' для ' + cardData.offer.guests + ' гост' + getGuestsLetter(Number(cardData.offer.guests)),
+    capacity: cardData.offer.rooms + pluralize(cardData.offer.rooms, [' комната', ' комнаты', ' комнат']) + ' для ' + cardData.offer.guests + pluralize(cardData.offer.guests, [' гостя', ' гостей', ' гостей']),
     time: 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout,
     features: getFeatures(cardData.offer.features),
     description: cardData.offer.description,
