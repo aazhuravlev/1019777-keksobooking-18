@@ -15,7 +15,6 @@ var MIN_LOCATION_X = 0;
 var MAX_LOCATION_X = 1200;
 var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
-var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
 var MAIN_PIN_WIDTH = 62;
 var MAIN_PIN_TRIANGLE_HEIGHT = 22;
@@ -71,11 +70,14 @@ var MAP = document.querySelector('.map');
 var PINS = document.querySelector('.map__pins');
 var MAIN_PIN = document.querySelector('.map__pin--main');
 var FORM = document.querySelector('.ad-form');
-var INPUT_ADDRESS = document.querySelector('#address')
-var TYPE_SELECT = document.querySelector('#type');
-var TYPE_SELECT_OPTION = TYPE_SELECT.querySelectorAll('option');
-var PRICE_PER_NIGHT = document.querySelector('#price');
+var FORM_RESET = document.querySelector('.ad-form__reset');
 var FORM_FIELDSETS = FORM.querySelectorAll('fieldset');
+var INPUT_ADDRESS = document.querySelector('#address');
+var TYPE_SELECT = document.querySelector('#type');
+var ROOM_SELECT = document.querySelector('#room_number');
+var CAPACITY_SELECT = document.querySelector('#capacity');
+var CAPACITY_OPTIONS = CAPACITY_SELECT.querySelectorAll('option');
+var PRICE_PER_NIGHT = document.querySelector('#price');
 var FILTERS = document.querySelector('.map__filters-container');
 var SIMILAR_PINS_TEMPLATE = document.querySelector('#pin')
   .content
@@ -249,12 +251,14 @@ var renderPins = function (arr) {
 };
 
 var formFieldsetsDisabled = function (selector) {
+  FORM.classList.add('ad-form--disabled');
   selector.forEach(function (item) {
     item.disabled = true;
   });
 };
 
 var formFieldsetsEnabled = function (selector) {
+  FORM.classList.remove('ad-form--disabled');
   selector.forEach(function (item) {
     item.disabled = false;
   });
@@ -269,11 +273,24 @@ var mapEnterPressHendler = function (evt) {
 
 var openMap = function () {
   MAP.classList.remove('map--faded');
-  FORM.classList.remove('ad-form--disabled');
   formFieldsetsEnabled(FORM_FIELDSETS);
   PINS.appendChild(renderPins(getPins(PINS_COUNT)));
   MAP.insertBefore(prepareCard(DESC_PINS[0]), FILTERS);
+  INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
   MAIN_PIN.removeEventListener('mousedown', openMap);
+};
+
+var removeSelectors = function (selectors) {
+  selectors.forEach(function (item) {
+    item.remove();
+  });
+};
+
+var formReset = function () {
+  MAP.classList.add('map--faded');
+  formFieldsetsDisabled(FORM_FIELDSETS);
+  removeSelectors(PINS.querySelectorAll('[type]'));
+  document.querySelector('.map__card').remove();
   INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
 };
 
@@ -302,9 +319,11 @@ var changeTypeHousing = function () {
 var main = function () {
   formFieldsetsDisabled(FORM_FIELDSETS);
   changeTypeHousing();
+  changeRoomsQuantity();
   INPUT_ADDRESS.value = calcPinX + ', ' + calcPinY;
   MAIN_PIN.addEventListener('keydown', mapEnterPressHendler);
   MAIN_PIN.addEventListener('mousedown', openMap);
+  FORM_RESET.addEventListener('click', formReset);
 };
 
 main();
