@@ -72,6 +72,9 @@ var PINS = document.querySelector('.map__pins');
 var MAIN_PIN = document.querySelector('.map__pin--main');
 var FORM = document.querySelector('.ad-form');
 var INPUT_ADDRESS = document.querySelector('#address')
+var TYPE_SELECT = document.querySelector('#type');
+var TYPE_SELECT_OPTION = TYPE_SELECT.querySelectorAll('option');
+var PRICE_PER_NIGHT = document.querySelector('#price');
 var FORM_FIELDSETS = FORM.querySelectorAll('fieldset');
 var FILTERS = document.querySelector('.map__filters-container');
 var SIMILAR_PINS_TEMPLATE = document.querySelector('#pin')
@@ -274,8 +277,31 @@ var openMap = function () {
   INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
 };
 
+var changeTypeHousing = function () {
+  var TYPE_SELECT_OPTIONS = {
+    bungalo: {
+      min: '0'
+    },
+    flat: {
+      min: '1000'
+    },
+    house: {
+      min: '5000'
+    },
+    palace: {
+      min: '10000'
+    }
+  };
+
+  TYPE_SELECT.addEventListener('change', function () {
+    PRICE_PER_NIGHT.placeholder = TYPE_SELECT_OPTIONS[TYPE_SELECT.value].min;
+    PRICE_PER_NIGHT.min = TYPE_SELECT_OPTIONS[TYPE_SELECT.value].min;
+  });
+};
+
 var main = function () {
   formFieldsetsDisabled(FORM_FIELDSETS);
+  changeTypeHousing();
   INPUT_ADDRESS.value = calcPinX + ', ' + calcPinY;
   MAIN_PIN.addEventListener('keydown', mapEnterPressHendler);
   MAIN_PIN.addEventListener('mousedown', openMap);
