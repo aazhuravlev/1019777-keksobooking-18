@@ -6,15 +6,21 @@ var TYPES = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', 
 var TIME = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var MIN_PRICE = 1;
-var MAX_PRICE = 100000;
+var MAX_PRICE = 50000;
 var MIN_ROOMS = 1;
-var MAX_ROOMS = 10;
+var MAX_ROOMS = 3;
 var MIN_GUESTS = 1;
-var MAX_GUESTS = 10;
+var MAX_GUESTS = 3;
 var MIN_LOCATION_X = 0;
 var MAX_LOCATION_X = 1200;
 var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+var MAIN_PIN_WIDTH = 62;
+var MAIN_PIN_TRIANGLE_HEIGHT = 22;
+var MAIN_PIN_HEIGHT = 62;
+var MAIN_PIN_FULL_HEIGHT = MAIN_PIN_HEIGHT + MAIN_PIN_TRIANGLE_HEIGHT;
 
 var TEXT_CONTENT = 'textContent';
 var CONTENT = {
@@ -63,6 +69,10 @@ var CONTENT_KEYS = Object.keys(CONTENT);
 
 var MAP = document.querySelector('.map');
 var PINS = document.querySelector('.map__pins');
+var MAIN_PIN = document.querySelector('.map__pin--main');
+var FORM = document.querySelector('.ad-form');
+var INPUT_ADDRESS = document.querySelector('#address')
+var FORM_FIELDSETS = FORM.querySelectorAll('fieldset');
 var FILTERS = document.querySelector('.map__filters-container');
 var SIMILAR_PINS_TEMPLATE = document.querySelector('#pin')
   .content
@@ -71,6 +81,10 @@ var SIMILAR_PINS_TEMPLATE = document.querySelector('#pin')
 var SIMILAR_CARDS_TEMPLATE = document.querySelector('#card')
 .content
 .querySelector('.map__card');
+
+var calcPinX = parseInt(MAIN_PIN.style.left, 10) + MAIN_PIN_WIDTH / 2;
+var calcPinY = parseInt(MAIN_PIN.style.top, 10) + MAIN_PIN_HEIGHT / 2;
+var calcActivePinY = parseInt(MAIN_PIN.style.top, 10) + MAIN_PIN_FULL_HEIGHT;
 
 var createList = function (quantity, part1, part2) {
   var arr = [];
@@ -199,7 +213,7 @@ var getCardValues = function (cardData) {
     adress: cardData.offer.adress,
     price: cardData.offer.price + '₽/ночь',
     type: TYPES[cardData.offer.type],
-    capacity: cardData.offer.rooms + roomDeclination + ' для ' + guestDeclination,
+    capacity: cardData.offer.rooms + roomDeclination + ' для ' + cardData.offer.guests + guestDeclination,
     time: 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout,
     features: getFeatures(cardData.offer.features),
     description: cardData.offer.description,
@@ -231,10 +245,41 @@ var renderPins = function (arr) {
   return fragment;
 };
 
-var main = function (quantity) {
-  PINS.appendChild(renderPins(getPins(quantity)));
-  MAP.insertBefore(prepareCard(DESC_PINS[0]), FILTERS);
-  MAP.classList.remove('map--faded');
+var formFieldsetsDisabled = function (selector) {
+  selector.forEach(function (item) {
+    item.disabled = true;
+  });
 };
 
-main(PINS_COUNT);
+var formFieldsetsEnabled = function (selector) {
+  selector.forEach(function (item) {
+    item.disabled = false;
+  });
+};
+
+var openMap = function () {
+  MAP.classList.remove('map--faded');
+  FORM.classList.remove('ad-form--disabled');
+  formFieldsetsEnabled(FORM_FIELDSETS);
+  PINS.appendChild(renderPins(getPins(PINS_COUNT)));
+  MAP.insertBefore(prepareCard(DESC_PINS[0]), FILTERS);
+  MAIN_PIN.removeEventListener('mousedown', openMap);
+  INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
+};
+
+var mapEnterPressHendler = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openMap();
+    MAIN_PIN.removeEventListener('keydown', mapEnterPressHendler);
+  }
+};
+
+var main = function () {
+  formFieldsetsDisabled(FORM_FIELDSETS);
+  INPUT_ADDRESS.value = calcPinX + ', ' + calcPinY;
+  MAIN_PIN.addEventListener('keydown', mapEnterPressHendler);
+  MAIN_PIN.addEventListener('mousedown', openMap);
+};
+
+main();
+// console.log(parseInt(MAIN_PIN.style.left, 10));
