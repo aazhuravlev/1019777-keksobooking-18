@@ -257,6 +257,13 @@ var formFieldsetsEnabled = function (selector) {
   });
 };
 
+var mapEnterPressHendler = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openMap();
+    MAIN_PIN.removeEventListener('keydown', mapEnterPressHendler);
+  }
+};
+
 var openMap = function () {
   MAP.classList.remove('map--faded');
   FORM.classList.remove('ad-form--disabled');
@@ -267,13 +274,6 @@ var openMap = function () {
   INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
 };
 
-var mapEnterPressHendler = function (evt) {
-  if (evt.keyCode === ENTER_KEYCODE) {
-    openMap();
-    MAIN_PIN.removeEventListener('keydown', mapEnterPressHendler);
-  }
-};
-
 var main = function () {
   formFieldsetsDisabled(FORM_FIELDSETS);
   INPUT_ADDRESS.value = calcPinX + ', ' + calcPinY;
@@ -282,4 +282,3 @@ var main = function () {
 };
 
 main();
-// console.log(parseInt(MAIN_PIN.style.left, 10));
