@@ -192,12 +192,14 @@ var getPhotos = function (arr) {
 };
 
 var getCardValues = function (cardData) {
+  var roomDeclination = pluralize(cardData.offer.rooms, [' комната', ' комнаты', ' комнат']);
+  var guestDeclination = pluralize(cardData.offer.guests, [' гостя', ' гостей', ' гостей']);
   return {
     title: cardData.offer.title,
     adress: cardData.offer.adress,
     price: cardData.offer.price + '₽/ночь',
     type: TYPES[cardData.offer.type],
-    capacity: cardData.offer.rooms + pluralize(cardData.offer.rooms, [' комната', ' комнаты', ' комнат']) + ' для ' + cardData.offer.guests + pluralize(cardData.offer.guests, [' гостя', ' гостей', ' гостей']),
+    capacity: cardData.offer.rooms + roomDeclination + ' для ' + guestDeclination,
     time: 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout,
     features: getFeatures(cardData.offer.features),
     description: cardData.offer.description,
