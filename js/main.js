@@ -316,6 +316,36 @@ var changeTypeHousing = function () {
   });
 };
 
+var changeRoomsQuantity = function () {
+  ROOM_SELECT.addEventListener('change', function () {
+    if (ROOM_SELECT.value === '1') {
+      CAPACITY_OPTIONS[0].disabled = true;
+      CAPACITY_OPTIONS[1].disabled = true;
+      CAPACITY_OPTIONS[2].disabled = false;
+      CAPACITY_OPTIONS[3].disabled = true;
+      CAPACITY_OPTIONS[2].selected = true;
+    } else if (ROOM_SELECT.value === '2') {
+      CAPACITY_OPTIONS[0].disabled = true;
+      CAPACITY_OPTIONS[1].disabled = false;
+      CAPACITY_OPTIONS[2].disabled = false;
+      CAPACITY_OPTIONS[3].disabled = true;
+      CAPACITY_OPTIONS[2].selected = true;
+    } else if (ROOM_SELECT.value === '3') {
+      CAPACITY_OPTIONS[0].disabled = false;
+      CAPACITY_OPTIONS[1].disabled = false;
+      CAPACITY_OPTIONS[2].disabled = false;
+      CAPACITY_OPTIONS[3].disabled = true;
+      CAPACITY_OPTIONS[2].selected = true;
+    } else if (ROOM_SELECT.value === '100') {
+      CAPACITY_OPTIONS[0].disabled = true;
+      CAPACITY_OPTIONS[1].disabled = true;
+      CAPACITY_OPTIONS[2].disabled = true;
+      CAPACITY_OPTIONS[3].disabled = false;
+      CAPACITY_OPTIONS[3].selected = true;
+    }
+  });
+};
+
 var main = function () {
   formFieldsetsDisabled(FORM_FIELDSETS);
   changeTypeHousing();
