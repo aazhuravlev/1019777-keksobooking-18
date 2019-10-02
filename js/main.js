@@ -74,8 +74,8 @@ var SIMILAR_CARDS_TEMPLATE = document.querySelector('#card')
 
 var createList = function (quantity, part1, part2) {
   var arr = [];
-  for (var i = 0; i < quantity; i++) {
-    arr.push(part1 + (i + 1) + part2);
+  for (var i = 1; i <= quantity; i++) {
+    arr.push(part1 + i + part2);
   }
   return arr;
 };
