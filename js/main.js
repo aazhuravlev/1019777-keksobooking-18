@@ -271,6 +271,14 @@ var mapEnterPressHendler = function (evt) {
   }
 };
 
+var mapCardRemove = function () {
+  document.querySelector('.map__card').remove();
+};
+
+var popupClose = function () {
+  document.querySelector('.popup__close').addEventListener('click', mapCardRemove);
+};
+
 var openMap = function () {
   MAP.classList.remove('map--faded');
   formFieldsetsEnabled(FORM_FIELDSETS);
@@ -278,6 +286,7 @@ var openMap = function () {
   MAP.insertBefore(prepareCard(DESC_PINS[0]), FILTERS);
   INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
   MAIN_PIN.removeEventListener('mousedown', openMap);
+  popupClose();
 };
 
 var removeSelectors = function (selectors) {
@@ -290,7 +299,7 @@ var formReset = function () {
   MAP.classList.add('map--faded');
   formFieldsetsDisabled(FORM_FIELDSETS);
   removeSelectors(PINS.querySelectorAll('[type]'));
-  document.querySelector('.map__card').remove();
+  mapCardRemove();
   INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
 };
 
