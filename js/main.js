@@ -271,22 +271,35 @@ var mapEnterPressHendler = function (evt) {
   }
 };
 
-var mapCardRemove = function () {
-  document.querySelector('.map__card').remove();
+var pinClickHandler = function () {
+  var CREATED_PINS = PINS.querySelectorAll('[type=button]');
+  CREATED_PINS.forEach(function (item, i) {
+    item.addEventListener('click', function () {
+      MAP.insertBefore(prepareCard(DESC_PINS[i]), FILTERS);
+      popupCloseClickHandler();
+    });
+  });
 };
 
-var popupClose = function () {
-  document.querySelector('.popup__close').addEventListener('click', mapCardRemove);
+var mapCardRemove = function () {
+  document.querySelectorAll('.map__card').forEach(function (item) {
+    item.remove();
+  });
+};
+
+var popupCloseClickHandler = function () {
+  document.querySelectorAll('.popup__close').forEach(function (item) {
+    item.addEventListener('click', mapCardRemove);
+  });
 };
 
 var openMap = function () {
   MAP.classList.remove('map--faded');
   formFieldsetsEnabled(FORM_FIELDSETS);
-  PINS.appendChild(renderPins(getPins(PINS_COUNT)));
-  MAP.insertBefore(prepareCard(DESC_PINS[0]), FILTERS);
+  PINS.appendChild(renderPins(DESC_PINS));
   INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
   MAIN_PIN.removeEventListener('mousedown', openMap);
-  popupClose();
+  pinClickHandler();
 };
 
 var removeSelectors = function (selectors) {
