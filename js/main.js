@@ -21,6 +21,7 @@ var MAIN_PIN_WIDTH = 62;
 var MAIN_PIN_TRIANGLE_HEIGHT = 22;
 var MAIN_PIN_HEIGHT = 62;
 var MAIN_PIN_FULL_HEIGHT = MAIN_PIN_HEIGHT + MAIN_PIN_TRIANGLE_HEIGHT;
+var CAPACITY_OPTIONS_QUANTITY = 4;
 
 var TEXT_CONTENT = 'textContent';
 var CONTENT = {
@@ -286,10 +287,10 @@ var mapCardRemoveKeydownHandler = function (evt) {
 
 var pinClickHandler = function (selector) {
   selector.forEach(function (item, i) {
+    if (document.querySelector('.map__card')) {
+      mapCardRemove();
+    }
     item.addEventListener('click', function () {
-      if (document.querySelector('.map__card')) {
-        mapCardRemove();
-      }
       MAP.insertBefore(prepareCard(DESC_PINS[i]), FILTERS);
       document.querySelector('.popup__close').addEventListener('click', mapCardRemove);
     });
@@ -350,22 +351,22 @@ var changeTypeHousing = function () {
 };
 
 var changeRoomsHandler = function () {
-  CAPACITY_OPTIONS[0].disabled = true;
-  CAPACITY_OPTIONS[1].disabled = true;
-  CAPACITY_OPTIONS[2].disabled = false;
-  CAPACITY_OPTIONS[3].disabled = true;
-  CAPACITY_OPTIONS[2].selected = true;
-  if (ROOM_SELECT.value === '2') {
+  for (var i = 0; i < CAPACITY_OPTIONS_QUANTITY; i++) {
+    CAPACITY_OPTIONS[i].disabled = true;
+  }
+  if (ROOM_SELECT.value === '1') {
+    CAPACITY_OPTIONS[2].disabled = false;
+    CAPACITY_OPTIONS[2].selected = true;
+  } else if (ROOM_SELECT.value === '2') {
     CAPACITY_OPTIONS[1].disabled = false;
+    CAPACITY_OPTIONS[2].disabled = false;
     CAPACITY_OPTIONS[1].selected = true;
   } else if (ROOM_SELECT.value === '3') {
     CAPACITY_OPTIONS[0].disabled = false;
     CAPACITY_OPTIONS[1].disabled = false;
+    CAPACITY_OPTIONS[2].disabled = false;
     CAPACITY_OPTIONS[0].selected = true;
   } else if (ROOM_SELECT.value === '100') {
-    CAPACITY_OPTIONS[0].disabled = true;
-    CAPACITY_OPTIONS[1].disabled = true;
-    CAPACITY_OPTIONS[2].disabled = true;
     CAPACITY_OPTIONS[3].disabled = false;
     CAPACITY_OPTIONS[3].selected = true;
   }
