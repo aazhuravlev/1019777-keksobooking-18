@@ -22,6 +22,12 @@ var MAIN_PIN_TRIANGLE_HEIGHT = 22;
 var MAIN_PIN_HEIGHT = 62;
 var MAIN_PIN_FULL_HEIGHT = MAIN_PIN_HEIGHT + MAIN_PIN_TRIANGLE_HEIGHT;
 var CAPACITY_OPTIONS_QUANTITY = 4;
+var CAPACITY_VALUES = {
+  '1': [2],
+  '2': [1, 2],
+  '3': [0, 1, 2],
+  '100': [3]
+};
 
 var TEXT_CONTENT = 'textContent';
 var CONTENT = {
@@ -350,22 +356,10 @@ var changeRoomsHandler = function () {
   for (var i = 0; i < CAPACITY_OPTIONS_QUANTITY; i++) {
     CAPACITY_OPTIONS[i].disabled = true;
   }
-  if (ROOM_SELECT.value === '1') {
-    CAPACITY_OPTIONS[2].disabled = false;
-    CAPACITY_OPTIONS[2].selected = true;
-  } else if (ROOM_SELECT.value === '2') {
-    CAPACITY_OPTIONS[1].disabled = false;
-    CAPACITY_OPTIONS[2].disabled = false;
-    CAPACITY_OPTIONS[1].selected = true;
-  } else if (ROOM_SELECT.value === '3') {
-    CAPACITY_OPTIONS[0].disabled = false;
-    CAPACITY_OPTIONS[1].disabled = false;
-    CAPACITY_OPTIONS[2].disabled = false;
-    CAPACITY_OPTIONS[0].selected = true;
-  } else if (ROOM_SELECT.value === '100') {
-    CAPACITY_OPTIONS[3].disabled = false;
-    CAPACITY_OPTIONS[3].selected = true;
+  for (var j = 0; j < CAPACITY_VALUES[ROOM_SELECT.value].length; j++) {
+    CAPACITY_OPTIONS[CAPACITY_VALUES[ROOM_SELECT.value][j]].disabled = false;
   }
+  CAPACITY_OPTIONS[CAPACITY_VALUES[ROOM_SELECT.value][0]].selected = true;
 };
 
 var changeRoomsQuantity = function () {
