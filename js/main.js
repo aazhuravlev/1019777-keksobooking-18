@@ -77,6 +77,8 @@ var INPUT_ADDRESS = document.querySelector('#address');
 var TYPE_SELECT = document.querySelector('#type');
 var ROOM_SELECT = document.querySelector('#room_number');
 var CAPACITY_SELECT = document.querySelector('#capacity');
+var TIMEIN_SELECT = document.querySelector('#timein');
+var TIMEOUT_SELECT = document.querySelector('#timeout');
 var CAPACITY_OPTIONS = CAPACITY_SELECT.querySelectorAll('option');
 var PRICE_PER_NIGHT = document.querySelector('#price');
 var FILTERS = document.querySelector('.map__filters-container');
@@ -339,34 +341,38 @@ var changeTypeHousing = function () {
     }
   };
 
-  TYPE_SELECT.addEventListener('change', function () {
+  var typeSelectChangeHandler = function () {
     PRICE_PER_NIGHT.placeholder = TYPE_SELECT_OPTIONS[TYPE_SELECT.value].min;
     PRICE_PER_NIGHT.min = TYPE_SELECT_OPTIONS[TYPE_SELECT.value].min;
-  });
+  };
+
+  TYPE_SELECT.addEventListener('change', typeSelectChangeHandler);
+};
+
+var changeRoomsHandler = function () {
+  CAPACITY_OPTIONS[0].disabled = true;
+  CAPACITY_OPTIONS[1].disabled = true;
+  CAPACITY_OPTIONS[2].disabled = false;
+  CAPACITY_OPTIONS[3].disabled = true;
+  CAPACITY_OPTIONS[2].selected = true;
+  if (ROOM_SELECT.value === '2') {
+    CAPACITY_OPTIONS[1].disabled = false;
+    CAPACITY_OPTIONS[1].selected = true;
+  } else if (ROOM_SELECT.value === '3') {
+    CAPACITY_OPTIONS[0].disabled = false;
+    CAPACITY_OPTIONS[1].disabled = false;
+    CAPACITY_OPTIONS[0].selected = true;
+  } else if (ROOM_SELECT.value === '100') {
+    CAPACITY_OPTIONS[0].disabled = true;
+    CAPACITY_OPTIONS[1].disabled = true;
+    CAPACITY_OPTIONS[2].disabled = true;
+    CAPACITY_OPTIONS[3].disabled = false;
+    CAPACITY_OPTIONS[3].selected = true;
+  }
 };
 
 var changeRoomsQuantity = function () {
-  ROOM_SELECT.addEventListener('change', function () {
-    CAPACITY_OPTIONS[0].disabled = true;
-    CAPACITY_OPTIONS[1].disabled = true;
-    CAPACITY_OPTIONS[2].disabled = false;
-    CAPACITY_OPTIONS[3].disabled = true;
-    CAPACITY_OPTIONS[2].selected = true;
-    if (ROOM_SELECT.value === '2') {
-      CAPACITY_OPTIONS[1].disabled = false;
-      CAPACITY_OPTIONS[1].selected = true;
-    } else if (ROOM_SELECT.value === '3') {
-      CAPACITY_OPTIONS[0].disabled = false;
-      CAPACITY_OPTIONS[1].disabled = false;
-      CAPACITY_OPTIONS[0].selected = true;
-    } else if (ROOM_SELECT.value === '100') {
-      CAPACITY_OPTIONS[0].disabled = true;
-      CAPACITY_OPTIONS[1].disabled = true;
-      CAPACITY_OPTIONS[2].disabled = true;
-      CAPACITY_OPTIONS[3].disabled = false;
-      CAPACITY_OPTIONS[3].selected = true;
-    }
-  });
+  ROOM_SELECT.addEventListener('change', changeRoomsHandler);
 };
 
 var main = function () {
