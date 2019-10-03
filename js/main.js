@@ -254,14 +254,14 @@ var renderPins = function (arr) {
   return fragment;
 };
 
-var formFieldsetsDisabled = function (selector) {
+var setFormFieldsetsDisabled = function (selector) {
   FORM.classList.add('ad-form--disabled');
   selector.forEach(function (item) {
     item.disabled = true;
   });
 };
 
-var formFieldsetsEnabled = function (selector) {
+var setFormFieldsetsEnabled = function (selector) {
   FORM.classList.remove('ad-form--disabled');
   selector.forEach(function (item) {
     item.disabled = false;
@@ -304,7 +304,7 @@ var pinClick = function () {
 
 var openMap = function () {
   MAP.classList.remove('map--faded');
-  formFieldsetsEnabled(FORM_FIELDSETS);
+  setFormFieldsetsEnabled(FORM_FIELDSETS);
   PINS.appendChild(renderPins(DESC_PINS));
   INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
   MAIN_PIN.removeEventListener('mousedown', openMap);
@@ -320,7 +320,7 @@ var removeSelectors = function (selectors) {
 
 var formReset = function () {
   MAP.classList.add('map--faded');
-  formFieldsetsDisabled(FORM_FIELDSETS);
+  setFormFieldsetsDisabled(FORM_FIELDSETS);
   removeSelectors(PINS.querySelectorAll('[type]'));
   document.querySelector('.map__card').remove();
   INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
@@ -346,7 +346,6 @@ var changeRoomsHandler = function () {
   for (var i = 0; i < CAPACITY_OPTIONS_QUANTITY; i++) {
     CAPACITY_OPTIONS[i].disabled = true;
   }
-
   if (ROOM_SELECT.value === '1') {
     CAPACITY_OPTIONS[2].disabled = false;
     CAPACITY_OPTIONS[2].selected = true;
