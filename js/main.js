@@ -214,15 +214,19 @@ var getPhotos = function (arr) {
   return arr.map(getPhoto).join('');
 };
 
+var getCapacity = function (number) {
+  var roomDeclination = pluralize(number.offer.rooms, [' комната', ' комнаты', ' комнат']);
+  var guestDeclination = pluralize(number.offer.guests, [' гостя', ' гостей', ' гостей']);
+  return number.offer.rooms + roomDeclination + ' для ' + number.offer.guests + guestDeclination;
+};
+
 var getCardValues = function (cardData) {
-  var roomDeclination = pluralize(cardData.offer.rooms, [' комната', ' комнаты', ' комнат']);
-  var guestDeclination = pluralize(cardData.offer.guests, [' гостя', ' гостей', ' гостей']);
   return {
     title: cardData.offer.title,
     adress: cardData.offer.adress,
     price: cardData.offer.price + '₽/ночь',
     type: TYPES[cardData.offer.type],
-    capacity: cardData.offer.rooms + roomDeclination + ' для ' + cardData.offer.guests + guestDeclination,
+    capacity: getCapacity(cardData),
     time: 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout,
     features: getFeatures(cardData.offer.features),
     description: cardData.offer.description,
@@ -369,7 +373,7 @@ var changeRoomsQuantity = function () {
 };
 
 var main = function () {
-  formFieldsetsDisabled(FORM_FIELDSETS);
+  setFormFieldsetsDisabled(FORM_FIELDSETS);
   changeTypeHousing();
   changeRoomsQuantity();
   INPUT_ADDRESS.value = calcPinX + ', ' + calcPinY;
