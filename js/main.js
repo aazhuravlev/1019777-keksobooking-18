@@ -275,6 +275,9 @@ var pinClickHandler = function () {
   var CREATED_PINS = PINS.querySelectorAll('[type=button]');
   CREATED_PINS.forEach(function (item, i) {
     item.addEventListener('click', function () {
+      if (document.querySelector('.map__card')) {
+        mapCardRemove();
+      }
       MAP.insertBefore(prepareCard(DESC_PINS[i]), FILTERS);
       popupCloseClickHandler();
     });
@@ -282,15 +285,11 @@ var pinClickHandler = function () {
 };
 
 var mapCardRemove = function () {
-  document.querySelectorAll('.map__card').forEach(function (item) {
-    item.remove();
-  });
+  document.querySelector('.map__card').remove();
 };
 
 var popupCloseClickHandler = function () {
-  document.querySelectorAll('.popup__close').forEach(function (item) {
-    item.addEventListener('click', mapCardRemove);
-  });
+  document.querySelector('.popup__close').addEventListener('click', mapCardRemove);
 };
 
 var openMap = function () {
