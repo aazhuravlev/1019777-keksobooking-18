@@ -328,22 +328,14 @@ var formReset = function () {
 
 var changeTypeHousing = function () {
   var TYPE_SELECT_OPTIONS = {
-    bungalo: {
-      min: '0'
-    },
-    flat: {
-      min: '1000'
-    },
-    house: {
-      min: '5000'
-    },
-    palace: {
-      min: '10000'
-    }
+    bungalo: '0',
+    flat: '1000',
+    house: '5000',
+    palace: '10000'
   };
 
   var typeSelectChangeHandler = function () {
-    PRICE_PER_NIGHT.placeholder = TYPE_SELECT_OPTIONS[TYPE_SELECT.value].min;
+    PRICE_PER_NIGHT.placeholder = TYPE_SELECT_OPTIONS[TYPE_SELECT.value];
     PRICE_PER_NIGHT.min = TYPE_SELECT_OPTIONS[TYPE_SELECT.value].min;
   };
 
@@ -354,6 +346,7 @@ var changeRoomsHandler = function () {
   for (var i = 0; i < CAPACITY_OPTIONS_QUANTITY; i++) {
     CAPACITY_OPTIONS[i].disabled = true;
   }
+
   if (ROOM_SELECT.value === '1') {
     CAPACITY_OPTIONS[2].disabled = false;
     CAPACITY_OPTIONS[2].selected = true;
