@@ -16,6 +16,7 @@ var MAX_LOCATION_X = 1200;
 var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
 var ENTER_KEYCODE = 13;
+var ESC_KEYCODE = 27;
 var MAIN_PIN_WIDTH = 62;
 var MAIN_PIN_TRIANGLE_HEIGHT = 22;
 var MAIN_PIN_HEIGHT = 62;
@@ -271,25 +272,31 @@ var mapEnterPressHendler = function (evt) {
   }
 };
 
-var pinClickHandler = function () {
-  var CREATED_PINS = PINS.querySelectorAll('[type=button]');
-  CREATED_PINS.forEach(function (item, i) {
+var mapCardRemove = function () {
+  document.querySelector('.map__card').remove();
+};
+
+var mapCardRemoveKeydownHandler = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    mapCardRemove();
+  }
+};
+
+var pinClickHandler = function (selector) {
+  selector.forEach(function (item, i) {
     item.addEventListener('click', function () {
       if (document.querySelector('.map__card')) {
         mapCardRemove();
       }
       MAP.insertBefore(prepareCard(DESC_PINS[i]), FILTERS);
-      popupCloseClickHandler();
+      document.querySelector('.popup__close').addEventListener('click', mapCardRemove);
     });
   });
 };
 
-var mapCardRemove = function () {
-  document.querySelector('.map__card').remove();
-};
-
-var popupCloseClickHandler = function () {
-  document.querySelector('.popup__close').addEventListener('click', mapCardRemove);
+var pinClick = function () {
+  var CREATED_PINS = PINS.querySelectorAll('[type=button]');
+  pinClickHandler(CREATED_PINS);
 };
 
 var openMap = function () {
@@ -298,7 +305,8 @@ var openMap = function () {
   PINS.appendChild(renderPins(DESC_PINS));
   INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
   MAIN_PIN.removeEventListener('mousedown', openMap);
-  pinClickHandler();
+  pinClick();
+  document.addEventListener('keydown', mapCardRemoveKeydownHandler);
 };
 
 var removeSelectors = function (selectors) {
@@ -311,7 +319,7 @@ var formReset = function () {
   MAP.classList.add('map--faded');
   formFieldsetsDisabled(FORM_FIELDSETS);
   removeSelectors(PINS.querySelectorAll('[type]'));
-  mapCardRemove();
+  document.querySelector('.map__card').remove();
   INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
 };
 
