@@ -28,6 +28,12 @@ var CAPACITY_VALUES = {
   '3': [0, 1, 2],
   '100': [3]
 };
+var TYPE_SELECT_OPTIONS = {
+  bungalo: '0',
+  flat: '1000',
+  house: '5000',
+  palace: '10000'
+};
 
 var TEXT_CONTENT = 'textContent';
 var CONTENT = {
@@ -336,20 +342,9 @@ var formReset = function () {
   INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
 };
 
-var changeTypeHousing = function () {
-  var TYPE_SELECT_OPTIONS = {
-    bungalo: '0',
-    flat: '1000',
-    house: '5000',
-    palace: '10000'
-  };
-
-  var typeSelectChangeHandler = function () {
-    PRICE_PER_NIGHT.placeholder = TYPE_SELECT_OPTIONS[TYPE_SELECT.value];
-    PRICE_PER_NIGHT.min = TYPE_SELECT_OPTIONS[TYPE_SELECT.value].min;
-  };
-
-  TYPE_SELECT.addEventListener('change', typeSelectChangeHandler);
+var typeSelectChangeHandler = function () {
+  PRICE_PER_NIGHT.placeholder = TYPE_SELECT_OPTIONS[TYPE_SELECT.value];
+  PRICE_PER_NIGHT.min = TYPE_SELECT_OPTIONS[TYPE_SELECT.value].min;
 };
 
 var changeRoomsHandler = function () {
@@ -362,14 +357,10 @@ var changeRoomsHandler = function () {
   CAPACITY_OPTIONS[CAPACITY_VALUES[ROOM_SELECT.value][0]].selected = true;
 };
 
-var changeRoomsQuantity = function () {
-  ROOM_SELECT.addEventListener('change', changeRoomsHandler);
-};
-
 var main = function () {
   setFormFieldsetsDisabled(FORM_FIELDSETS);
-  changeTypeHousing();
-  changeRoomsQuantity();
+  TYPE_SELECT.addEventListener('change', typeSelectChangeHandler);
+  ROOM_SELECT.addEventListener('change', changeRoomsHandler);
   INPUT_ADDRESS.value = calcPinX + ', ' + calcPinY;
   MAIN_PIN.addEventListener('keydown', mapEnterPressHendler);
   MAIN_PIN.addEventListener('mousedown', openMap);
