@@ -107,6 +107,14 @@ var calcPinX = parseInt(MAIN_PIN.style.left, 10) + MAIN_PIN_WIDTH / 2;
 var calcPinY = parseInt(MAIN_PIN.style.top, 10) + MAIN_PIN_HEIGHT / 2;
 var calcActivePinY = parseInt(MAIN_PIN.style.top, 10) + MAIN_PIN_FULL_HEIGHT;
 
+var calcMainPinCoordinates = function () {
+  return calcPinX + ', ' + calcPinY;
+};
+
+var calcActiveMainPinCoordinates = function () {
+  return calcPinX + ', ' + calcActivePinY;
+};
+
 var createList = function (quantity, part1, part2) {
   var arr = [];
   for (var i = 1; i <= quantity; i++) {
@@ -322,7 +330,7 @@ var openMap = function () {
   MAP.classList.remove('map--faded');
   setEnabledFormFieldsets(FORM_FIELDSETS);
   PINS.appendChild(renderPins(DESC_PINS));
-  INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
+  INPUT_ADDRESS.value = calcActiveMainPinCoordinates();
   MAIN_PIN.removeEventListener('mousedown', openMap);
   clickPin();
   document.addEventListener('keydown', removeMapCardKeydownHandler);
@@ -337,9 +345,9 @@ var removeSelectors = function (selectors) {
 var formReset = function () {
   MAP.classList.add('map--faded');
   setDisabledFormFieldsets(FORM_FIELDSETS);
+  INPUT_ADDRESS.value = calcMainPinCoordinates();
   removeSelectors(PINS.querySelectorAll('[type]'));
   document.querySelector('.map__card').remove();
-  INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
 };
 
 var typeSelectChangeHandler = function () {
@@ -361,7 +369,7 @@ var main = function () {
   setDisabledFormFieldsets(FORM_FIELDSETS);
   TYPE_SELECT.addEventListener('change', typeSelectChangeHandler);
   ROOM_SELECT.addEventListener('change', changeRoomsHandler);
-  INPUT_ADDRESS.value = calcPinX + ', ' + calcPinY;
+  INPUT_ADDRESS.value = calcMainPinCoordinates();
   MAIN_PIN.addEventListener('keydown', mapEnterPressHendler);
   MAIN_PIN.addEventListener('mousedown', openMap);
   FORM_RESET.addEventListener('click', formReset);
