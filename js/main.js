@@ -365,10 +365,20 @@ var changeRoomsHandler = function () {
   CAPACITY_OPTIONS[CAPACITY_VALUES[ROOM_SELECT.value][0]].selected = true;
 };
 
+var timeInSelectHandler = function () {
+  TIMEOUT_SELECT[TIME.indexOf(TIMEIN_SELECT.value)].selected = true;
+};
+
+var timeOutSelectHandler = function () {
+  TIMEIN_SELECT[TIME.indexOf(TIMEOUT_SELECT.value)].selected = true;
+};
+
 var main = function () {
   setDisabledFormFieldsets(FORM_FIELDSETS);
   TYPE_SELECT.addEventListener('change', typeSelectChangeHandler);
   ROOM_SELECT.addEventListener('change', changeRoomsHandler);
+  TIMEIN_SELECT.addEventListener('change', timeInSelectHandler);
+  TIMEOUT_SELECT.addEventListener('change', timeOutSelectHandler);
   INPUT_ADDRESS.value = calcMainPinCoordinates();
   MAIN_PIN.addEventListener('keydown', mapEnterPressHendler);
   MAIN_PIN.addEventListener('mousedown', openMap);
