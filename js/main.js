@@ -270,14 +270,14 @@ var renderPins = function (arr) {
   return fragment;
 };
 
-var setFormFieldsetsDisabled = function (selector) {
+var setDisabledFormFieldsets = function (selector) {
   FORM.classList.add('ad-form--disabled');
   selector.forEach(function (item) {
     item.disabled = true;
   });
 };
 
-var setFormFieldsetsEnabled = function (selector) {
+var setEnabledFormFieldsets = function (selector) {
   FORM.classList.remove('ad-form--disabled');
   selector.forEach(function (item) {
     item.disabled = false;
@@ -320,7 +320,7 @@ var pinClick = function () {
 
 var openMap = function () {
   MAP.classList.remove('map--faded');
-  setFormFieldsetsEnabled(FORM_FIELDSETS);
+  setEnabledFormFieldsets(FORM_FIELDSETS);
   PINS.appendChild(renderPins(DESC_PINS));
   INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
   MAIN_PIN.removeEventListener('mousedown', openMap);
@@ -336,7 +336,7 @@ var removeSelectors = function (selectors) {
 
 var formReset = function () {
   MAP.classList.add('map--faded');
-  setFormFieldsetsDisabled(FORM_FIELDSETS);
+  setDisabledFormFieldsets(FORM_FIELDSETS);
   removeSelectors(PINS.querySelectorAll('[type]'));
   document.querySelector('.map__card').remove();
   INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
@@ -358,7 +358,7 @@ var changeRoomsHandler = function () {
 };
 
 var main = function () {
-  setFormFieldsetsDisabled(FORM_FIELDSETS);
+  setDisabledFormFieldsets(FORM_FIELDSETS);
   TYPE_SELECT.addEventListener('change', typeSelectChangeHandler);
   ROOM_SELECT.addEventListener('change', changeRoomsHandler);
   INPUT_ADDRESS.value = calcPinX + ', ' + calcPinY;
