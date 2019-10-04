@@ -348,12 +348,12 @@ var typeSelectChangeHandler = function () {
 };
 
 var changeRoomsHandler = function () {
-  for (var i = 0; i < CAPACITY_OPTIONS_QUANTITY; i++) {
-    CAPACITY_OPTIONS[i].disabled = true;
-  }
-  for (var j = 0; j < CAPACITY_VALUES[ROOM_SELECT.value].length; j++) {
-    CAPACITY_OPTIONS[CAPACITY_VALUES[ROOM_SELECT.value][j]].disabled = false;
-  }
+  CAPACITY_OPTIONS.forEach(function (item) {
+    item.disabled = true;
+  });
+  CAPACITY_VALUES[ROOM_SELECT.value].forEach(function (item) {
+    CAPACITY_OPTIONS[item].disabled = false;
+  });
   CAPACITY_OPTIONS[CAPACITY_VALUES[ROOM_SELECT.value][0]].selected = true;
 };
 
