@@ -291,29 +291,29 @@ var mapEnterPressHendler = function (evt) {
   }
 };
 
-var mapCardRemove = function () {
+var removeMapCard = function () {
   document.querySelector('.map__card').remove();
 };
 
-var mapCardRemoveKeydownHandler = function (evt) {
+var removeMapCardKeydownHandler = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
-    mapCardRemove();
+    removeMapCard();
   }
 };
 
 var pinClickHandler = function (selector) {
   selector.forEach(function (item, i) {
     if (document.querySelector('.map__card')) {
-      mapCardRemove();
+      removeMapCard();
     }
     item.addEventListener('click', function () {
       MAP.insertBefore(prepareCard(DESC_PINS[i]), FILTERS);
-      document.querySelector('.popup__close').addEventListener('click', mapCardRemove);
+      document.querySelector('.popup__close').addEventListener('click', removeMapCard);
     });
   });
 };
 
-var pinClick = function () {
+var clickPin = function () {
   var CREATED_PINS = PINS.querySelectorAll('[type=button]');
   pinClickHandler(CREATED_PINS);
 };
@@ -324,8 +324,8 @@ var openMap = function () {
   PINS.appendChild(renderPins(DESC_PINS));
   INPUT_ADDRESS.value = calcPinX + ', ' + calcActivePinY;
   MAIN_PIN.removeEventListener('mousedown', openMap);
-  pinClick();
-  document.addEventListener('keydown', mapCardRemoveKeydownHandler);
+  clickPin();
+  document.addEventListener('keydown', removeMapCardKeydownHandler);
 };
 
 var removeSelectors = function (selectors) {
