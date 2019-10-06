@@ -37,8 +37,8 @@ var TYPE_SELECT_OPTIONS = {
 var TEXT_CONTENT = 'textContent';
 var CONTENT = {
   title: ['title', TEXT_CONTENT],
-  adress: ['text--address',TEXT_CONTENT],
-  price: ['text--price',TEXT_CONTENT],
+  adress: ['text--address', TEXT_CONTENT],
+  price: ['text--price', TEXT_CONTENT],
   type: ['type', TEXT_CONTENT],
   capacity: ['text--capacity', TEXT_CONTENT],
   time: ['text--time', TEXT_CONTENT],
