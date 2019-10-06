@@ -212,7 +212,7 @@ var preparePin = function (item, i) {
   var pinImage = pinElement.querySelector('img');
 
   pinElement.setAttribute('style', getLocation(item));
-  pinElement.setAttribute('data-id', (i + 1));
+  pinElement.setAttribute('data-id', i);
   pinImage.src = item.author.avatar;
   pinImage.alt = item.offer.title;
   return pinElement;
@@ -313,10 +313,10 @@ var removeMapCardKeydownHandler = function (evt) {
 };
 
 var pinClickHandler = function (evt) {
-  var cardSelectorId = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
-  if (cardSelectorId) {
+  var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
+  if (idx) {
     removeMapCard();
-    MAP.insertBefore(prepareCard(DESC_PINS[cardSelectorId - 1]), FILTERS);
+    MAP.insertBefore(prepareCard(DESC_PINS[idx]), FILTERS);
     MAP.querySelector('.popup__close').addEventListener('click', removeMapCard);
   }
 };
