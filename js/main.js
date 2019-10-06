@@ -300,7 +300,10 @@ var mapEnterPressHendler = function (evt) {
 };
 
 var removeMapCard = function () {
-  MAP.querySelector('.map__card').remove();
+  var mapCard = MAP.querySelector('.map__card');
+  if (mapCard) {
+    mapCard.remove();
+  }
 };
 
 var removeMapCardKeydownHandler = function (evt) {
@@ -311,6 +314,7 @@ var removeMapCardKeydownHandler = function (evt) {
 
 var pinClickHandler = function (evt) {
   if (evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id')) {
+    removeMapCard();
     MAP.insertBefore(prepareCard(DESC_PINS[0]), FILTERS);
     MAP.querySelector('.popup__close').addEventListener('click', removeMapCard);
   }
