@@ -36,47 +36,18 @@ var TYPE_SELECT_OPTIONS = {
 
 var TEXT_CONTENT = 'textContent';
 var CONTENT = {
-  title: {
-    selector: 'title',
-    target: TEXT_CONTENT
-  },
-  adress: {
-    selector: 'text--address',
-    target: TEXT_CONTENT
-  },
-  price: {
-    selector: 'text--price',
-    target: TEXT_CONTENT
-  },
-  type: {
-    selector: 'type',
-    target: TEXT_CONTENT
-  },
-  capacity: {
-    selector: 'text--capacity',
-    target: TEXT_CONTENT
-  },
-  time: {
-    selector: 'text--time',
-    target: TEXT_CONTENT
-  },
-  features: {
-    selector: 'features',
-    target: 'innerHTML'
-  },
-  description: {
-    selector: 'description',
-    target: TEXT_CONTENT
-  },
-  photos: {
-    selector: 'photos',
-    target: 'innerHTML'
-  },
-  avatar: {
-    selector: 'avatar',
-    target: 'src'
-  }
+  title: ['title', TEXT_CONTENT],
+  adress: ['text--address',TEXT_CONTENT],
+  price: ['text--price',TEXT_CONTENT],
+  type: ['type', TEXT_CONTENT],
+  capacity: ['text--capacity', TEXT_CONTENT],
+  time: ['text--time', TEXT_CONTENT],
+  features: ['features', 'innerHTML'],
+  description: ['description', TEXT_CONTENT],
+  photos: ['photos', 'innerHTML'],
+  avatar: ['avatar', 'src']
 };
+
 var CONTENT_KEYS = Object.keys(CONTENT);
 
 var MAP = document.querySelector('.map');
@@ -264,7 +235,7 @@ var prepareCard = function (item) {
     if (!values[key]) {
       window['console']['error']('в values отсутствует ключ ' + key);
     } else {
-      cardElement.querySelector('.popup__' + keyItem.selector)[keyItem.target] = values[key];
+      cardElement.querySelector('.popup__' + keyItem[0])[keyItem[1]] = values[key];
     }
   });
   return cardElement;
