@@ -212,7 +212,7 @@ var preparePin = function (item, i) {
   var pinImage = pinElement.querySelector('img');
 
   pinElement.setAttribute('style', getLocation(item));
-  pinElement.setAttribute('data-id', 'pin' + (i + 1));
+  pinElement.setAttribute('data-id', (i + 1));
   pinImage.src = item.author.avatar;
   pinImage.alt = item.offer.title;
   return pinElement;
@@ -313,9 +313,10 @@ var removeMapCardKeydownHandler = function (evt) {
 };
 
 var pinClickHandler = function (evt) {
-  if (evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id')) {
+  var cardSelectorId = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
+  if (cardSelectorId) {
     removeMapCard();
-    MAP.insertBefore(prepareCard(DESC_PINS[0]), FILTERS);
+    MAP.insertBefore(prepareCard(DESC_PINS[cardSelectorId - 1]), FILTERS);
     MAP.querySelector('.popup__close').addEventListener('click', removeMapCard);
   }
 };
@@ -339,7 +340,7 @@ var formReset = function () {
   setDisabledFormFieldsets(FORM_FIELDSETS);
   INPUT_ADDRESS.value = calcMainPinCoordinates();
   removeSelectors(PINS.querySelectorAll('[type]'));
-  document.querySelector('.map__card').remove();
+  removeMapCard();
 };
 
 var typeSelectChangeHandler = function () {
