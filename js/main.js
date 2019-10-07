@@ -35,6 +35,8 @@ var TYPE_SELECT_OPTIONS = {
 };
 
 var TEXT_CONTENT = 'textContent';
+var INNER_HTML = 'innerHTML';
+var SRC = 'src';
 var CONTENT = {
   title: ['title', TEXT_CONTENT],
   adress: ['text--address', TEXT_CONTENT],
@@ -42,10 +44,10 @@ var CONTENT = {
   type: ['type', TEXT_CONTENT],
   capacity: ['text--capacity', TEXT_CONTENT],
   time: ['text--time', TEXT_CONTENT],
-  features: ['features', 'innerHTML'],
+  features: ['features', INNER_HTML],
   description: ['description', TEXT_CONTENT],
-  photos: ['photos', 'innerHTML'],
-  avatar: ['avatar', 'src']
+  photos: ['photos', INNER_HTML],
+  avatar: ['avatar', SRC]
 };
 
 var CONTENT_KEYS = Object.keys(CONTENT);
@@ -65,14 +67,10 @@ var TIMEOUT_SELECT = document.querySelector('#timeout');
 var CAPACITY_OPTIONS = CAPACITY_SELECT.querySelectorAll('option');
 var PRICE_PER_NIGHT = document.querySelector('#price');
 var FILTERS = document.querySelector('.map__filters-container');
-var SIMILAR_PINS_TEMPLATE = document.querySelector('#pin')
-  .content
-  .querySelector('.map__pin');
-
-var SIMILAR_CARDS_TEMPLATE = document.querySelector('#card')
-.content
-.querySelector('.map__card');
-
+var SIMILAR_PINS_TEMPLATE = document.querySelector('#pin').content;
+var MAP_PIN = SIMILAR_PINS_TEMPLATE.querySelector('.map__pin');
+var SIMILAR_CARDS_TEMPLATE = document.querySelector('#card').content;
+var MAP_CARD = SIMILAR_CARDS_TEMPLATE.querySelector('.map__card');
 var calcPinX = parseInt(MAIN_PIN.style.left, 10) + MAIN_PIN_WIDTH / 2;
 var calcPinY = parseInt(MAIN_PIN.style.top, 10) + MAIN_PIN_HEIGHT / 2;
 var calcActivePinY = parseInt(MAIN_PIN.style.top, 10) + MAIN_PIN_FULL_HEIGHT;
@@ -172,14 +170,12 @@ var getPins = function (quantity) {
   return pinsDesc;
 };
 
-var DESC_PINS = getPins(PINS_COUNT);
-
 var getLocation = function (number) {
   return 'left: ' + number.location.x + ';' + ' top: ' + number.location.y + ';';
 };
 
 var preparePin = function (item, i) {
-  var pinElement = SIMILAR_PINS_TEMPLATE.cloneNode(true);
+  var pinElement = MAP_PIN.cloneNode(true);
   var pinImage = pinElement.querySelector('img');
 
   pinElement.setAttribute('style', getLocation(item));
@@ -227,7 +223,7 @@ var getCardValues = function (cardData) {
 };
 
 var prepareCard = function (item) {
-  var cardElement = SIMILAR_CARDS_TEMPLATE.cloneNode(true);
+  var cardElement = MAP_CARD.cloneNode(true);
   var values = getCardValues(item);
 
   CONTENT_KEYS.forEach(function (key) {
@@ -351,4 +347,5 @@ var main = function () {
   FORM_RESET.addEventListener('click', formReset);
 };
 
+var DESC_PINS = getPins(PINS_COUNT);
 main();
