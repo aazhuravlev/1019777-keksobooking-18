@@ -4,9 +4,11 @@ var PINS_COUNT = 8;
 var HOTEL_PHOTOS_COUNT = 3;
 var TYPES = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
 var TIME = ['12:00', '13:00', '14:00'];
+var ACCOMODATION_TIME;
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var MIN_PRICE = 1;
 var MAX_PRICE = 50000;
+var CARD_PRICE;
 var MIN_ROOMS = 1;
 var MAX_ROOMS = 3;
 var MIN_GUESTS = 1;
@@ -21,6 +23,10 @@ var MAIN_PIN_WIDTH = 62;
 var MAIN_PIN_TRIANGLE_HEIGHT = 22;
 var MAIN_PIN_HEIGHT = 62;
 var MAIN_PIN_FULL_HEIGHT = MAIN_PIN_HEIGHT + MAIN_PIN_TRIANGLE_HEIGHT;
+var ROOM_DECLINATION;
+var ROOM_DECLINATION_VALUES = [' комната', ' комнаты', ' комнат'];
+var GUEST_DECLINATION;
+var GUEST_DECLINATION_VALUES = [' гостя', ' гостей', ' гостей'];
 var CAPACITY_VALUES = {
   '1': [2],
   '2': [1, 2],
@@ -202,21 +208,25 @@ var getPhotos = function (arr) {
 };
 
 var getCapacity = function (number) {
-  var roomDeclination = pluralize(number.offer.rooms, [' комната', ' комнаты', ' комнат']);
-  var guestDeclination = pluralize(number.offer.guests, [' гостя', ' гостей', ' гостей']);
-  return number.offer.rooms + roomDeclination + ' для ' + number.offer.guests + guestDeclination;
+  var item = number.offer;
+  ROOM_DECLINATION = pluralize(item.rooms, ROOM_DECLINATION_VALUES);
+  GUEST_DECLINATION = pluralize(item.guests, GUEST_DECLINATION_VALUES);
+  return item.rooms + ROOM_DECLINATION + ' для ' + item.guests + GUEST_DECLINATION;
 };
 
 var getCardValues = function (cardData) {
+  var item = cardData.offer;
+  ACCOMODATION_TIME = 'Заезд после ' + item.checkin + ', выезд до ' + item.checkout;
+  CARD_PRICE = item.price + '₽/ночь';
   return {
-    title: cardData.offer.title,
-    adress: cardData.offer.adress,
-    price: cardData.offer.price + '₽/ночь',
-    type: TYPES[cardData.offer.type],
+    title: item.title,
+    adress: item.adress,
+    price: CARD_PRICE,
+    type: TYPES[item.type],
     capacity: getCapacity(cardData),
-    time: 'Заезд после ' + cardData.offer.checkin + ', выезд до ' + cardData.offer.checkout,
-    features: getFeatures(cardData.offer.features),
-    description: cardData.offer.description,
+    time: ACCOMODATION_TIME,
+    features: getFeatures(item.features),
+    description: item.description,
     photos: getPhotos(PHOTOS),
     avatar: cardData.author.avatar
   };
@@ -248,10 +258,7 @@ var renderPins = function (arr) {
 var setStatusFormFieldsets = function (selector, action) {
   FORM.classList[action]('ad-form--disabled');
   selector.forEach(function (item) {
-    item.disabled = true;
-    if (action === 'remove') {
-      item.disabled = false;
-    }
+    item.disabled = action !== 'remove';
   });
 };
 
