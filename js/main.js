@@ -245,17 +245,13 @@ var renderPins = function (arr) {
   return fragment;
 };
 
-var setDisabledFormFieldsets = function (selector) {
-  FORM.classList.add('ad-form--disabled');
+var setStatusFormFieldsets = function (selector, action) {
+  FORM.classList[action]('ad-form--disabled');
   selector.forEach(function (item) {
     item.disabled = true;
-  });
-};
-
-var setEnabledFormFieldsets = function (selector) {
-  FORM.classList.remove('ad-form--disabled');
-  selector.forEach(function (item) {
-    item.disabled = false;
+    if (action === 'remove') {
+      item.disabled = false;
+    }
   });
 };
 
@@ -290,7 +286,7 @@ var pinClickHandler = function (evt) {
 
 var openMap = function () {
   MAP.classList.remove('map--faded');
-  setEnabledFormFieldsets(FORM_FIELDSETS);
+  setStatusFormFieldsets(FORM_FIELDSETS, 'remove');
   PINS.appendChild(renderPins(DESC_PINS));
   INPUT_ADDRESS.value = calcActiveMainPinCoordinates();
   MAIN_PIN.removeEventListener('mousedown', openMap);
@@ -304,7 +300,7 @@ var removeSelectors = function (selectors) {
 
 var formReset = function () {
   MAP.classList.add('map--faded');
-  setDisabledFormFieldsets(FORM_FIELDSETS);
+  setStatusFormFieldsets(FORM_FIELDSETS, 'add');
   INPUT_ADDRESS.value = calcMainPinCoordinates();
   removeSelectors(PINS.querySelectorAll('[type]'));
   removeMapCard();
@@ -334,7 +330,7 @@ var timeOutSelectHandler = function () {
 };
 
 var main = function () {
-  setDisabledFormFieldsets(FORM_FIELDSETS);
+  setStatusFormFieldsets(FORM_FIELDSETS, 'add');
   PINS.addEventListener('click', pinClickHandler);
   MAP.addEventListener('keydown', removeMapCardKeydownHandler);
   TYPE_SELECT.addEventListener('change', typeSelectChangeHandler);
