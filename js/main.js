@@ -77,16 +77,16 @@ var SELECTORS_DATA = {
 };
 
 var findNodes = function (obj) {
-  var selectors = {};
+  var nodes = {};
   var keys = Object.keys(obj);
   keys.forEach(function (key) {
-    selectors[key] = document.querySelector(obj[key]);
+    nodes[key] = document.querySelector(obj[key]);
   });
-  selectors.formFieldsets = selectors.form.querySelectorAll('fieldset');
-  selectors.capacityOptions = selectors.capacitySelect.querySelectorAll('option');
-  selectors.mapPin = selectors.similarPinsTemplate.content.querySelector('.map__pin');
-  selectors.mapCard = selectors.similarCardsTemplate.content.querySelector('.map__card');
-  return selectors;
+  nodes.formFieldsets = nodes.form.querySelectorAll('fieldset');
+  nodes.capacityOptions = nodes.capacitySelect.querySelectorAll('option');
+  nodes.mapPin = nodes.similarPinsTemplate.content.querySelector('.map__pin');
+  nodes.mapCard = nodes.similarCardsTemplate.content.querySelector('.map__card');
+  return nodes;
 };
 
 var NODES = findNodes(SELECTORS_DATA);
