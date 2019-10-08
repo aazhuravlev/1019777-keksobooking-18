@@ -82,15 +82,14 @@ var createSelectors = function (obj) {
   keys.forEach(function (key) {
     selectors[key] = document.querySelector(obj[key]);
   });
+  selectors.formFieldsets = selectors.form.querySelectorAll('fieldset');
+  selectors.capacityOptions = selectors.capacitySelect.querySelectorAll('option');
+  selectors.mapPin = selectors.similarPinsTemplate.content.querySelector('.map__pin');
+  selectors.mapCard = selectors.similarCardsTemplate.content.querySelector('.map__card');
   return selectors;
 };
 
 var NODES = createSelectors(SELECTORS_DATA);
-
-var FORM_FIELDSETS = NODES.form.querySelectorAll('fieldset');
-var CAPACITY_OPTIONS = NODES.capacitySelect.querySelectorAll('option');
-var MAP_PIN = NODES.similarPinsTemplate.content.querySelector('.map__pin');
-var MAP_CARD = NODES.similarCardsTemplate.content.querySelector('.map__card');
 var calcPinX = parseInt(NODES.mainPin.style.left, 10) + MAIN_PIN_WIDTH / 2;
 var calcPinY = parseInt(NODES.mainPin.style.top, 10) + MAIN_PIN_HEIGHT / 2;
 var calcActivePinY = parseInt(NODES.mainPin.style.top, 10) + MAIN_PIN_FULL_HEIGHT;
@@ -195,7 +194,7 @@ var getLocation = function (number) {
 };
 
 var preparePin = function (item, i) {
-  var pinElement = MAP_PIN.cloneNode(true);
+  var pinElement = NODES.mapPin.cloneNode(true);
   var pinImage = pinElement.querySelector('img');
 
   pinElement.setAttribute('style', getLocation(item));
@@ -247,7 +246,7 @@ var getCardValues = function (cardData) {
 };
 
 var prepareCard = function (item) {
-  var cardElement = MAP_CARD.cloneNode(true);
+  var cardElement = NODES.mapCard.cloneNode(true);
   var values = getCardValues(item);
 
   CONTENT_KEYS.forEach(function (key) {
@@ -307,7 +306,7 @@ var pinClickHandler = function (evt) {
 
 var openMap = function () {
   NODES.map.classList.remove('map--faded');
-  setStatusFormFieldsets(FORM_FIELDSETS, 'remove');
+  setStatusFormFieldsets(NODES.formFieldsets, 'remove');
   NODES.pins.appendChild(renderPins(DESC_PINS));
   NODES.inputAddress.value = calcActiveMainPinCoordinates();
   NODES.mainPin.removeEventListener('mousedown', openMap);
@@ -321,7 +320,7 @@ var removeSelectors = function (selectors) {
 
 var formReset = function () {
   NODES.map.classList.add('map--faded');
-  setStatusFormFieldsets(FORM_FIELDSETS, 'add');
+  setStatusFormFieldsets(NODES.formFieldsets, 'add');
   NODES.inputAddress.value = calcMainPinCoordinates();
   removeSelectors(NODES.pins.querySelectorAll('[type]'));
   removeMapCard();
@@ -333,13 +332,13 @@ var typeSelectChangeHandler = function () {
 };
 
 var changeRoomsHandler = function () {
-  CAPACITY_OPTIONS.forEach(function (item) {
+  NODES.capacityOptions.forEach(function (item) {
     item.disabled = true;
   });
   CAPACITY_VALUES[NODES.roomSelect.value].forEach(function (item) {
-    CAPACITY_OPTIONS[item].disabled = false;
+    NODES.capacityOptions[item].disabled = false;
   });
-  CAPACITY_OPTIONS[CAPACITY_VALUES[NODES.roomSelect.value][0]].selected = true;
+  NODES.capacityOptions[CAPACITY_VALUES[NODES.roomSelect.value][0]].selected = true;
 };
 
 var timeInSelectHandler = function () {
@@ -351,7 +350,7 @@ var timeOutSelectHandler = function () {
 };
 
 var main = function () {
-  setStatusFormFieldsets(FORM_FIELDSETS, 'add');
+  setStatusFormFieldsets(NODES.formFieldsets, 'add');
   NODES.pins.addEventListener('click', pinClickHandler);
   NODES.map.addEventListener('keydown', removeMapCardKeydownHandler);
   NODES.typeSelect.addEventListener('change', typeSelectChangeHandler);
