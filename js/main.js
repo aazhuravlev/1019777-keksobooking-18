@@ -85,15 +85,15 @@ var createSelectors = function (obj) {
   return selectors;
 };
 
-var SELECTORS = createSelectors(SELECTORS_DATA);
+var NODES = createSelectors(SELECTORS_DATA);
 
-var FORM_FIELDSETS = SELECTORS['form'].querySelectorAll('fieldset');
-var CAPACITY_OPTIONS = SELECTORS['capacitySelect'].querySelectorAll('option');
-var MAP_PIN = SELECTORS['similarPinsTemplate'].content.querySelector('.map__pin');
-var MAP_CARD = SELECTORS['similarCardsTemplate'].content.querySelector('.map__card');
-var calcPinX = parseInt(SELECTORS['mainPin'].style.left, 10) + MAIN_PIN_WIDTH / 2;
-var calcPinY = parseInt(SELECTORS['mainPin'].style.top, 10) + MAIN_PIN_HEIGHT / 2;
-var calcActivePinY = parseInt(SELECTORS['mainPin'].style.top, 10) + MAIN_PIN_FULL_HEIGHT;
+var FORM_FIELDSETS = NODES.form.querySelectorAll('fieldset');
+var CAPACITY_OPTIONS = NODES.capacitySelect.querySelectorAll('option');
+var MAP_PIN = NODES.similarPinsTemplate.content.querySelector('.map__pin');
+var MAP_CARD = NODES.similarCardsTemplate.content.querySelector('.map__card');
+var calcPinX = parseInt(NODES.mainPin.style.left, 10) + MAIN_PIN_WIDTH / 2;
+var calcPinY = parseInt(NODES.mainPin.style.top, 10) + MAIN_PIN_HEIGHT / 2;
+var calcActivePinY = parseInt(NODES.mainPin.style.top, 10) + MAIN_PIN_FULL_HEIGHT;
 
 var calcMainPinCoordinates = function () {
   return calcPinX + ', ' + calcPinY;
@@ -270,7 +270,7 @@ var renderPins = function (arr) {
 };
 
 var setStatusFormFieldsets = function (selector, action) {
-  SELECTORS['form'].classList[action]('ad-form--disabled');
+  NODES.form.classList[action]('ad-form--disabled');
   selector.forEach(function (item) {
     item.disabled = action !== 'remove';
   });
@@ -279,12 +279,12 @@ var setStatusFormFieldsets = function (selector, action) {
 var mapEnterPressHendler = function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     openMap();
-    SELECTORS['mainPin'].removeEventListener('keydown', mapEnterPressHendler);
+    NODES.mainPin.removeEventListener('keydown', mapEnterPressHendler);
   }
 };
 
 var removeMapCard = function () {
-  var mapCard = SELECTORS['map'].querySelector('.map__card');
+  var mapCard = NODES.map.querySelector('.map__card');
   if (mapCard) {
     mapCard.remove();
   }
@@ -300,17 +300,17 @@ var pinClickHandler = function (evt) {
   var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
   if (idx) {
     removeMapCard();
-    SELECTORS['map'].insertBefore(prepareCard(DESC_PINS[idx]), SELECTORS['filters']);
-    SELECTORS['map'].querySelector('.popup__close').addEventListener('click', removeMapCard);
+    NODES.map.insertBefore(prepareCard(DESC_PINS[idx]), NODES.filters);
+    NODES.map.querySelector('.popup__close').addEventListener('click', removeMapCard);
   }
 };
 
 var openMap = function () {
-  SELECTORS['map'].classList.remove('map--faded');
+  NODES.map.classList.remove('map--faded');
   setStatusFormFieldsets(FORM_FIELDSETS, 'remove');
-  SELECTORS['pins'].appendChild(renderPins(DESC_PINS));
-  SELECTORS['inputAddress'].value = calcActiveMainPinCoordinates();
-  SELECTORS['mainPin'].removeEventListener('mousedown', openMap);
+  NODES.pins.appendChild(renderPins(DESC_PINS));
+  NODES.inputAddress.value = calcActiveMainPinCoordinates();
+  NODES.mainPin.removeEventListener('mousedown', openMap);
 };
 
 var removeSelectors = function (selectors) {
@@ -320,48 +320,48 @@ var removeSelectors = function (selectors) {
 };
 
 var formReset = function () {
-  SELECTORS['map'].classList.add('map--faded');
+  NODES.map.classList.add('map--faded');
   setStatusFormFieldsets(FORM_FIELDSETS, 'add');
-  SELECTORS['inputAddress'].value = calcMainPinCoordinates();
-  removeSelectors(SELECTORS['pins'].querySelectorAll('[type]'));
+  NODES.inputAddress.value = calcMainPinCoordinates();
+  removeSelectors(NODES.pins.querySelectorAll('[type]'));
   removeMapCard();
 };
 
 var typeSelectChangeHandler = function () {
-  SELECTORS['pricePerNight'].placeholder = TYPE_SELECT_OPTIONS[SELECTORS['typeSelect'].value];
-  SELECTORS['pricePerNight'].min = TYPE_SELECT_OPTIONS[SELECTORS['typeSelect'].value].min;
+  NODES.pricePerNight.placeholder = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
+  NODES.pricePerNight.min = TYPE_SELECT_OPTIONS[NODES.typeSelect.value].min;
 };
 
 var changeRoomsHandler = function () {
   CAPACITY_OPTIONS.forEach(function (item) {
     item.disabled = true;
   });
-  CAPACITY_VALUES[SELECTORS['roomSelect'].value].forEach(function (item) {
+  CAPACITY_VALUES[NODES.roomSelect.value].forEach(function (item) {
     CAPACITY_OPTIONS[item].disabled = false;
   });
-  CAPACITY_OPTIONS[CAPACITY_VALUES[SELECTORS['roomSelect'].value][0]].selected = true;
+  CAPACITY_OPTIONS[CAPACITY_VALUES[NODES.roomSelect.value][0]].selected = true;
 };
 
 var timeInSelectHandler = function () {
-  SELECTORS['timeOutSelect'][TIME.indexOf(SELECTORS['timeInSelect'].value)].selected = true;
+  NODES.timeOutSelect[TIME.indexOf(NODES.timeInSelect.value)].selected = true;
 };
 
 var timeOutSelectHandler = function () {
-  SELECTORS['timeInSelect'][TIME.indexOf(SELECTORS['timeOutSelect'].value)].selected = true;
+  NODES.timeInSelect[TIME.indexOf(NODES.timeOutSelect.value)].selected = true;
 };
 
 var main = function () {
   setStatusFormFieldsets(FORM_FIELDSETS, 'add');
-  SELECTORS['pins'].addEventListener('click', pinClickHandler);
-  SELECTORS['map'].addEventListener('keydown', removeMapCardKeydownHandler);
-  SELECTORS['typeSelect'].addEventListener('change', typeSelectChangeHandler);
-  SELECTORS['roomSelect'].addEventListener('change', changeRoomsHandler);
-  SELECTORS['timeInSelect'].addEventListener('change', timeInSelectHandler);
-  SELECTORS['timeOutSelect'].addEventListener('change', timeOutSelectHandler);
-  SELECTORS['inputAddress'].value = calcMainPinCoordinates();
-  SELECTORS['mainPin'].addEventListener('keydown', mapEnterPressHendler);
-  SELECTORS['mainPin'].addEventListener('mousedown', openMap);
-  SELECTORS['formReset'].addEventListener('click', formReset);
+  NODES.pins.addEventListener('click', pinClickHandler);
+  NODES.map.addEventListener('keydown', removeMapCardKeydownHandler);
+  NODES.typeSelect.addEventListener('change', typeSelectChangeHandler);
+  NODES.roomSelect.addEventListener('change', changeRoomsHandler);
+  NODES.timeInSelect.addEventListener('change', timeInSelectHandler);
+  NODES.timeOutSelect.addEventListener('change', timeOutSelectHandler);
+  NODES.inputAddress.value = calcMainPinCoordinates();
+  NODES.mainPin.addEventListener('keydown', mapEnterPressHendler);
+  NODES.mainPin.addEventListener('mousedown', openMap);
+  NODES.formReset.addEventListener('click', formReset);
 };
 
 var DESC_PINS = getPins(PINS_COUNT);
