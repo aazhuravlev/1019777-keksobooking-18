@@ -76,7 +76,7 @@ var SELECTORS_DATA = {
   similarCardsTemplate: '#card',
 };
 
-var createSelectors = function (obj) {
+var findNodes = function (obj) {
   var selectors = {};
   var keys = Object.keys(obj);
   keys.forEach(function (key) {
@@ -89,7 +89,7 @@ var createSelectors = function (obj) {
   return selectors;
 };
 
-var NODES = createSelectors(SELECTORS_DATA);
+var NODES = findNodes(SELECTORS_DATA);
 var calcPinX = parseInt(NODES.mainPin.style.left, 10) + MAIN_PIN_WIDTH / 2;
 var calcPinY = parseInt(NODES.mainPin.style.top, 10) + MAIN_PIN_HEIGHT / 2;
 var calcActivePinY = parseInt(NODES.mainPin.style.top, 10) + MAIN_PIN_FULL_HEIGHT;
