@@ -4,25 +4,27 @@ var PINS_COUNT = 8;
 var HOTEL_PHOTOS_COUNT = 3;
 var TYPES = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
 var TIME = ['12:00', '13:00', '14:00'];
-var ACCOMODATION_TIME;
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var MIN_PRICE = 1;
 var MAX_PRICE = 50000;
-var CARD_PRICE;
 var MIN_ROOMS = 1;
 var MAX_ROOMS = 3;
 var MIN_GUESTS = 1;
 var MAX_GUESTS = 3;
-var MIN_LOCATION_X = 0;
-var MAX_LOCATION_X = 1200;
-var MIN_LOCATION_Y = 130;
-var MAX_LOCATION_Y = 630;
+var LOCATION = {
+  minX: 0,
+  maxX: 1200,
+  minY: 130,
+  maxY: 630
+};
+var MAIN_PIN = {
+  width: 62,
+  height: 22,
+  triangleHeight: 22
+};
+MAIN_PIN.fullHeight = MAIN_PIN.height + MAIN_PIN.triangleHeight;
 var ENTER_KEYCODE = 13;
 var ESC_KEYCODE = 27;
-var MAIN_PIN_WIDTH = 62;
-var MAIN_PIN_TRIANGLE_HEIGHT = 22;
-var MAIN_PIN_HEIGHT = 62;
-var MAIN_PIN_FULL_HEIGHT = MAIN_PIN_HEIGHT + MAIN_PIN_TRIANGLE_HEIGHT;
 var ROOM_DECLINATION;
 var ROOM_DECLINATION_VALUES = [' комната', ' комнаты', ' комнат'];
 var GUEST_DECLINATION;
@@ -90,9 +92,9 @@ var findNodes = function (obj) {
 };
 
 var NODES = findNodes(SELECTORS_DATA);
-var calcPinX = parseInt(NODES.mainPin.style.left, 10) + MAIN_PIN_WIDTH / 2;
-var calcPinY = parseInt(NODES.mainPin.style.top, 10) + MAIN_PIN_HEIGHT / 2;
-var calcActivePinY = parseInt(NODES.mainPin.style.top, 10) + MAIN_PIN_FULL_HEIGHT;
+var calcPinX = parseInt(NODES.mainPin.style.left, 10) + MAIN_PIN.width / 2;
+var calcPinY = parseInt(NODES.mainPin.style.top, 10) + MAIN_PIN.height / 2;
+var calcActivePinY = parseInt(NODES.mainPin.style.top, 10) + MAIN_PIN.fullHeight;
 
 var calcMainPinCoordinates = function () {
   return calcPinX + ', ' + calcPinY;
@@ -159,10 +161,9 @@ var getPins = function (quantity) {
   var TYPE_KEYS = getRandomItem(Object.keys(TYPES));
   var descriptions = DESCRIPTIONS.slice(0);
 
-
   for (var i = 0; i < quantity; i++) {
-    var locationX = getRandomBetween(MIN_LOCATION_X, MAX_LOCATION_X);
-    var locationY = getRandomBetween(MIN_LOCATION_Y, MAX_LOCATION_Y);
+    var locationX = getRandomBetween(LOCATION.minX, LOCATION.maxX);
+    var locationY = getRandomBetween(LOCATION.minY, LOCATION.maxY);
     pinsDesc.push({
       author: {
         avatar: spliceRandomItem(avatars),
@@ -229,15 +230,13 @@ var getCapacity = function (number) {
 
 var getCardValues = function (cardData) {
   var item = cardData.offer;
-  ACCOMODATION_TIME = 'Заезд после ' + item.checkin + ', выезд до ' + item.checkout;
-  CARD_PRICE = item.price + '₽/ночь';
   return {
     title: item.title,
     adress: item.adress,
-    price: CARD_PRICE,
+    price: item.price + '₽/ночь',
     type: TYPES[item.type],
     capacity: getCapacity(cardData),
-    time: ACCOMODATION_TIME,
+    time: 'Заезд после ' + item.checkin + ', выезд до ' + item.checkout,
     features: getFeatures(item.features),
     description: item.description,
     photos: getPhotos(PHOTOS),
@@ -328,7 +327,7 @@ var formReset = function () {
 
 var typeSelectChangeHandler = function () {
   NODES.pricePerNight.placeholder = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
-  NODES.pricePerNight.min = TYPE_SELECT_OPTIONS[NODES.typeSelect.value].min;
+  NODES.pricePerNight.min = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
 };
 
 var changeRoomsHandler = function () {
