@@ -327,11 +327,8 @@ var formReset = function () {
 };
 
 var adTitleChangeHandler = function () {
-  if (NODES.adTitle.value.length < NODES.adTitle.minLength || NODES.adTitle.value.length > NODES.adTitle.maxLength) {
-    NODES.adTitle.setCustomValidity('Минимально допустимое количество символов: ' + NODES.adTitle.minLength + '. Длина текста сейчас: ' + NODES.adTitle.value.length + '.');
-    NODES.adTitle.style.borderColor = 'red';
-  } else {
-    NODES.adTitle.style.borderColor = '';
+  if (NODES.adTitle.validity.tooShort || NODES.adTitle.validity.tooLong) {
+    NODES.adTitle.reportValidity();
   }
 };
 
@@ -339,11 +336,7 @@ var typeSelectChangeHandler = function () {
   NODES.pricePerNight.placeholder = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
   NODES.pricePerNight.min = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
   if (NODES.pricePerNight.min > NODES.pricePerNight.value) {
-    NODES.pricePerNight.setCustomValidity('Значение должно быть больше или равно ' + NODES.pricePerNight.min + '.');
-    NODES.pricePerNight.style.borderColor = 'red';
-  } else {
-    NODES.pricePerNight.setCustomValidity('');
-    NODES.pricePerNight.style.borderColor = '';
+    NODES.pricePerNight.reportValidity();
   }
 };
 
