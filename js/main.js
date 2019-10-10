@@ -67,6 +67,7 @@ var SELECTORS_DATA = {
   form: '.ad-form',
   formReset: '.ad-form__reset',
   inputAddress: '#address',
+  adTitle: '#title',
   typeSelect: '#type',
   roomSelect: '#room_number',
   capacitySelect: '#capacity',
@@ -325,9 +326,25 @@ var formReset = function () {
   removeMapCard();
 };
 
+var adTitleChangeHandler = function () {
+  if (NODES.adTitle.value.length < NODES.adTitle.minLength || NODES.adTitle.value.length > NODES.adTitle.maxLength) {
+    NODES.adTitle.setCustomValidity('Минимально допустимое количество символов: ' + NODES.adTitle.minLength + '. Длина текста сейчас: ' + NODES.adTitle.value.length + '.');
+    NODES.adTitle.style.borderColor = 'red';
+  } else {
+    NODES.adTitle.style.borderColor = '';
+  }
+};
+
 var typeSelectChangeHandler = function () {
   NODES.pricePerNight.placeholder = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
   NODES.pricePerNight.min = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
+  if (NODES.pricePerNight.min > NODES.pricePerNight.value) {
+    NODES.pricePerNight.setCustomValidity('Значение должно быть больше или равно ' + NODES.pricePerNight.min + '.');
+    NODES.pricePerNight.style.borderColor = 'red';
+  } else {
+    NODES.pricePerNight.setCustomValidity('');
+    NODES.pricePerNight.style.borderColor = '';
+  }
 };
 
 var changeRoomsHandler = function () {
@@ -352,6 +369,7 @@ var main = function () {
   setStatusFormFieldsets(NODES.formFieldsets, 'add');
   NODES.pins.addEventListener('click', pinClickHandler);
   NODES.map.addEventListener('keydown', removeMapCardKeydownHandler);
+  NODES.adTitle.addEventListener('change', adTitleChangeHandler);
   NODES.typeSelect.addEventListener('change', typeSelectChangeHandler);
   NODES.roomSelect.addEventListener('change', changeRoomsHandler);
   NODES.timeInSelect.addEventListener('change', timeInSelectHandler);
