@@ -141,15 +141,15 @@ var getRandomSlice = function (arr) {
 };
 
 var pluralize = function (number, arr) {
-  number %= 100;
-  if (number >= 5 && number <= 20) {
+  var remainder = number % 100;
+  if (remainder >= 5 && remainder <= 20) {
     return arr[2];
   }
-  number %= 10;
-  if (number === 1) {
+  remainder = number % 10;
+  if (remainder === 1) {
     return arr[0];
   }
-  if (number >= 2 && number <= 4) {
+  if (remainder >= 2 && remainder <= 4) {
     return arr[1];
   }
   return arr[2];
@@ -312,8 +312,8 @@ var openMap = function () {
   NODES.mainPin.removeEventListener('mousedown', openMap);
 };
 
-var removeSelectors = function (selectors) {
-  selectors.forEach(function (item) {
+var removeSelectors = function (nodes) {
+  nodes.forEach(function (item) {
     item.remove();
   });
 };
