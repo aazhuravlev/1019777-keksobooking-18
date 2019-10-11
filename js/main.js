@@ -4,25 +4,28 @@ var PINS_COUNT = 8;
 var HOTEL_PHOTOS_COUNT = 3;
 var TYPES = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
 var TIME = ['12:00', '13:00', '14:00'];
-var ACCOMODATION_TIME;
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var INPUT_SHADOW_COLOR = '0 0 2px 2px #ff0000';
 var MIN_PRICE = 1;
 var MAX_PRICE = 50000;
-var CARD_PRICE;
 var MIN_ROOMS = 1;
 var MAX_ROOMS = 3;
 var MIN_GUESTS = 1;
 var MAX_GUESTS = 3;
-var MIN_LOCATION_X = 0;
-var MAX_LOCATION_X = 1200;
-var MIN_LOCATION_Y = 130;
-var MAX_LOCATION_Y = 630;
+var LOCATION = {
+  minX: 0,
+  maxX: 1200,
+  minY: 130,
+  maxY: 630
+};
+var MAIN_PIN = {
+  width: 62,
+  height: 22,
+  triangleHeight: 22
+};
+MAIN_PIN.fullHeight = MAIN_PIN.height + MAIN_PIN.triangleHeight;
 var ENTER_KEYCODE = 13;
 var ESC_KEYCODE = 27;
-var MAIN_PIN_WIDTH = 62;
-var MAIN_PIN_TRIANGLE_HEIGHT = 22;
-var MAIN_PIN_HEIGHT = 62;
-var MAIN_PIN_FULL_HEIGHT = MAIN_PIN_HEIGHT + MAIN_PIN_TRIANGLE_HEIGHT;
 var ROOM_DECLINATION;
 var ROOM_DECLINATION_VALUES = [' комната', ' комнаты', ' комнат'];
 var GUEST_DECLINATION;
@@ -65,6 +68,7 @@ var SELECTORS_DATA = {
   form: '.ad-form',
   formReset: '.ad-form__reset',
   inputAddress: '#address',
+  adTitle: '#title',
   typeSelect: '#type',
   roomSelect: '#room_number',
   capacitySelect: '#capacity',
@@ -76,24 +80,23 @@ var SELECTORS_DATA = {
   similarCardsTemplate: '#card',
 };
 
-var createSelectors = function (obj) {
-  var selectors = {};
+var findNodes = function (obj) {
+  var nodes = {};
   var keys = Object.keys(obj);
   keys.forEach(function (key) {
-    selectors[key] = document.querySelector(obj[key]);
+    nodes[key] = document.querySelector(obj[key]);
   });
-  return selectors;
+  nodes.formFieldsets = nodes.form.querySelectorAll('fieldset');
+  nodes.capacityOptions = nodes.capacitySelect.querySelectorAll('option');
+  nodes.mapPin = nodes.similarPinsTemplate.content.querySelector('.map__pin');
+  nodes.mapCard = nodes.similarCardsTemplate.content.querySelector('.map__card');
+  return nodes;
 };
 
-var SELECTORS = createSelectors(SELECTORS_DATA);
-
-var FORM_FIELDSETS = SELECTORS['form'].querySelectorAll('fieldset');
-var CAPACITY_OPTIONS = SELECTORS['capacitySelect'].querySelectorAll('option');
-var MAP_PIN = SELECTORS['similarPinsTemplate'].content.querySelector('.map__pin');
-var MAP_CARD = SELECTORS['similarCardsTemplate'].content.querySelector('.map__card');
-var calcPinX = parseInt(SELECTORS['mainPin'].style.left, 10) + MAIN_PIN_WIDTH / 2;
-var calcPinY = parseInt(SELECTORS['mainPin'].style.top, 10) + MAIN_PIN_HEIGHT / 2;
-var calcActivePinY = parseInt(SELECTORS['mainPin'].style.top, 10) + MAIN_PIN_FULL_HEIGHT;
+var NODES = findNodes(SELECTORS_DATA);
+var calcPinX = parseInt(NODES.mainPin.style.left, 10) + MAIN_PIN.width / 2;
+var calcPinY = parseInt(NODES.mainPin.style.top, 10) + MAIN_PIN.height / 2;
+var calcActivePinY = parseInt(NODES.mainPin.style.top, 10) + MAIN_PIN.fullHeight;
 
 var calcMainPinCoordinates = function () {
   return calcPinX + ', ' + calcPinY;
@@ -139,15 +142,15 @@ var getRandomSlice = function (arr) {
 };
 
 var pluralize = function (number, arr) {
-  number %= 100;
-  if (number >= 5 && number <= 20) {
+  var remainder = number % 100;
+  if (remainder >= 5 && remainder <= 20) {
     return arr[2];
   }
-  number %= 10;
-  if (number === 1) {
+  remainder = number % 10;
+  if (remainder === 1) {
     return arr[0];
   }
-  if (number >= 2 && number <= 4) {
+  if (remainder >= 2 && remainder <= 4) {
     return arr[1];
   }
   return arr[2];
@@ -160,10 +163,9 @@ var getPins = function (quantity) {
   var TYPE_KEYS = getRandomItem(Object.keys(TYPES));
   var descriptions = DESCRIPTIONS.slice(0);
 
-
   for (var i = 0; i < quantity; i++) {
-    var locationX = getRandomBetween(MIN_LOCATION_X, MAX_LOCATION_X);
-    var locationY = getRandomBetween(MIN_LOCATION_Y, MAX_LOCATION_Y);
+    var locationX = getRandomBetween(LOCATION.minX, LOCATION.maxX);
+    var locationY = getRandomBetween(LOCATION.minY, LOCATION.maxY);
     pinsDesc.push({
       author: {
         avatar: spliceRandomItem(avatars),
@@ -195,7 +197,7 @@ var getLocation = function (number) {
 };
 
 var preparePin = function (item, i) {
-  var pinElement = MAP_PIN.cloneNode(true);
+  var pinElement = NODES.mapPin.cloneNode(true);
   var pinImage = pinElement.querySelector('img');
 
   pinElement.setAttribute('style', getLocation(item));
@@ -230,15 +232,13 @@ var getCapacity = function (number) {
 
 var getCardValues = function (cardData) {
   var item = cardData.offer;
-  ACCOMODATION_TIME = 'Заезд после ' + item.checkin + ', выезд до ' + item.checkout;
-  CARD_PRICE = item.price + '₽/ночь';
   return {
     title: item.title,
     adress: item.adress,
-    price: CARD_PRICE,
+    price: item.price + '₽/ночь',
     type: TYPES[item.type],
     capacity: getCapacity(cardData),
-    time: ACCOMODATION_TIME,
+    time: 'Заезд после ' + item.checkin + ', выезд до ' + item.checkout,
     features: getFeatures(item.features),
     description: item.description,
     photos: getPhotos(PHOTOS),
@@ -247,7 +247,7 @@ var getCardValues = function (cardData) {
 };
 
 var prepareCard = function (item) {
-  var cardElement = MAP_CARD.cloneNode(true);
+  var cardElement = NODES.mapCard.cloneNode(true);
   var values = getCardValues(item);
 
   CONTENT_KEYS.forEach(function (key) {
@@ -270,7 +270,7 @@ var renderPins = function (arr) {
 };
 
 var setStatusFormFieldsets = function (selector, action) {
-  SELECTORS['form'].classList[action]('ad-form--disabled');
+  NODES.form.classList[action]('ad-form--disabled');
   selector.forEach(function (item) {
     item.disabled = action !== 'remove';
   });
@@ -279,12 +279,12 @@ var setStatusFormFieldsets = function (selector, action) {
 var mapEnterPressHendler = function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     openMap();
-    SELECTORS['mainPin'].removeEventListener('keydown', mapEnterPressHendler);
+    NODES.mainPin.removeEventListener('keydown', mapEnterPressHendler);
   }
 };
 
 var removeMapCard = function () {
-  var mapCard = SELECTORS['map'].querySelector('.map__card');
+  var mapCard = NODES.map.querySelector('.map__card');
   if (mapCard) {
     mapCard.remove();
   }
@@ -300,68 +300,92 @@ var pinClickHandler = function (evt) {
   var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
   if (idx) {
     removeMapCard();
-    SELECTORS['map'].insertBefore(prepareCard(DESC_PINS[idx]), SELECTORS['filters']);
-    SELECTORS['map'].querySelector('.popup__close').addEventListener('click', removeMapCard);
+    NODES.map.insertBefore(prepareCard(DESC_PINS[idx]), NODES.filters);
+    NODES.map.querySelector('.popup__close').addEventListener('click', removeMapCard);
   }
 };
 
 var openMap = function () {
-  SELECTORS['map'].classList.remove('map--faded');
-  setStatusFormFieldsets(FORM_FIELDSETS, 'remove');
-  SELECTORS['pins'].appendChild(renderPins(DESC_PINS));
-  SELECTORS['inputAddress'].value = calcActiveMainPinCoordinates();
-  SELECTORS['mainPin'].removeEventListener('mousedown', openMap);
+  NODES.map.classList.remove('map--faded');
+  setStatusFormFieldsets(NODES.formFieldsets, 'remove');
+  NODES.pins.appendChild(renderPins(DESC_PINS));
+  NODES.inputAddress.value = calcActiveMainPinCoordinates();
+  NODES.mainPin.removeEventListener('mousedown', openMap);
 };
 
-var removeSelectors = function (selectors) {
-  selectors.forEach(function (item) {
+var removeSelectors = function (nodes) {
+  nodes.forEach(function (item) {
     item.remove();
   });
 };
 
 var formReset = function () {
-  SELECTORS['map'].classList.add('map--faded');
-  setStatusFormFieldsets(FORM_FIELDSETS, 'add');
-  SELECTORS['inputAddress'].value = calcMainPinCoordinates();
-  removeSelectors(SELECTORS['pins'].querySelectorAll('[type]'));
+  NODES.map.classList.add('map--faded');
+  setStatusFormFieldsets(NODES.formFieldsets, 'add');
+  NODES.inputAddress.value = calcMainPinCoordinates();
+  removeSelectors(NODES.pins.querySelectorAll('[type]'));
   removeMapCard();
 };
 
+var addShadow = function (node) {
+  node.style.boxShadow = INPUT_SHADOW_COLOR;
+};
+
+var removeShadow = function (node) {
+  node.style.boxShadow = '';
+};
+
+var adTitleChangeHandler = function () {
+  if (NODES.adTitle.validity.tooShort || NODES.adTitle.validity.tooLong) {
+    NODES.adTitle.reportValidity();
+    addShadow(NODES.adTitle);
+  } else {
+    removeShadow(NODES.adTitle);
+  }
+};
+
 var typeSelectChangeHandler = function () {
-  SELECTORS['pricePerNight'].placeholder = TYPE_SELECT_OPTIONS[SELECTORS['typeSelect'].value];
-  SELECTORS['pricePerNight'].min = TYPE_SELECT_OPTIONS[SELECTORS['typeSelect'].value].min;
+  NODES.pricePerNight.placeholder = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
+  NODES.pricePerNight.min = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
+  if (NODES.pricePerNight.min > NODES.pricePerNight.value) {
+    NODES.pricePerNight.reportValidity();
+    addShadow(NODES.pricePerNight);
+  } else {
+    removeShadow(NODES.pricePerNight);
+  }
 };
 
 var changeRoomsHandler = function () {
-  CAPACITY_OPTIONS.forEach(function (item) {
+  NODES.capacityOptions.forEach(function (item) {
     item.disabled = true;
   });
-  CAPACITY_VALUES[SELECTORS['roomSelect'].value].forEach(function (item) {
-    CAPACITY_OPTIONS[item].disabled = false;
+  CAPACITY_VALUES[NODES.roomSelect.value].forEach(function (item) {
+    NODES.capacityOptions[item].disabled = false;
   });
-  CAPACITY_OPTIONS[CAPACITY_VALUES[SELECTORS['roomSelect'].value][0]].selected = true;
+  NODES.capacityOptions[CAPACITY_VALUES[NODES.roomSelect.value][0]].selected = true;
 };
 
 var timeInSelectHandler = function () {
-  SELECTORS['timeOutSelect'][TIME.indexOf(SELECTORS['timeInSelect'].value)].selected = true;
+  NODES.timeOutSelect[TIME.indexOf(NODES.timeInSelect.value)].selected = true;
 };
 
 var timeOutSelectHandler = function () {
-  SELECTORS['timeInSelect'][TIME.indexOf(SELECTORS['timeOutSelect'].value)].selected = true;
+  NODES.timeInSelect[TIME.indexOf(NODES.timeOutSelect.value)].selected = true;
 };
 
 var main = function () {
-  setStatusFormFieldsets(FORM_FIELDSETS, 'add');
-  SELECTORS['pins'].addEventListener('click', pinClickHandler);
-  SELECTORS['map'].addEventListener('keydown', removeMapCardKeydownHandler);
-  SELECTORS['typeSelect'].addEventListener('change', typeSelectChangeHandler);
-  SELECTORS['roomSelect'].addEventListener('change', changeRoomsHandler);
-  SELECTORS['timeInSelect'].addEventListener('change', timeInSelectHandler);
-  SELECTORS['timeOutSelect'].addEventListener('change', timeOutSelectHandler);
-  SELECTORS['inputAddress'].value = calcMainPinCoordinates();
-  SELECTORS['mainPin'].addEventListener('keydown', mapEnterPressHendler);
-  SELECTORS['mainPin'].addEventListener('mousedown', openMap);
-  SELECTORS['formReset'].addEventListener('click', formReset);
+  setStatusFormFieldsets(NODES.formFieldsets, 'add');
+  NODES.pins.addEventListener('click', pinClickHandler);
+  NODES.map.addEventListener('keydown', removeMapCardKeydownHandler);
+  NODES.adTitle.addEventListener('change', adTitleChangeHandler);
+  NODES.typeSelect.addEventListener('change', typeSelectChangeHandler);
+  NODES.roomSelect.addEventListener('change', changeRoomsHandler);
+  NODES.timeInSelect.addEventListener('change', timeInSelectHandler);
+  NODES.timeOutSelect.addEventListener('change', timeOutSelectHandler);
+  NODES.inputAddress.value = calcMainPinCoordinates();
+  NODES.mainPin.addEventListener('keydown', mapEnterPressHendler);
+  NODES.mainPin.addEventListener('mousedown', openMap);
+  NODES.formReset.addEventListener('click', formReset);
 };
 
 var DESC_PINS = getPins(PINS_COUNT);
