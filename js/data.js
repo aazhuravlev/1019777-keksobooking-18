@@ -45,8 +45,8 @@
     var descriptions = DESCRIPTIONS.slice(0);
 
     for (var i = 0; i < quantity; i++) {
-      var locationX = window.getRandomBetween(LOCATION.minX, LOCATION.maxX);
-      var locationY = window.getRandomBetween(LOCATION.minY, LOCATION.maxY);
+      var locationX = window.getRandomBetween(window.LOCATION.minX, window.LOCATION.maxX);
+      var locationY = window.getRandomBetween(window.LOCATION.minY, window.LOCATION.maxY);
       pinsDesc.push({
         author: {
           avatar: window.spliceRandomItem(avatars),
