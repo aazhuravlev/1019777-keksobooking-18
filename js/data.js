@@ -12,9 +12,9 @@
   var MAX_ROOMS = 3;
   var MIN_GUESTS = 1;
   var MAX_GUESTS = 3;
-  var LOCATION = {
+  window.LOCATION = {
     minX: 0,
-    maxX: 1200,
+    maxX: 1138,
     minY: 130,
     maxY: 630
   };

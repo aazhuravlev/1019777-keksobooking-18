@@ -12,8 +12,8 @@
     window.NODES.timeInSelect.addEventListener('change', window.timeInSelectHandler);
     window.NODES.timeOutSelect.addEventListener('change', window.timeOutSelectHandler);
     window.NODES.inputAddress.value = window.calcMainPinCoordinates();
+    window.NODES.mainPin.addEventListener('mousedown', window.dragHandler);
     window.NODES.mainPin.addEventListener('keydown', window.mapEnterPressHendler);
-    window.NODES.mainPin.addEventListener('mousedown', window.openMap);
     window.NODES.formReset.addEventListener('click', window.formReset);
   };
 

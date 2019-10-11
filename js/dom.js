@@ -6,7 +6,9 @@
   var MAIN_PIN = {
     width: 62,
     height: 22,
-    triangleHeight: 22
+    triangleHeight: 22,
+    startX: 570,
+    startY: 375
   };
   MAIN_PIN.fullHeight = MAIN_PIN.height + MAIN_PIN.triangleHeight;
   var ENTER_KEYCODE = 13;
@@ -75,9 +77,9 @@
   };
 
   window.NODES = findNodes(SELECTORS_DATA);
-  var calcPinX = parseInt(window.NODES.mainPin.style.left, 10) + MAIN_PIN.width / 2;
-  var calcPinY = parseInt(window.NODES.mainPin.style.top, 10) + MAIN_PIN.height / 2;
-  var calcActivePinY = parseInt(window.NODES.mainPin.style.top, 10) + MAIN_PIN.fullHeight;
+  var calcPinX = window.NODES.mainPin.offsetLeft + MAIN_PIN.width / 2;
+  var calcPinY = window.NODES.mainPin.offsetTop + MAIN_PIN.height / 2;
+  var calcActivePinY = window.NODES.mainPin.offsetTop + MAIN_PIN.fullHeight;
 
   window.calcMainPinCoordinates = function () {
     return calcPinX + ', ' + calcPinY;
@@ -130,8 +132,7 @@
 
   window.mapEnterPressHendler = function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
-      window.openMap();
-      window.NODES.mainPin.removeEventListener('keydown', window.mapEnterPressHendler);
+      openMap();
     }
   };
 
@@ -157,12 +158,11 @@
     }
   };
 
-  window.openMap = function () {
+  var openMap = function () {
     window.NODES.map.classList.remove('map--faded');
     window.setStatusFormFieldsets(window.NODES.formFieldsets, 'remove');
     window.NODES.pins.appendChild(renderPins(window.DESC_PINS));
     window.NODES.inputAddress.value = calcActiveMainPinCoordinates();
-    window.NODES.mainPin.removeEventListener('mousedown', window.openMap);
   };
 
   var removeSelectors = function (nodes) {
@@ -177,6 +177,8 @@
     window.NODES.inputAddress.value = window.calcMainPinCoordinates();
     removeSelectors(window.NODES.pins.querySelectorAll('[type]'));
     removeMapCard();
+    window.NODES.mainPin.style.top = MAIN_PIN.startY + 'px';
+    window.NODES.mainPin.style.left = MAIN_PIN.startX + 'px';
   };
 
   var addShadow = function (node) {
@@ -231,4 +233,58 @@
     window.NODES.timeInSelect[window.TIME.indexOf(window.NODES.timeOutSelect.value)].selected = true;
   };
 
+  window.dragHandler = function (evt) {
+    openMap();
+    evt.preventDefault();
+
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    var mouseMoveHandler = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      var actualX = window.NODES.mainPin.offsetLeft - shift.x;
+      var actualY = window.NODES.mainPin.offsetTop - shift.y;
+
+      if (actualX <= window.LOCATION.minX) {
+        actualX = window.LOCATION.minX;
+      } else if (actualX >= window.LOCATION.maxX) {
+        actualX = window.LOCATION.maxX;
+      }
+      if (actualY <= window.LOCATION.minY) {
+        actualY = window.LOCATION.minY;
+      } else if (actualY >= window.LOCATION.maxY) {
+        actualY = window.LOCATION.maxY;
+      }
+
+      var triangleActualX = actualX - shift.x + MAIN_PIN.width / 2;
+      var triangleActualY = actualY + MAIN_PIN.fullHeight;
+
+      window.NODES.mainPin.style.top = actualY + 'px';
+      window.NODES.mainPin.style.left = actualX + 'px';
+      window.NODES.inputAddress.value = triangleActualX + ', ' + triangleActualY;
+    };
+
+    var mouseUpHandler = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
+
+    };
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+  };
 })();
