@@ -119,68 +119,33 @@ var TITLES = createList(PINS_COUNT, 'title', '');
 var DESCRIPTIONS = createList(PINS_COUNT, 'description', '');
 var PHOTOS = createList(HOTEL_PHOTOS_COUNT, 'http://o0.github.io/assets/images/tokyo/hotel', '.jpg');
 
-var getRandomBetween = function (min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
 
-var getRandomIndex = function (max) {
-  return getRandomBetween(0, max - 1);
-};
-
-var spliceRandomItem = function (arr) {
-  return arr.splice(getRandomIndex(arr.length - 1), 1);
-};
-
-var getRandomItem = function (arr) {
-  return arr[getRandomIndex(arr.length)];
-};
-
-var getRandomSlice = function (arr) {
-  return arr.slice(0, 2 + getRandomIndex(arr.length - 2));
-};
-
-var pluralize = function (number, arr) {
-  var remainder = number % 100;
-  if (remainder >= 5 && remainder <= 20) {
-    return arr[2];
-  }
-  remainder = number % 10;
-  if (remainder === 1) {
-    return arr[0];
-  }
-  if (remainder >= 2 && remainder <= 4) {
-    return arr[1];
-  }
-  return arr[2];
-};
 
 var getPins = function (quantity) {
   var pinsDesc = [];
   var avatars = AVATARS.slice(0);
   var titles = TITLES.slice(0);
-  var TYPE_KEYS = getRandomItem(Object.keys(TYPES));
+  var TYPE_KEYS = window.getRandomItem(Object.keys(TYPES));
   var descriptions = DESCRIPTIONS.slice(0);
 
   for (var i = 0; i < quantity; i++) {
-    var locationX = getRandomBetween(LOCATION.minX, LOCATION.maxX);
-    var locationY = getRandomBetween(LOCATION.minY, LOCATION.maxY);
+    var locationX = window.getRandomBetween(LOCATION.minX, LOCATION.maxX);
+    var locationY = window.getRandomBetween(LOCATION.minY, LOCATION.maxY);
     pinsDesc.push({
       author: {
-        avatar: spliceRandomItem(avatars),
+        avatar: window.spliceRandomItem(avatars),
       },
       offer: {
-        title: spliceRandomItem(titles),
+        title: window.spliceRandomItem(titles),
         adress: locationX + ', ' + locationY,
-        price: getRandomBetween(MIN_PRICE, MAX_PRICE),
+        price: window.getRandomBetween(MIN_PRICE, MAX_PRICE),
         type: TYPE_KEYS,
-        rooms: getRandomBetween(MIN_ROOMS, MAX_ROOMS),
-        guests: getRandomBetween(MIN_GUESTS, MAX_GUESTS),
-        checkin: getRandomItem(TIME),
-        checkout: getRandomItem(TIME),
-        features: getRandomSlice(FEATURES),
-        description: spliceRandomItem(descriptions),
+        rooms: window.getRandomBetween(MIN_ROOMS, MAX_ROOMS),
+        guests: window.getRandomBetween(MIN_GUESTS, MAX_GUESTS),
+        checkin: window.getRandomItem(TIME),
+        checkout: window.getRandomItem(TIME),
+        features: window.getRandomSlice(FEATURES),
+        description: window.spliceRandomItem(descriptions),
         photos: PHOTOS
       },
       location: {
@@ -225,8 +190,8 @@ var getPhotos = function (arr) {
 
 var getCapacity = function (number) {
   var item = number.offer;
-  ROOM_DECLINATION = pluralize(item.rooms, ROOM_DECLINATION_VALUES);
-  GUEST_DECLINATION = pluralize(item.guests, GUEST_DECLINATION_VALUES);
+  ROOM_DECLINATION = window.pluralize(item.rooms, ROOM_DECLINATION_VALUES);
+  GUEST_DECLINATION = window.pluralize(item.guests, GUEST_DECLINATION_VALUES);
   return item.rooms + ROOM_DECLINATION + ' для ' + item.guests + GUEST_DECLINATION;
 };
 
