@@ -349,6 +349,12 @@ var typeSelectChangeHandler = function () {
   NODES.pricePerNight.min = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
   if (NODES.pricePerNight.min > NODES.pricePerNight.value) {
     NODES.pricePerNight.reportValidity();
+  }
+};
+
+var pricePerNightHandler = function () {
+  if (NODES.pricePerNight.min > NODES.pricePerNight.value) {
+    NODES.pricePerNight.reportValidity();
     addShadow(NODES.pricePerNight);
   } else {
     removeShadow(NODES.pricePerNight);
@@ -379,6 +385,7 @@ var main = function () {
   NODES.map.addEventListener('keydown', removeMapCardKeydownHandler);
   NODES.adTitle.addEventListener('change', adTitleChangeHandler);
   NODES.typeSelect.addEventListener('change', typeSelectChangeHandler);
+  NODES.typeSelect.addEventListener('change', pricePerNightHandler);
   NODES.roomSelect.addEventListener('change', changeRoomsHandler);
   NODES.timeInSelect.addEventListener('change', timeInSelectHandler);
   NODES.timeOutSelect.addEventListener('change', timeOutSelectHandler);
