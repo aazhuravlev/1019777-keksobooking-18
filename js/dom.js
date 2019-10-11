@@ -130,7 +130,7 @@
 
   window.mapEnterPressHendler = function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
-      openMap();
+      window.openMap();
       window.NODES.mainPin.removeEventListener('keydown', window.mapEnterPressHendler);
     }
   };
@@ -157,12 +157,12 @@
     }
   };
 
-  var openMap = function () {
+  window.openMap = function () {
     window.NODES.map.classList.remove('map--faded');
     window.setStatusFormFieldsets(window.NODES.formFieldsets, 'remove');
     window.NODES.pins.appendChild(renderPins(window.DESC_PINS));
     window.NODES.inputAddress.value = calcActiveMainPinCoordinates();
-    window.NODES.mainPin.removeEventListener('mousedown', openMap);
+    window.NODES.mainPin.removeEventListener('mousedown', window.openMap);
   };
 
   var removeSelectors = function (nodes) {
