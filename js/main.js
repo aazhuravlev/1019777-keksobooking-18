@@ -5,6 +5,7 @@ var HOTEL_PHOTOS_COUNT = 3;
 var TYPES = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
 var TIME = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var INPUT_SHADOW_COLOR = '0 0 2px 2px #ff0000';
 var MIN_PRICE = 1;
 var MAX_PRICE = 50000;
 var MIN_ROOMS = 1;
@@ -326,9 +327,20 @@ var formReset = function () {
   removeMapCard();
 };
 
+var addShadow = function (node) {
+  node.style.boxShadow = INPUT_SHADOW_COLOR;
+};
+
+var removeShadow = function (node) {
+  node.style.boxShadow = '';
+};
+
 var adTitleChangeHandler = function () {
   if (NODES.adTitle.validity.tooShort || NODES.adTitle.validity.tooLong) {
     NODES.adTitle.reportValidity();
+    addShadow(NODES.adTitle);
+  } else {
+    removeShadow(NODES.adTitle);
   }
 };
 
@@ -337,6 +349,9 @@ var typeSelectChangeHandler = function () {
   NODES.pricePerNight.min = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
   if (NODES.pricePerNight.min > NODES.pricePerNight.value) {
     NODES.pricePerNight.reportValidity();
+    addShadow(NODES.pricePerNight);
+  } else {
+    removeShadow(NODES.pricePerNight);
   }
 };
 
