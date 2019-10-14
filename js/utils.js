@@ -23,7 +23,7 @@
     return arr.slice(0, 2 + getRandomIndex(arr.length - 2));
   };
 
-  window.pluralize = function (number, arr) {
+  var pluralize = function (number, arr) {
     var remainder = number % 100;
     if (remainder >= 5 && remainder <= 20) {
       return arr[2];
@@ -42,6 +42,7 @@
     getRandomBetween: getRandomBetween,
     spliceRandomItem: spliceRandomItem,
     getRandomItem: getRandomItem,
-    getRandomSlice: getRandomSlice
+    getRandomSlice: getRandomSlice,
+    pluralize: pluralize
   };
 })();

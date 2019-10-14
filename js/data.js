@@ -19,11 +19,6 @@
     maxY: 630
   };
 
-  var ROOM_DECLINATION;
-  var ROOM_DECLINATION_VALUES = [' комната', ' комнаты', ' комнат'];
-  var GUEST_DECLINATION;
-  var GUEST_DECLINATION_VALUES = [' гостя', ' гостей', ' гостей'];
-
   var createList = function (quantity, part1, part2) {
     var arr = [];
     for (var i = 1; i <= quantity; i++) {
@@ -34,10 +29,10 @@
 
   var AVATARS = createList(PINS_COUNT, 'img/avatars/user0', '.png');
   var TITLES = createList(PINS_COUNT, 'title', '');
-  var DESCRIPTIONS = createList(PINS_COUNT, 'description', '');
   var PHOTOS = createList(HOTEL_PHOTOS_COUNT, 'http://o0.github.io/assets/images/tokyo/hotel', '.jpg');
+  var DESCRIPTIONS = createList(PINS_COUNT, 'description', '');
 
-  var getPins = function (quantity) {
+  var getPinsData = function (quantity) {
     var pinsDesc = [];
     var avatars = AVATARS.slice(0);
     var titles = TITLES.slice(0);
@@ -73,56 +68,13 @@
     return pinsDesc;
   };
 
-  var getLocation = function (location) {
-    return 'left: ' + location.x + ';' + ' top: ' + location.y + ';';
-  };
-
-  var getFeature = function (item) {
-    return '<li class="popup__feature popup__feature--' + item + '"></li>';
-  };
-
-  var getFeatures = function (arr) {
-    return arr.map(getFeature).join('');
-  };
-
-  var getPhoto = function (item) {
-    return '<img src="' + item + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
-  };
-
-  var getPhotos = function (arr) {
-    return arr.map(getPhoto).join('');
-  };
-
-  var getCapacity = function (number) {
-    var item = number.offer;
-    ROOM_DECLINATION = window.pluralize(item.rooms, ROOM_DECLINATION_VALUES);
-    GUEST_DECLINATION = window.pluralize(item.guests, GUEST_DECLINATION_VALUES);
-    return item.rooms + ROOM_DECLINATION + ' для ' + item.guests + GUEST_DECLINATION;
-  };
-
-  var getCardValues = function (cardData) {
-    var item = cardData.offer;
-    return {
-      title: item.title,
-      adress: item.adress,
-      price: item.price + '₽/ночь',
-      type: TYPES[item.type],
-      capacity: getCapacity(cardData),
-      time: 'Заезд после ' + item.checkin + ', выезд до ' + item.checkout,
-      features: getFeatures(item.features),
-      description: item.description,
-      photos: getPhotos(PHOTOS),
-      avatar: cardData.author.avatar
-    };
-  };
-
-  var DESC_PINS = getPins(PINS_COUNT);
+  var DESC_PINS = getPinsData(PINS_COUNT);
 
   window.data = {
-    time: TIME,
-    location: LOCATION,
     descPins: DESC_PINS,
-    getLocation: getLocation,
-    getCardValues: getCardValues
+    location: LOCATION,
+    types: TYPES,
+    photos: PHOTOS,
+    time: TIME
   };
 })();

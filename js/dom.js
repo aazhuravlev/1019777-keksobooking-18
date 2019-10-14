@@ -26,24 +26,6 @@
     palace: '10000'
   };
 
-  var TEXT_CONTENT = 'textContent';
-  var INNER_HTML = 'innerHTML';
-  var SRC = 'src';
-  var CONTENT = {
-    title: ['title', TEXT_CONTENT],
-    adress: ['text--address', TEXT_CONTENT],
-    price: ['text--price', TEXT_CONTENT],
-    type: ['type', TEXT_CONTENT],
-    capacity: ['text--capacity', TEXT_CONTENT],
-    time: ['text--time', TEXT_CONTENT],
-    features: ['features', INNER_HTML],
-    description: ['description', TEXT_CONTENT],
-    photos: ['photos', INNER_HTML],
-    avatar: ['avatar', SRC]
-  };
-
-  var CONTENT_KEYS = Object.keys(CONTENT);
-
   var SELECTORS_DATA = {
     map: '.map',
     pins: '.map__pins',
@@ -58,9 +40,7 @@
     timeInSelect: '#timein',
     timeOutSelect: '#timeout',
     pricePerNight: '#price',
-    filters: '.map__filters-container',
-    similarPinsTemplate: '#pin',
-    similarCardsTemplate: '#card',
+    filters: '.map__filters-container'
   };
 
   var findNodes = function (obj) {
@@ -71,8 +51,6 @@
     });
     nodes.formFieldsets = nodes.form.querySelectorAll('fieldset');
     nodes.capacityOptions = nodes.capacitySelect.querySelectorAll('option');
-    nodes.mapPin = nodes.similarPinsTemplate.content.querySelector('.map__pin');
-    nodes.mapCard = nodes.similarCardsTemplate.content.querySelector('.map__card');
     return nodes;
   };
 
@@ -89,39 +67,7 @@
     return calcPinX + ', ' + calcActivePinY;
   };
 
-  var preparePin = function (item, i) {
-    var pinElement = NODES.mapPin.cloneNode(true);
-    var pinImage = pinElement.querySelector('img');
 
-    pinElement.setAttribute('style', window.data.getLocation(item.location));
-    pinElement.setAttribute('data-id', i);
-    pinImage.src = item.author.avatar;
-    pinImage.alt = item.offer.title;
-    return pinElement;
-  };
-
-  var prepareCard = function (item) {
-    var cardElement = NODES.mapCard.cloneNode(true);
-    var values = window.data.getCardValues(item);
-
-    CONTENT_KEYS.forEach(function (key) {
-      var keyItem = CONTENT[key];
-      if (!values[key]) {
-        window['console']['error']('в values отсутствует ключ ' + key);
-      } else {
-        cardElement.querySelector('.popup__' + keyItem[0])[keyItem[1]] = values[key];
-      }
-    });
-    return cardElement;
-  };
-
-  var renderPins = function (arr) {
-    var fragment = document.createDocumentFragment();
-    arr.forEach(function (item, i) {
-      fragment.appendChild(preparePin(item, i));
-    });
-    return fragment;
-  };
 
   var setStatusFormFieldsets = function (selector, action) {
     NODES.form.classList[action]('ad-form--disabled');
@@ -153,7 +99,7 @@
     var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
     if (idx) {
       removeMapCard();
-      NODES.map.insertBefore(prepareCard(window.data.descPins[idx]), NODES.filters);
+      NODES.map.insertBefore(window.cards.prepareCard(window.data.descPins[idx]), NODES.filters);
       NODES.map.querySelector('.popup__close').addEventListener('click', removeMapCard);
     }
   };
@@ -161,7 +107,7 @@
   var openMap = function () {
     NODES.map.classList.remove('map--faded');
     setStatusFormFieldsets(NODES.formFieldsets, 'remove');
-    NODES.pins.appendChild(renderPins(window.data.descPins));
+    NODES.pins.appendChild(window.pins.renderPins(window.data.descPins));
     NODES.inputAddress.value = calcActiveMainPinCoordinates();
   };
 
@@ -226,7 +172,7 @@
   };
 
   var timeInSelectHandler = function () {
-    NODES.timeOutSelect[window.data.TIME.indexOf(NODES.timeInSelect.value)].selected = true;
+    NODES.timeOutSelect[window.data.time.indexOf(NODES.timeInSelect.value)].selected = true;
   };
 
   var timeOutSelectHandler = function () {
@@ -265,8 +211,8 @@
       }
       if (actualY <= window.data.location.minY) {
         actualY = window.data.location.minY;
-      } else if (actualY >= window.location.maxY) {
-        actualY = window.data.data.location.maxY;
+      } else if (actualY >= window.data.location.maxY) {
+        actualY = window.data.location.maxY;
       }
 
       var triangleActualX = actualX - shift.x + MAIN_PIN.width / 2;
