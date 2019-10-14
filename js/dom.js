@@ -67,8 +67,6 @@
     return calcPinX + ', ' + calcActivePinY;
   };
 
-
-
   var setStatusFormFieldsets = function (selector, action) {
     NODES.form.classList[action]('ad-form--disabled');
     selector.forEach(function (item) {
