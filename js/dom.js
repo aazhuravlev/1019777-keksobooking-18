@@ -288,19 +288,20 @@
     document.addEventListener('mouseup', mouseUpHandler);
   };
 
-  window.dom = {};
-  window.dom.nodes = NODES;
-  window.dom.calcMainPinCoordinates = calcMainPinCoordinates;
-  window.dom.setStatusFormFieldsets = setStatusFormFieldsets;
-  window.dom.mapEnterPressHendler = mapEnterPressHendler;
-  window.dom.removeMapCardKeydownHandler = removeMapCardKeydownHandler;
-  window.dom.pinClickHandler = pinClickHandler;
-  window.dom.formReset = formReset;
-  window.dom.adTitleChangeHandler = adTitleChangeHandler;
-  window.dom.typeSelectChangeHandler = typeSelectChangeHandler;
-  window.dom.pricePerNightHandler = pricePerNightHandler;
-  window.dom.changeRoomsHandler = changeRoomsHandler;
-  window.dom.timeInSelectHandler = timeInSelectHandler;
-  window.dom.timeOutSelectHandler = timeOutSelectHandler;
-  window.dom.dragHandler = dragHandler;
+  window.dom = {
+    nodes: NODES,
+    calcMainPinCoordinates: calcMainPinCoordinates,
+    setStatusFormFieldsets: setStatusFormFieldsets,
+    mapEnterPressHendler: mapEnterPressHendler,
+    removeMapCardKeydownHandler: removeMapCardKeydownHandler,
+    pinClickHandler: pinClickHandler,
+    formReset: formReset,
+    adTitleChangeHandler: adTitleChangeHandler,
+    typeSelectChangeHandler: typeSelectChangeHandler,
+    pricePerNightHandler: pricePerNightHandler,
+    changeRoomsHandler: changeRoomsHandler,
+    timeInSelectHandler: timeInSelectHandler,
+    timeOutSelectHandler: timeOutSelectHandler,
+    dragHandler: dragHandler
+  };
 })();

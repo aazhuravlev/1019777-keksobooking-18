@@ -38,9 +38,10 @@
     return arr[2];
   };
 
-  window.utils = {};
-  window.utils.getRandomBetween = getRandomBetween;
-  window.utils.spliceRandomItem = spliceRandomItem;
-  window.utils.getRandomItem = getRandomItem;
-  window.utils.getRandomSlice = getRandomSlice;
+  window.utils = {
+    getRandomBetween: getRandomBetween,
+    spliceRandomItem: spliceRandomItem,
+    getRandomItem: getRandomItem,
+    getRandomSlice: getRandomSlice
+  };
 })();

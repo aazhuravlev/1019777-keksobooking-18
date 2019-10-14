@@ -118,10 +118,11 @@
 
   var DESC_PINS = getPins(PINS_COUNT);
 
-  window.data = {};
-  window.data.time = TIME;
-  window.data.location = LOCATION;
-  window.data.descPins = DESC_PINS;
-  window.data.getLocation = getLocation;
-  window.data.getCardValues = getCardValues;
+  window.data = {
+    time: TIME,
+    location: LOCATION,
+    descPins: DESC_PINS,
+    getLocation: getLocation,
+    getCardValues: getCardValues
+  };
 })();
