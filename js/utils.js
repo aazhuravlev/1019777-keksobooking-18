@@ -1,25 +1,25 @@
 'use strict';
 
 (function () {
-  window.getRandomBetween = function (min, max) {
+  var getRandomBetween = function (min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
   var getRandomIndex = function (max) {
-    return window.getRandomBetween(0, max - 1);
+    return getRandomBetween(0, max - 1);
   };
 
-  window.spliceRandomItem = function (arr) {
+  var spliceRandomItem = function (arr) {
     return arr.splice(getRandomIndex(arr.length - 1), 1);
   };
 
-  window.getRandomItem = function (arr) {
+  var getRandomItem = function (arr) {
     return arr[getRandomIndex(arr.length)];
   };
 
-  window.getRandomSlice = function (arr) {
+  var getRandomSlice = function (arr) {
     return arr.slice(0, 2 + getRandomIndex(arr.length - 2));
   };
 
@@ -37,4 +37,10 @@
     }
     return arr[2];
   };
+
+  window.utils = {};
+  window.utils.getRandomBetween = getRandomBetween;
+  window.utils.spliceRandomItem = spliceRandomItem;
+  window.utils.getRandomItem = getRandomItem;
+  window.utils.getRandomSlice = getRandomSlice;
 })();
