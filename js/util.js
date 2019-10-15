@@ -38,11 +38,21 @@
     return arr[2];
   };
 
+  var findNodes = function (obj) {
+    var nodes = {};
+    var keys = Object.keys(obj);
+    keys.forEach(function (key) {
+      nodes[key] = document.querySelector(obj[key]);
+    });
+    return nodes;
+  };
+
   window.util = {
     getRandomBetween: getRandomBetween,
     spliceRandomItem: spliceRandomItem,
     getRandomItem: getRandomItem,
     getRandomSlice: getRandomSlice,
-    pluralize: pluralize
+    pluralize: pluralize,
+    findNodes: findNodes
   };
 })();

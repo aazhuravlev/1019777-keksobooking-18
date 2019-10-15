@@ -3,6 +3,7 @@
 (function () {
   var ROOM_DECLINATION_VALUES = [' комната', ' комнаты', ' комнат'];
   var GUEST_DECLINATION_VALUES = [' гостя', ' гостей', ' гостей'];
+  var ESC_KEYCODE = 27;
 
   var TEXT_CONTENT = 'textContent';
   var INNER_HTML = 'innerHTML';
@@ -20,8 +21,14 @@
     avatar: ['avatar', SRC]
   };
 
-  var SIMILAR_CARDS_TEMPLATE = document.querySelector('#card');
-  var MAP_CARD = SIMILAR_CARDS_TEMPLATE.content.querySelector('.map__card');
+  var SELECTORS_DATA = {
+    map: '.map',
+    similarCardsTemplate: '#card'
+  };
+
+  var NODES = window.util.findNodes(SELECTORS_DATA);
+
+  NODES.mapCard = NODES.similarCardsTemplate.content.querySelector('.map__card');
 
   var CONTENT_KEYS = Object.keys(CONTENT);
 
@@ -65,7 +72,7 @@
   };
 
   var prepareCard = function (item) {
-    var cardElement = MAP_CARD.cloneNode(true);
+    var cardElement = NODES.mapCard.cloneNode(true);
     var values = getCardValues(item);
 
     CONTENT_KEYS.forEach(function (key) {
@@ -79,7 +86,28 @@
     return cardElement;
   };
 
+  var removeCard = function () {
+    var mapCard = NODES.map.querySelector('.map__card');
+    if (mapCard) {
+      mapCard.remove();
+    }
+  };
+
+  var removeMapCardKeydownHandler = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      removeCard();
+    }
+  };
+
+  var addHendlers = function () {
+    NODES.map.addEventListener('keydown', removeMapCardKeydownHandler);
+  };
+
   window.card = {
-    prepare: prepareCard
+    prepare: prepareCard,
+    remove: removeCard,
+    removeKeydownHandler: removeMapCardKeydownHandler,
+    nodes: NODES,
+    addHendlers: addHendlers
   };
 })();
