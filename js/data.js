@@ -12,7 +12,7 @@
   var MAX_ROOMS = 3;
   var MIN_GUESTS = 1;
   var MAX_GUESTS = 3;
-  var LOCATION = {
+  var MAP_BORDER = {
     minX: 0,
     maxX: 1138,
     minY: 130,
@@ -36,27 +36,27 @@
     var pinsDesc = [];
     var avatars = AVATARS.slice(0);
     var titles = TITLES.slice(0);
-    var TYPE_KEYS = window.utils.getRandomItem(Object.keys(TYPES));
+    var TYPE_KEYS = window.util.getRandomItem(Object.keys(TYPES));
     var descriptions = DESCRIPTIONS.slice(0);
 
     for (var i = 0; i < quantity; i++) {
-      var locationX = window.utils.getRandomBetween(LOCATION.minX, LOCATION.maxX);
-      var locationY = window.utils.getRandomBetween(LOCATION.minY, LOCATION.maxY);
+      var locationX = window.util.getRandomBetween(MAP_BORDER.minX, MAP_BORDER.maxX);
+      var locationY = window.util.getRandomBetween(MAP_BORDER.minY, MAP_BORDER.maxY);
       pinsDesc.push({
         author: {
-          avatar: window.utils.spliceRandomItem(avatars),
+          avatar: window.util.spliceRandomItem(avatars),
         },
         offer: {
-          title: window.utils.spliceRandomItem(titles),
+          title: window.util.spliceRandomItem(titles),
           adress: locationX + ', ' + locationY,
-          price: window.utils.getRandomBetween(MIN_PRICE, MAX_PRICE),
+          price: window.util.getRandomBetween(MIN_PRICE, MAX_PRICE),
           type: TYPE_KEYS,
-          rooms: window.utils.getRandomBetween(MIN_ROOMS, MAX_ROOMS),
-          guests: window.utils.getRandomBetween(MIN_GUESTS, MAX_GUESTS),
-          checkin: window.utils.getRandomItem(TIME),
-          checkout: window.utils.getRandomItem(TIME),
-          features: window.utils.getRandomSlice(FEATURES),
-          description: window.utils.spliceRandomItem(descriptions),
+          rooms: window.util.getRandomBetween(MIN_ROOMS, MAX_ROOMS),
+          guests: window.util.getRandomBetween(MIN_GUESTS, MAX_GUESTS),
+          checkin: window.util.getRandomItem(TIME),
+          checkout: window.util.getRandomItem(TIME),
+          features: window.util.getRandomSlice(FEATURES),
+          description: window.util.spliceRandomItem(descriptions),
           photos: PHOTOS
         },
         location: {
@@ -68,11 +68,11 @@
     return pinsDesc;
   };
 
-  var DESC_PINS = getPinsData(PINS_COUNT);
+  var PROPERTY_DESC = getPinsData(PINS_COUNT);
 
   window.data = {
-    descPins: DESC_PINS,
-    location: LOCATION,
+    propertyDesc: PROPERTY_DESC,
+    mapBorder: MAP_BORDER,
     types: TYPES,
     photos: PHOTOS,
     time: TIME

@@ -1,9 +1,7 @@
 'use strict';
 
 (function () {
-  var ROOM_DECLINATION;
   var ROOM_DECLINATION_VALUES = [' комната', ' комнаты', ' комнат'];
-  var GUEST_DECLINATION;
   var GUEST_DECLINATION_VALUES = [' гостя', ' гостей', ' гостей'];
 
   var TEXT_CONTENT = 'textContent';
@@ -45,9 +43,9 @@
 
   var getCapacity = function (number) {
     var item = number.offer;
-    ROOM_DECLINATION = window.utils.pluralize(item.rooms, ROOM_DECLINATION_VALUES);
-    GUEST_DECLINATION = window.utils.pluralize(item.guests, GUEST_DECLINATION_VALUES);
-    return item.rooms + ROOM_DECLINATION + ' для ' + item.guests + GUEST_DECLINATION;
+    var roomDeclination = window.util.pluralize(item.rooms, ROOM_DECLINATION_VALUES);
+    var guestDeclination = window.util.pluralize(item.guests, GUEST_DECLINATION_VALUES);
+    return item.rooms + roomDeclination + ' для ' + item.guests + guestDeclination;
   };
 
   var getCardValues = function (cardData) {
@@ -81,7 +79,7 @@
     return cardElement;
   };
 
-  window.cards = {
-    prepareCard: prepareCard
+  window.card = {
+    prepare: prepareCard
   };
 })();

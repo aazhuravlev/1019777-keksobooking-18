@@ -12,7 +12,7 @@
     var pinElement = MAP_PIN.cloneNode(true);
     var pinImage = pinElement.querySelector('img');
 
-    pinElement.setAttribute('style', getLocation(item.location));
+    pinElement.setAttribute('style', getLocation(item.mapBorder));
     pinElement.setAttribute('data-id', i);
     pinImage.src = item.author.avatar;
     pinImage.alt = item.offer.title;
@@ -27,7 +27,7 @@
     return fragment;
   };
 
-  window.pins = {
-    renderPins: renderPins
+  window.pin = {
+    render: renderPins
   };
 })();

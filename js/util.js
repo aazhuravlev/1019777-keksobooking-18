@@ -38,7 +38,7 @@
     return arr[2];
   };
 
-  window.utils = {
+  window.util = {
     getRandomBetween: getRandomBetween,
     spliceRandomItem: spliceRandomItem,
     getRandomItem: getRandomItem,

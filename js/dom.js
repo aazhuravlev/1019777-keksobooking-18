@@ -97,7 +97,7 @@
     var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
     if (idx) {
       removeMapCard();
-      NODES.map.insertBefore(window.cards.prepareCard(window.data.descPins[idx]), NODES.filters);
+      NODES.map.insertBefore(window.card.prepare(window.data.propertyDesc[idx]), NODES.filters);
       NODES.map.querySelector('.popup__close').addEventListener('click', removeMapCard);
     }
   };
@@ -105,7 +105,7 @@
   var openMap = function () {
     NODES.map.classList.remove('map--faded');
     setStatusFormFieldsets(NODES.formFieldsets, 'remove');
-    NODES.pins.appendChild(window.pins.renderPins(window.data.descPins));
+    NODES.pins.appendChild(window.pin.render(window.data.propertyDesc));
     NODES.inputAddress.value = calcActiveMainPinCoordinates();
   };
 
@@ -202,15 +202,15 @@
       var actualX = NODES.mainPin.offsetLeft - shift.x;
       var actualY = NODES.mainPin.offsetTop - shift.y;
 
-      if (actualX <= window.data.location.minX) {
-        actualX = window.data.location.minX;
-      } else if (actualX >= window.data.location.maxX) {
-        actualX = window.data.location.maxX;
+      if (actualX <= window.data.mapBorder.minX) {
+        actualX = window.data.mapBorder.minX;
+      } else if (actualX >= window.data.mapBorder.maxX) {
+        actualX = window.data.mapBorder.maxX;
       }
-      if (actualY <= window.data.location.minY) {
-        actualY = window.data.location.minY;
-      } else if (actualY >= window.data.location.maxY) {
-        actualY = window.data.location.maxY;
+      if (actualY <= window.data.mapBorder.minY) {
+        actualY = window.data.mapBorder.minY;
+      } else if (actualY >= window.data.mapBorder.maxY) {
+        actualY = window.data.mapBorder.maxY;
       }
 
       var triangleActualX = actualX - shift.x + MAIN_PIN.width / 2;
