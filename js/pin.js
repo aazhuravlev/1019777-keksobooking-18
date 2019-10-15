@@ -64,7 +64,7 @@
     }
   };
 
-  var addHendlers = function () {
+  var addHandlers = function () {
     NODES.pins.addEventListener('click', pinClickHandler);
   };
 
@@ -74,6 +74,6 @@
     calcActiveMainPinCoordinates: calcActiveMainPinCoordinates,
     mainPin: MAIN_PIN,
     nodes: NODES,
-    addHendlers: addHendlers
+    addHandlers: addHandlers
   };
 })();
