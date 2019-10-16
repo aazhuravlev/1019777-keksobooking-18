@@ -27,6 +27,12 @@
     return arr;
   };
 
+  var data = [];
+  var getData = function () {
+    console.log(data);
+    return data;
+  };
+
   var AVATARS = createList(PINS_COUNT, 'img/avatars/user0', '.png');
   var TITLES = createList(PINS_COUNT, 'title', '');
   var PHOTOS = createList(HOTEL_PHOTOS_COUNT, 'http://o0.github.io/assets/images/tokyo/hotel', '.jpg');
@@ -70,11 +76,24 @@
 
   var PROPERTY_DESC = getPinsData(PINS_COUNT);
 
+  var loadData = function (onSuccess) {
+    if (data.length > 0) {
+      onSuccess(data);
+      return;
+    }
+    window.backend.load(function (result) {
+      data = result;
+      return data;
+    }, window.backend.errorHandler);
+  };
+
   window.data = {
     propertyDesc: PROPERTY_DESC,
     mapBorder: MAP_BORDER,
     types: TYPES,
     photos: PHOTOS,
-    time: TIME
+    time: TIME,
+    getData: getData,
+    loadData: loadData
   };
 })();

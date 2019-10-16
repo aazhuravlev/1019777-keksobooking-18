@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var PINS_COUNT = 8;
   var MAIN_PIN = {
     width: 62,
     height: 22,
@@ -14,7 +15,6 @@
     mainPin: '.map__pin--main',
     pins: '.map__pins',
     pinTemplate: '#pin',
-    filters: '.map__filters-container'
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
@@ -33,7 +33,7 @@
   };
 
   var getLocation = function (location) {
-    return 'left: ' + location.x + ';' + ' top: ' + location.y + ';';
+    return 'left: ' + location.x + 'px;' + ' top: ' + location.y + 'px;';
   };
 
   var preparePin = function (item, i) {
@@ -49,17 +49,17 @@
 
   var renderPins = function (arr) {
     var fragment = document.createDocumentFragment();
-    arr.forEach(function (item, i) {
-      fragment.appendChild(preparePin(item, i));
-    });
-    return fragment;
+    for (var i = 0; i < PINS_COUNT; i++) {
+      fragment.appendChild(preparePin(arr[i], i));
+    }
+    return NODES.pins.appendChild(fragment);
   };
 
   var pinClickHandler = function (evt) {
     var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
     if (idx) {
       window.card.remove();
-      window.card.nodes.map.insertBefore(window.card.prepare(window.data.propertyDesc[idx]), NODES.filters);
+      window.card.render(window.data.getData(), idx);
       window.card.nodes.map.querySelector('.popup__close').addEventListener('click', window.card.remove);
     }
   };

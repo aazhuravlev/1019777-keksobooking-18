@@ -12,12 +12,13 @@
   var openMap = function () {
     window.card.nodes.map.classList.remove('map--faded');
     window.form.setStatusFieldsets(window.form.nodes.formFieldsets, 'remove');
-    window.pin.nodes.pins.appendChild(window.pin.render(window.data.propertyDesc));
+    window.pin.render(window.data.getData());
     window.form.nodes.inputAddress.value = window.pin.calcActiveMainPinCoordinates();
+    window.pin.nodes.mainPin.removeEventListener('click', openMap);
+    window.pin.nodes.mainPin.addEventListener('mousedown', dragHandler);
   };
 
   var dragHandler = function (evt) {
-    openMap();
     evt.preventDefault();
 
     var startCoords = {
@@ -72,7 +73,7 @@
   };
 
   var addHandlers = function () {
-    window.pin.nodes.mainPin.addEventListener('mousedown', dragHandler);
+    window.pin.nodes.mainPin.addEventListener('mousedown', openMap);
     window.pin.nodes.mainPin.addEventListener('keydown', mapEnterPressHandler);
   };
 

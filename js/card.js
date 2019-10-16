@@ -10,7 +10,7 @@
   var SRC = 'src';
   var CONTENT = {
     title: ['title', TEXT_CONTENT],
-    adress: ['text--address', TEXT_CONTENT],
+    address: ['text--address', TEXT_CONTENT],
     price: ['text--price', TEXT_CONTENT],
     type: ['type', TEXT_CONTENT],
     capacity: ['text--capacity', TEXT_CONTENT],
@@ -25,7 +25,8 @@
 
   var SELECTORS_DATA = {
     map: '.map',
-    similarCardsTemplate: '#card'
+    similarCardsTemplate: '#card',
+    filters: '.map__filters-container'
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
@@ -37,6 +38,9 @@
   };
 
   var getFeatures = function (arr) {
+    if (!arr || arr.length === 0) {
+      return [];
+    }
     return arr.map(getFeature).join('');
   };
 
@@ -45,11 +49,14 @@
   };
 
   var getPhotos = function (arr) {
+    if (!arr || arr.length < 1) {
+      return [];
+    }
     return arr.map(getPhoto).join('');
   };
 
   var getCapacity = function (number) {
-    var item = number.offer;
+    var item = number;
     var roomDeclination = window.util.pluralize(item.rooms, ROOM_DECLINATION_VALUES);
     var guestDeclination = window.util.pluralize(item.guests, GUEST_DECLINATION_VALUES);
     return item.rooms + roomDeclination + ' для ' + item.guests + guestDeclination;
@@ -59,14 +66,14 @@
     var item = cardData.offer;
     return {
       title: item.title,
-      adress: item.adress,
+      address: item.address,
       price: item.price + '₽/ночь',
       type: window.data.types[item.type],
-      capacity: getCapacity(cardData),
+      capacity: getCapacity(item),
       time: 'Заезд после ' + item.checkin + ', выезд до ' + item.checkout,
       features: getFeatures(item.features),
       description: item.description,
-      photos: getPhotos(window.data.photos),
+      photos: getPhotos(item.photos),
       avatar: cardData.author.avatar
     };
   };
@@ -86,6 +93,10 @@
     return cardElement;
   };
 
+  var renderCard = function (arr, idx) {
+    NODES.map.insertBefore(prepareCard(arr[idx]), NODES.filters);
+  };
+
   var removeCard = function () {
     var mapCard = NODES.map.querySelector('.map__card');
     if (mapCard) {
@@ -99,15 +110,15 @@
     }
   };
 
-  var addHendlers = function () {
+  var addHandlers = function () {
     NODES.map.addEventListener('keydown', removeMapCardKeydownHandler);
   };
 
   window.card = {
     prepare: prepareCard,
+    render: renderCard,
     remove: removeCard,
-    removeKeydownHandler: removeMapCardKeydownHandler,
     nodes: NODES,
-    addHendlers: addHendlers
+    addHandlers: addHandlers
   };
 })();
