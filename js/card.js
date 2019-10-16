@@ -21,6 +21,8 @@
     avatar: ['avatar', SRC]
   };
 
+  var CONTENT_KEYS = Object.keys(CONTENT);
+
   var SELECTORS_DATA = {
     map: '.map',
     similarCardsTemplate: '#card'
@@ -29,8 +31,6 @@
   var NODES = window.util.findNodes(SELECTORS_DATA);
 
   NODES.mapCard = NODES.similarCardsTemplate.content.querySelector('.map__card');
-
-  var CONTENT_KEYS = Object.keys(CONTENT);
 
   var getFeature = function (item) {
     return '<li class="popup__feature popup__feature--' + item + '"></li>';

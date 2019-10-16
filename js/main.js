@@ -2,9 +2,9 @@
 
 (function () {
   var main = function () {
-    window.pin.addHendlers();
-    window.form.addHendlers();
-    window.dom.addHendlers();
+    window.pin.addHandlers();
+    window.form.addHandlers();
+    window.dom.addHandlers();
   };
 
   main();

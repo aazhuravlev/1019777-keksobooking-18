@@ -106,7 +106,7 @@
     window.pin.nodes.mainPin.style.left = window.pin.mainPin.startX + 'px';
   };
 
-  var addHendlers = function () {
+  var addHandlers = function () {
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
     NODES.adTitle.addEventListener('change', adTitleChangeHandler);
     NODES.typeSelect.addEventListener('change', typeSelectChangeHandler);
@@ -121,6 +121,6 @@
   window.form = {
     setStatusFieldsets: setStatusFormFieldsets,
     nodes: NODES,
-    addHendlers: addHendlers
+    addHandlers: addHandlers
   };
 })();

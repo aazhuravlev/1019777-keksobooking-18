@@ -3,7 +3,7 @@
 (function () {
   var ENTER_KEYCODE = 13;
 
-  var mapEnterPressHendler = function (evt) {
+  var mapEnterPressHandler = function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       openMap();
     }
@@ -71,12 +71,12 @@
     document.addEventListener('mouseup', mouseUpHandler);
   };
 
-  var addHendlers = function () {
+  var addHandlers = function () {
     window.pin.nodes.mainPin.addEventListener('mousedown', dragHandler);
-    window.pin.nodes.mainPin.addEventListener('keydown', mapEnterPressHendler);
+    window.pin.nodes.mainPin.addEventListener('keydown', mapEnterPressHandler);
   };
 
   window.dom = {
-    addHendlers: addHendlers
+    addHandlers: addHandlers
   };
 })();
