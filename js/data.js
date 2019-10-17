@@ -80,11 +80,12 @@
       onSuccess(data);
       return;
     }
-    window.backend.load(function (result) {
+    var onLoad = function (result) {
       data = result;
       window.dom.addHandlers();
       return data;
-    }, window.backend.errorHandler);
+    };
+    window.backend.load(onLoad, window.dom.errorHandler);
   };
 
   window.data = {

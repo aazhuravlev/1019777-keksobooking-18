@@ -93,10 +93,15 @@
     return cardElement;
   };
 
-  var renderCard = function (arr, idx) {
-    NODES.map.insertBefore(prepareCard(arr[idx]), NODES.filters);
+  var renderCard = function (arr) {
+    NODES.map.insertBefore(prepareCard(arr), NODES.filters);
   };
-
+  /*
+  var mapCardClose = function () {
+    var closeButton = NODES.map.querySelector('.popup__close');
+    closeButton.addEventListener('click', removeCard);
+  };
+  */
   var removeCard = function () {
     var mapCard = NODES.map.querySelector('.map__card');
     if (mapCard) {
@@ -112,6 +117,7 @@
 
   var addHandlers = function () {
     NODES.map.addEventListener('keydown', removeMapCardKeydownHandler);
+    // mapCardClose();
   };
 
   window.card = {

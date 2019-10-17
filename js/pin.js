@@ -49,9 +49,9 @@
 
   var renderPins = function (arr) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < PINS_COUNT; i++) {
-      fragment.appendChild(preparePin(arr[i], i));
-    }
+    arr.forEach(function (item, i) {
+      fragment.appendChild(preparePin(item, i));
+    });
     return NODES.pins.appendChild(fragment);
   };
 
@@ -59,7 +59,7 @@
     var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
     if (idx) {
       window.card.remove();
-      window.card.render(window.data.getData(), idx);
+      window.card.render(window.data.getData()[idx]);
       window.card.nodes.map.querySelector('.popup__close').addEventListener('click', window.card.remove);
     }
   };

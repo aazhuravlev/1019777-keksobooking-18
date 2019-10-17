@@ -27,9 +27,15 @@
     timeOutSelect: '#timeout',
     pricePerNight: '#price'
   };
+
   var NODES = window.util.findNodes(SELECTORS_DATA);
   NODES.formFieldsets = NODES.form.querySelectorAll('fieldset');
   NODES.capacityOptions = NODES.capacitySelect.querySelectorAll('option');
+
+  var EVENTS_HANDLERS = {
+    change: 'change',
+    click: 'click'
+  };
 
   var setStatusFormFieldsets = function (selector, action) {
     NODES.form.classList[action]('ad-form--disabled');
@@ -106,16 +112,21 @@
     window.pin.nodes.mainPin.style.left = window.pin.mainPin.startX + 'px';
   };
 
+
+  var HANDLERS_DATA = [
+    [NODES.adTitle, EVENTS_HANDLERS.change, adTitleChangeHandler],
+    [NODES.typeSelect, EVENTS_HANDLERS.change, typeSelectChangeHandler],
+    [NODES.pricePerNight, EVENTS_HANDLERS.change, pricePerNightHandler],
+    [NODES.roomSelect, EVENTS_HANDLERS.change, changeRoomsHandler],
+    [NODES.timeInSelect, EVENTS_HANDLERS.change, timeInSelectHandler],
+    [NODES.timeOutSelect, EVENTS_HANDLERS.change, timeOutSelectHandler],
+    [NODES.formReset, EVENTS_HANDLERS.click, formReset]
+  ];
+
   var addHandlers = function () {
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
-    NODES.adTitle.addEventListener('change', adTitleChangeHandler);
-    NODES.typeSelect.addEventListener('change', typeSelectChangeHandler);
-    NODES.pricePerNight.addEventListener('change', pricePerNightHandler);
-    NODES.roomSelect.addEventListener('change', changeRoomsHandler);
-    NODES.timeInSelect.addEventListener('change', timeInSelectHandler);
-    NODES.timeOutSelect.addEventListener('change', timeOutSelectHandler);
     NODES.inputAddress.value = window.pin.calcMainPinCoordinates();
-    NODES.formReset.addEventListener('click', formReset);
+    window.util.setHandlers(HANDLERS_DATA);
   };
 
   window.form = {
