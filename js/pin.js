@@ -60,7 +60,6 @@
     if (idx) {
       window.card.remove();
       window.card.render(window.data.getData()[idx]);
-      window.card.nodes.map.querySelector('.popup__close').addEventListener('click', window.card.remove);
     }
   };
 

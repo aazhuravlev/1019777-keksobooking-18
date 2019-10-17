@@ -95,13 +95,9 @@
 
   var renderCard = function (arr) {
     NODES.map.insertBefore(prepareCard(arr), NODES.filters);
+    window.card.nodes.map.querySelector('.popup__close').addEventListener('click', window.card.remove);
   };
-  /*
-  var mapCardClose = function () {
-    var closeButton = NODES.map.querySelector('.popup__close');
-    closeButton.addEventListener('click', removeCard);
-  };
-  */
+
   var removeCard = function () {
     var mapCard = NODES.map.querySelector('.map__card');
     if (mapCard) {
@@ -117,7 +113,6 @@
 
   var addHandlers = function () {
     NODES.map.addEventListener('keydown', removeMapCardKeydownHandler);
-    // mapCardClose();
   };
 
   window.card = {
