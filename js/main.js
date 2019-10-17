@@ -6,7 +6,6 @@
     window.card.addHandlers();
     window.pin.addHandlers();
     window.form.addHandlers();
-    window.dom.addHandlers();
   };
 
   main();

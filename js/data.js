@@ -29,7 +29,6 @@
 
   var data = [];
   var getData = function () {
-    console.log(data);
     return data;
   };
 
@@ -83,6 +82,7 @@
     }
     window.backend.load(function (result) {
       data = result;
+      window.dom.addHandlers();
       return data;
     }, window.backend.errorHandler);
   };
