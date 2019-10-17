@@ -9,7 +9,6 @@
 
   var loadData = function () {
     if (data.length > 0 || isLoading) {
-      console.log(data);
       return;
     }
     var onLoad = function (result) {
@@ -18,7 +17,6 @@
       return data;
     };
     isLoading = true;
-    window.backend.load(onLoad, window.dom.errorHandler);
     window.backend.load(onLoad, window.dom.errorHandler);
   };
 

@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var PINS_COUNT = 8;
   var MAIN_PIN = {
     width: 62,
     height: 22,
