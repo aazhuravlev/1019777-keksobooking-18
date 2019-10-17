@@ -12,7 +12,8 @@
 
   var SELECTORS_DATA = {
     errorTemplate: '#error',
-    errorPopup: '.error'
+    errorPopup: '.error',
+    main: 'main'
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
@@ -94,7 +95,7 @@
 
   var renderErrorPopup = function () {
     var errorPopup = ERROR_POPUP.cloneNode(true);
-    document.body.appendChild(errorPopup);
+    NODES.main.appendChild(errorPopup);
   };
 
   var windowReloadHandler = function () {
