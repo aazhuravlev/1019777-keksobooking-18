@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var TYPES = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
   var ROOM_DECLINATION_VALUES = [' комната', ' комнаты', ' комнат'];
   var GUEST_DECLINATION_VALUES = [' гостя', ' гостей', ' гостей'];
   var ESC_KEYCODE = 27;
@@ -68,7 +69,7 @@
       title: item.title,
       address: item.address,
       price: item.price + '₽/ночь',
-      type: window.data.types[item.type],
+      type: TYPES[item.type],
       capacity: getCapacity(item),
       time: 'Заезд после ' + item.checkin + ', выезд до ' + item.checkout,
       features: getFeatures(item.features),

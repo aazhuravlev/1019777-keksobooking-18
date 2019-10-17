@@ -3,6 +3,13 @@
 (function () {
   var ENTER_KEYCODE = 13;
 
+  var MAP_BORDER = {
+    minX: 0,
+    maxX: 1138,
+    minY: 130,
+    maxY: 630
+  };
+
   var SELECTORS_DATA = {
     errorTemplate: '#error',
     errorPopup: '.error'
@@ -50,15 +57,15 @@
       var actualX = window.pin.nodes.mainPin.offsetLeft - shift.x;
       var actualY = window.pin.nodes.mainPin.offsetTop - shift.y;
 
-      if (actualX <= window.data.mapBorder.minX) {
-        actualX = window.data.mapBorder.minX;
-      } else if (actualX >= window.data.mapBorder.maxX) {
-        actualX = window.data.mapBorder.maxX;
+      if (actualX <= MAP_BORDER.minX) {
+        actualX = MAP_BORDER.minX;
+      } else if (actualX >= MAP_BORDER.maxX) {
+        actualX = MAP_BORDER.maxX;
       }
-      if (actualY <= window.data.mapBorder.minY) {
-        actualY = window.data.mapBorder.minY;
-      } else if (actualY >= window.data.mapBorder.maxY) {
-        actualY = window.data.mapBorder.maxY;
+      if (actualY <= MAP_BORDER.minY) {
+        actualY = MAP_BORDER.minY;
+      } else if (actualY >= MAP_BORDER.maxY) {
+        actualY = MAP_BORDER.maxY;
       }
 
       var triangleActualX = actualX - shift.x + window.pin.mainPin.width / 2;

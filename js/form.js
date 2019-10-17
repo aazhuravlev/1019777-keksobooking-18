@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var TIME = ['12:00', '13:00', '14:00'];
   var INPUT_SHADOW_COLOR = '0 0 2px 2px #ff0000';
   var CAPACITY_VALUES = {
     '1': [2],
@@ -95,11 +96,11 @@
   };
 
   var timeInSelectHandler = function () {
-    NODES.timeOutSelect[window.data.time.indexOf(NODES.timeInSelect.value)].selected = true;
+    NODES.timeOutSelect[TIME.indexOf(NODES.timeInSelect.value)].selected = true;
   };
 
   var timeOutSelectHandler = function () {
-    NODES.timeInSelect[window.data.time.indexOf(NODES.timeOutSelect.value)].selected = true;
+    NODES.timeInSelect[TIME.indexOf(NODES.timeOutSelect.value)].selected = true;
   };
 
   var formReset = function () {
