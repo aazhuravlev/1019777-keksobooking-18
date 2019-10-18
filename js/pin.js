@@ -14,7 +14,6 @@
     mainPin: '.map__pin--main',
     pins: '.map__pins',
     pinTemplate: '#pin',
-    filters: '.map__filters-container'
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
@@ -33,7 +32,7 @@
   };
 
   var getLocation = function (location) {
-    return 'left: ' + location.x + ';' + ' top: ' + location.y + ';';
+    return 'left: ' + location.x + 'px;' + ' top: ' + location.y + 'px;';
   };
 
   var preparePin = function (item, i) {
@@ -52,15 +51,14 @@
     arr.forEach(function (item, i) {
       fragment.appendChild(preparePin(item, i));
     });
-    return fragment;
+    return NODES.pins.appendChild(fragment);
   };
 
   var pinClickHandler = function (evt) {
     var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
     if (idx) {
       window.card.remove();
-      window.card.nodes.map.insertBefore(window.card.prepare(window.data.propertyDesc[idx]), NODES.filters);
-      window.card.nodes.map.querySelector('.popup__close').addEventListener('click', window.card.remove);
+      window.card.render(window.data.getData()[idx]);
     }
   };
 
