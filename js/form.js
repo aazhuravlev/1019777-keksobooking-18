@@ -9,12 +9,23 @@
     '3': [0, 1, 2],
     '100': [3]
   };
+
+  var STANDART_VALUES = {
+    roomSelect: '1',
+    capacitySelect: '1',
+    timeInSelect: TIME[0],
+    timeOutSelect: TIME[0]
+  };
   var TYPE_SELECT_OPTIONS = {
     bungalo: '0',
     flat: '1000',
     house: '5000',
     palace: '10000'
   };
+
+  var VALUE_FIELD = 'value';
+  var PLACEHOLDER_FIELD = 'placeholder';
+  var DISABLED_STATUS = 'disabled';
 
   var SELECTORS_DATA = {
     form: '.ad-form',
@@ -26,12 +37,34 @@
     capacitySelect: '#capacity',
     timeInSelect: '#timein',
     timeOutSelect: '#timeout',
-    pricePerNight: '#price'
+    pricePerNight: '#price',
+    description: '#description'
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
   NODES.formFieldsets = NODES.form.querySelectorAll('fieldset');
   NODES.capacityOptions = NODES.capacitySelect.querySelectorAll('option');
+
+  var INDEXES = {
+    flat: '1',
+    node: '0',
+    attribute: '1',
+    value: '2'
+  };
+
+  var STANDART_DATA = [
+    [NODES.adTitle, VALUE_FIELD, ''],
+    [NODES.typeSelect, VALUE_FIELD, Object.keys(window.card.types)[INDEXES.flat]],
+    [NODES.pricePerNight, VALUE_FIELD, ''],
+    [NODES.pricePerNight, PLACEHOLDER_FIELD, TYPE_SELECT_OPTIONS.flat],
+    [NODES.pricePerNight, PLACEHOLDER_FIELD, TYPE_SELECT_OPTIONS.flat],
+    [NODES.roomSelect, VALUE_FIELD, STANDART_VALUES.roomSelect],
+    [NODES.capacitySelect, VALUE_FIELD, STANDART_VALUES.capacitySelect],
+    [NODES.timeInSelect, VALUE_FIELD, STANDART_VALUES.timeInSelect],
+    [NODES.timeOutSelect, VALUE_FIELD, STANDART_VALUES.timeOutSelect],
+    [NODES.description, VALUE_FIELD, ''],
+    [NODES.inputAddress, DISABLED_STATUS, true]
+  ];
 
   var EVENTS_HANDLERS = {
     change: 'change',
@@ -56,11 +89,11 @@
   };
 
   var removeShadow = function (node) {
-    node.style.boxShadow = '';
+    node.removeAttribute('style');
   };
 
   var adTitleChangeHandler = function () {
-    if (NODES.adTitle.validity.tooShort || NODES.adTitle.validity.tooLong) {
+    if (!NODES.adTitle.checkValidity()) {
       NODES.adTitle.reportValidity();
       addShadow(NODES.adTitle);
     } else {
@@ -71,13 +104,13 @@
   var typeSelectChangeHandler = function () {
     NODES.pricePerNight.placeholder = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
     NODES.pricePerNight.min = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
-    if (NODES.pricePerNight.min > NODES.pricePerNight.value) {
+    if (!NODES.pricePerNight.checkValidity()) {
       NODES.pricePerNight.reportValidity();
     }
   };
 
   var pricePerNightHandler = function () {
-    if (NODES.pricePerNight.min > NODES.pricePerNight.value) {
+    if (!NODES.pricePerNight.checkValidity()) {
       NODES.pricePerNight.reportValidity();
       addShadow(NODES.pricePerNight);
     } else {
@@ -103,6 +136,12 @@
     NODES.timeInSelect[TIME.indexOf(NODES.timeOutSelect.value)].selected = true;
   };
 
+  var setStandartValues = function (arr) {
+    arr.forEach(function (key) {
+      key[INDEXES.node][key[INDEXES.attribute]] = key[INDEXES.value];
+    });
+  };
+
   var formReset = function () {
     window.card.nodes.map.classList.add('map--faded');
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
@@ -111,8 +150,12 @@
     window.card.remove();
     window.pin.nodes.mainPin.style.top = window.pin.mainPin.startY + 'px';
     window.pin.nodes.mainPin.style.left = window.pin.mainPin.startX + 'px';
+    setStandartValues(STANDART_DATA);
   };
 
+  var sendFormHandler = function () {
+    formReset();
+  };
 
   var HANDLERS_DATA = [
     [NODES.adTitle, EVENTS_HANDLERS.change, adTitleChangeHandler],
@@ -124,15 +167,24 @@
     [NODES.formReset, EVENTS_HANDLERS.click, formReset]
   ];
 
+  var submitHandler = function (evt) {
+    NODES.inputAddress.disabled = false;
+    window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.saveErrorHandler);
+    evt.preventDefault();
+    window.dom.saveSuccessHandler();
+  };
+
   var addHandlers = function () {
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
     NODES.inputAddress.value = window.pin.calcMainPinCoordinates();
     window.util.setHandlers(HANDLERS_DATA);
+    NODES.form.addEventListener('submit', submitHandler);
   };
 
   window.form = {
     setStatusFieldsets: setStatusFormFieldsets,
     nodes: NODES,
-    addHandlers: addHandlers
+    addHandlers: addHandlers,
+    submitHandler: submitHandler
   };
 })();

@@ -121,6 +121,8 @@
     render: renderCard,
     remove: removeCard,
     nodes: NODES,
-    addHandlers: addHandlers
+    addHandlers: addHandlers,
+    escKeycode: ESC_KEYCODE,
+    types: TYPES
   };
 })();

@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  //  var URL_SAVE = 'https://js.dump.academy/code-and-magick';
+  var URL_SAVE = 'https://js.dump.academy/keksobooking';
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
 
   var xhrHandler = function (xhr, onLoad, onError) {
@@ -24,14 +24,14 @@
 
     xhr.timeout = 10000;
   };
-  /*
+
   var save = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhrHandler(xhr, onLoad, onError);
     xhr.open('POST', URL_SAVE);
     xhr.send(data);
   };
-*/
+
   var load = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhrHandler(xhr, onLoad, onError);
@@ -41,6 +41,6 @@
 
   window.backend = {
     load: load,
-    //  save: save,
+    save: save,
   };
 })();
