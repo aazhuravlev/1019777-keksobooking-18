@@ -169,7 +169,7 @@
   ];
 
   var submitHandler = function (evt) {
-    NODES.inputAddress.disabled = true;
+    NODES.inputAddress.disabled = false;
     window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.saveErrorHandler);
     evt.preventDefault();
   };
