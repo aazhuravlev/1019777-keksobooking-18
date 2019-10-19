@@ -35,6 +35,15 @@
     window.pin.nodes.mainPin.addEventListener('mousedown', dragHandler);
   };
 
+  var setMainPinBorderMoving = function (coordinate, min, max) {
+    if (coordinate <= min) {
+      coordinate = min;
+    } else if (coordinate >= max) {
+      coordinate = max;
+    }
+    return coordinate;
+  };
+
   var dragHandler = function (evt) {
     evt.preventDefault();
 
@@ -59,22 +68,11 @@
       var actualX = window.pin.nodes.mainPin.offsetLeft - shift.x;
       var actualY = window.pin.nodes.mainPin.offsetTop - shift.y;
 
-      if (actualX <= MAP_BORDER.minX) {
-        actualX = MAP_BORDER.minX;
-      } else if (actualX >= MAP_BORDER.maxX) {
-        actualX = MAP_BORDER.maxX;
-      }
-      if (actualY <= MAP_BORDER.minY) {
-        actualY = MAP_BORDER.minY;
-      } else if (actualY >= MAP_BORDER.maxY) {
-        actualY = MAP_BORDER.maxY;
-      }
+      var triangleActualX = setMainPinBorderMoving(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) - shift.x + window.pin.mainPin.width / 2;
+      var triangleActualY = setMainPinBorderMoving(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + window.pin.mainPin.fullHeight;
 
-      var triangleActualX = actualX - shift.x + window.pin.mainPin.width / 2;
-      var triangleActualY = actualY + window.pin.mainPin.fullHeight;
-
-      window.pin.nodes.mainPin.style.top = actualY + 'px';
-      window.pin.nodes.mainPin.style.left = actualX + 'px';
+      window.pin.nodes.mainPin.style.top = setMainPinBorderMoving(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + 'px';
+      window.pin.nodes.mainPin.style.left = setMainPinBorderMoving(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) + 'px';
       window.form.nodes.inputAddress.value = triangleActualX + ', ' + triangleActualY;
     };
 
