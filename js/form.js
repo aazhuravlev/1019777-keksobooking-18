@@ -155,6 +155,7 @@
 
   var sendFormHandler = function () {
     formReset();
+    window.dom.saveSuccessHandler();
   };
 
   var HANDLERS_DATA = [
@@ -168,10 +169,9 @@
   ];
 
   var submitHandler = function (evt) {
-    NODES.inputAddress.disabled = false;
+    NODES.inputAddress.disabled = true;
     window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.saveErrorHandler);
     evt.preventDefault();
-    window.dom.saveSuccessHandler();
   };
 
   var addHandlers = function () {
