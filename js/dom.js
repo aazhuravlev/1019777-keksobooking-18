@@ -110,8 +110,8 @@
   };
 
   var successPopupRemoveKeydownHandler = function (evt) {
-    var renderedSuccessPopup = document.querySelector('.success');
     if (evt.keyCode === window.card.escKeycode) {
+      var renderedSuccessPopup = document.querySelector('.success');
       if (renderedSuccessPopup) {
         renderedSuccessPopup.remove();
       }
@@ -132,8 +132,8 @@
   };
 
   var errorPopupRemoveKeydownHandler = function (evt) {
-    var renderedErrorPopup = document.querySelector('.error');
     if (evt.keyCode === window.card.escKeycode) {
+      var renderedErrorPopup = document.querySelector('.error');
       if (renderedErrorPopup) {
         renderedErrorPopup.remove();
       }
