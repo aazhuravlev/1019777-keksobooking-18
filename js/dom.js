@@ -13,7 +13,8 @@
   var SELECTORS_DATA = {
     errorTemplate: '#error',
     successTemplate: '#success',
-    main: 'main'
+    main: 'main',
+    housingType: '#housing-type'
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
@@ -29,7 +30,7 @@
   var openMap = function () {
     window.card.nodes.map.classList.remove('map--faded');
     window.form.setStatusFieldsets(window.form.nodes.formFieldsets, 'remove');
-    window.pin.render(window.data.getData());
+    window.data.updateData();
     window.form.nodes.inputAddress.value = window.pin.calcActiveMainPinCoordinates();
     window.pin.nodes.mainPin.removeEventListener('click', openMap);
     window.pin.nodes.mainPin.addEventListener('mousedown', dragHandler);
@@ -88,6 +89,7 @@
   };
 
   var addHandlers = function () {
+    NODES.housingType.addEventListener('change', window.data.updateData);
     window.pin.nodes.mainPin.addEventListener('mousedown', openMap);
     window.pin.nodes.mainPin.addEventListener('keydown', mapEnterPressHandler);
   };
@@ -162,6 +164,7 @@
     addHandlers: addHandlers,
     errorHandler: errorHandler,
     saveErrorHandler: saveErrorHandler,
-    saveSuccessHandler: saveSuccessHandler
+    saveSuccessHandler: saveSuccessHandler,
+    nodes: NODES
   };
 })();

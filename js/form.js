@@ -68,7 +68,8 @@
 
   var EVENTS_HANDLERS = {
     change: 'change',
-    click: 'click'
+    click: 'click',
+    submit: 'submit'
   };
 
   var setStatusFormFieldsets = function (selector, action) {
@@ -158,6 +159,12 @@
     window.dom.saveSuccessHandler();
   };
 
+  var submitHandler = function (evt) {
+    NODES.inputAddress.disabled = false;
+    window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.saveErrorHandler);
+    evt.preventDefault();
+  };
+
   var HANDLERS_DATA = [
     [NODES.adTitle, EVENTS_HANDLERS.change, adTitleChangeHandler],
     [NODES.typeSelect, EVENTS_HANDLERS.change, typeSelectChangeHandler],
@@ -165,20 +172,14 @@
     [NODES.roomSelect, EVENTS_HANDLERS.change, changeRoomsHandler],
     [NODES.timeInSelect, EVENTS_HANDLERS.change, timeInSelectHandler],
     [NODES.timeOutSelect, EVENTS_HANDLERS.change, timeOutSelectHandler],
-    [NODES.formReset, EVENTS_HANDLERS.click, formReset]
+    [NODES.formReset, EVENTS_HANDLERS.click, formReset],
+    [NODES.form, EVENTS_HANDLERS.submit, submitHandler]
   ];
-
-  var submitHandler = function (evt) {
-    NODES.inputAddress.disabled = false;
-    window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.saveErrorHandler);
-    evt.preventDefault();
-  };
 
   var addHandlers = function () {
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
     NODES.inputAddress.value = window.pin.calcMainPinCoordinates();
     window.util.setHandlers(HANDLERS_DATA);
-    NODES.form.addEventListener('submit', submitHandler);
   };
 
   window.form = {

@@ -16,6 +16,8 @@
     pinTemplate: '#pin',
   };
 
+  var PINS_QUANTITY = 5;
+
   var NODES = window.util.findNodes(SELECTORS_DATA);
   NODES.mapPin = NODES.pinTemplate.content.querySelector('.map__pin');
 
@@ -46,19 +48,31 @@
     return pinElement;
   };
 
+  var removePins = function () {
+    var mapPins = NODES.pins.querySelectorAll('[type]');
+    if (mapPins) {
+      mapPins.forEach(function (pin) {
+        pin.remove();
+      });
+    }
+  };
+
   var renderPins = function (arr) {
-    var fragment = document.createDocumentFragment();
-    arr.forEach(function (item, i) {
-      fragment.appendChild(preparePin(item, i));
-    });
-    return NODES.pins.appendChild(fragment);
+    removePins();
+    window.card.remove();
+    if (arr.length > PINS_QUANTITY) {
+      arr.length = PINS_QUANTITY;
+    }
+    for (var i = 0; i < arr.length; i++) {
+      NODES.pins.appendChild(preparePin(arr[i], i));
+    }
   };
 
   var pinClickHandler = function (evt) {
     var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
     if (idx) {
       window.card.remove();
-      window.card.render(window.data.getData()[idx]);
+      window.card.render(window.data.updateData()[idx]);
     }
   };
 
