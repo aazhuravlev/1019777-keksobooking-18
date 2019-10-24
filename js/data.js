@@ -29,20 +29,20 @@
     return ANY_OPTION;
   };
 
-  var checkHousingType = function (loadedData) {
-    return window.dom.nodes.housingType.value === ANY_OPTION ? loadedData : loadedData.offer.type === window.dom.nodes.housingType.value;
+  var checkHousingType = function (item) {
+    return window.dom.nodes.housingType.value === ANY_OPTION ? item : item.offer.type === window.dom.nodes.housingType.value;
   };
 
-  var checkHousingPrice = function (loadedData) {
-    return window.dom.nodes.housingPrice.value === ANY_OPTION ? loadedData : checkPriceRange(loadedData.offer.price) === window.dom.nodes.housingPrice.value;
+  var checkHousingPrice = function (item) {
+    return window.dom.nodes.housingPrice.value === ANY_OPTION ? item : checkPriceRange(item.offer.price) === window.dom.nodes.housingPrice.value;
   };
 
-  var checkHousingRooms = function (loadedData) {
-    return window.dom.nodes.housingRooms.value === ANY_OPTION ? loadedData : String(loadedData.offer.rooms) === window.dom.nodes.housingRooms.value;
+  var checkHousingRooms = function (item) {
+    return window.dom.nodes.housingRooms.value === ANY_OPTION ? item : String(item.offer.rooms) === window.dom.nodes.housingRooms.value;
   };
 
-  var checkHousinGuests = function (loadedData) {
-    return window.dom.nodes.housingGuests.value === ANY_OPTION ? loadedData : String(loadedData.offer.guests) === window.dom.nodes.housingGuests.value;
+  var checkHousinGuests = function (item) {
+    return window.dom.nodes.housingGuests.value === ANY_OPTION ? item : String(item.offer.guests) === window.dom.nodes.housingGuests.value;
   };
 
   var checkHousinFeatures = function () {
@@ -64,8 +64,8 @@
     return true;
   };
 
-  var filterCheckboxes = function (loadedData) {
-    return compareFeatures(loadedData.offer.features, checkHousinFeatures()) ? loadedData : false;
+  var filterCheckboxes = function (item) {
+    return compareFeatures(item.offer.features, checkHousinFeatures()) ? item : false;
   };
 
   var getFilteringData = function (loadedData) {
