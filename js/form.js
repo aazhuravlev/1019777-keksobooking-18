@@ -187,7 +187,6 @@
     setStatusFieldsets: setStatusFormFieldsets,
     nodes: NODES,
     addHandlers: addHandlers,
-    submitHandler: submitHandler,
     eventHandlers: EVENTS_HANDLERS
   };
 })();
