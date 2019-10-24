@@ -14,12 +14,18 @@
     errorTemplate: '#error',
     successTemplate: '#success',
     main: 'main',
-    housingType: '#housing-type'
+    housingType: '#housing-type',
+    housingPrice: '#housing-price',
+    housingRooms: '#housing-rooms',
+    housingGuests: '#housing-guests',
+    housingFeatures: '#housing-features',
+    mapFilters: '.map__filters'
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
   var ERROR_POPUP = NODES.errorTemplate.content.querySelector('.error');
   var SUCCESS_POPUP = NODES.successTemplate.content.querySelector('.success');
+  NODES.housingFeaturesInput = NODES.housingFeatures.querySelectorAll('input');
 
   var mapEnterPressHandler = function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
@@ -88,12 +94,6 @@
     document.addEventListener('mouseup', mouseUpHandler);
   };
 
-  var addHandlers = function () {
-    NODES.housingType.addEventListener('change', window.data.updateData);
-    window.pin.nodes.mainPin.addEventListener('mousedown', openMap);
-    window.pin.nodes.mainPin.addEventListener('keydown', mapEnterPressHandler);
-  };
-
   var renderSuccessPopup = function () {
     var successPopup = SUCCESS_POPUP.cloneNode(true);
     NODES.main.appendChild(successPopup);
@@ -158,6 +158,16 @@
     renderErrorPopup();
     var errorButton = document.querySelector('.error__button');
     errorButton.addEventListener('click', windowReloadHandler);
+  };
+
+  var HANDLERS_DATA = [
+    [NODES.mapFilters, window.form.eventHandlers.change, window.data.updateDataDebounced],
+    [window.pin.nodes.mainPin, window.form.eventHandlers.mousedown, openMap],
+    [window.pin.nodes.mainPin, window.form.eventHandlers.keydown, mapEnterPressHandler]
+  ];
+
+  var addHandlers = function () {
+    window.util.setHandlers(HANDLERS_DATA);
   };
 
   window.dom = {

@@ -63,9 +63,9 @@
     if (arr.length > PINS_QUANTITY) {
       arr.length = PINS_QUANTITY;
     }
-    for (var i = 0; i < arr.length; i++) {
-      NODES.pins.appendChild(preparePin(arr[i], i));
-    }
+    arr.forEach(function (item, i) {
+      NODES.pins.appendChild(preparePin(item, i));
+    });
   };
 
   var pinClickHandler = function (evt) {

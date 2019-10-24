@@ -69,7 +69,8 @@
   var EVENTS_HANDLERS = {
     change: 'change',
     click: 'click',
-    submit: 'submit'
+    submit: 'submit',
+    mousedown: 'mousedown'
   };
 
   var setStatusFormFieldsets = function (selector, action) {
@@ -186,6 +187,7 @@
     setStatusFieldsets: setStatusFormFieldsets,
     nodes: NODES,
     addHandlers: addHandlers,
-    submitHandler: submitHandler
+    submitHandler: submitHandler,
+    eventHandlers: EVENTS_HANDLERS
   };
 })();
