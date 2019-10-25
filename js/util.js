@@ -5,10 +5,7 @@
     node: 0,
     typeListener: 1,
     handler: 2
-  }
-  var NODE_INDEX = 0;
-  var TYPE_LISTENER_INDEX = 1;
-  var HANDLER_INDEX = 2;
+  };
   var DEBOUNCE_INTERVAL = 500;
 
   var getRandomBetween = function (min, max) {
