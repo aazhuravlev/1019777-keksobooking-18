@@ -95,8 +95,9 @@
   };
 
   var renderCard = function (arr) {
+    removeCard();
     NODES.map.insertBefore(prepareCard(arr), NODES.filters);
-    window.card.nodes.map.querySelector('.popup__close').addEventListener('click', window.card.remove);
+    window.card.nodes.map.querySelector('.popup__close').addEventListener('click', removeCard);
   };
 
   var removeCard = function () {
