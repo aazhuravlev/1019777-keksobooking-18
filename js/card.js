@@ -114,7 +114,7 @@
   };
 
   var addHandlers = function () {
-    NODES.map.addEventListener('keydown', removeMapCardKeydownHandler);
+    document.addEventListener('keydown', removeMapCardKeydownHandler);
   };
 
   window.card = {
