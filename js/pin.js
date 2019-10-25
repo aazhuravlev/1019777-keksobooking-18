@@ -10,8 +10,8 @@
   };
 
   var MAP_BORDER = {
-    minX: 0,
-    maxX: 1138,
+    minX: -31,
+    maxX: 1169,
     minY: 130,
     maxY: 630
   };
