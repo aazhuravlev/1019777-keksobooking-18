@@ -38,7 +38,8 @@
     timeInSelect: '#timein',
     timeOutSelect: '#timeout',
     pricePerNight: '#price',
-    description: '#description'
+    description: '#description',
+    submitBtn: '.ad-form__submit'
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
@@ -149,8 +150,6 @@
   };
 
   var sendFormHandler = function () {
-    fieldValidate(NODES.adTitle);
-    fieldValidate(NODES.pricePerNight);
     formReset();
     window.dom.saveSuccessHandler();
   };
@@ -161,6 +160,11 @@
     evt.preventDefault();
   };
 
+  var checkValidationHandler = function () {
+    fieldValidate(NODES.adTitle)();
+    fieldValidate(NODES.pricePerNight)();
+  };
+
   var HANDLERS_DATA = [
     [NODES.adTitle, EVENTS_HANDLERS.change, fieldValidate(NODES.adTitle)],
     [NODES.typeSelect, EVENTS_HANDLERS.change, typeSelectChangeHandler],
@@ -169,6 +173,7 @@
     [NODES.timeInSelect, EVENTS_HANDLERS.change, timeInSelectHandler],
     [NODES.timeOutSelect, EVENTS_HANDLERS.change, timeOutSelectHandler],
     [NODES.formReset, EVENTS_HANDLERS.click, formReset],
+    [NODES.submitBtn, EVENTS_HANDLERS.click, checkValidationHandler],
     [NODES.form, EVENTS_HANDLERS.submit, submitHandler]
   ];
 
