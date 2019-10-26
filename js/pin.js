@@ -75,11 +75,20 @@
     });
   };
 
+  var activePinRemove = function () {
+    var activeMapPin = NODES.pins.querySelector('.map__pin--active');
+    if (activeMapPin) {
+      activeMapPin.classList.remove('map__pin--active');
+    }
+  };
+
   var pinClickHandler = function (evt) {
     var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
     if (idx) {
+      // debugger;
       window.card.remove();
       window.card.render(window.data.updateData()[idx]);
+      NODES.pins.querySelectorAll('[type]')[idx].classList.add('map__pin--active');
     }
   };
 
@@ -143,6 +152,7 @@
 
   window.pin = {
     render: renderPins,
+    activeRemove: activePinRemove,
     calcMainPinCoordinates: calcMainPinCoordinates,
     calcActiveMainPinCoordinates: calcActiveMainPinCoordinates,
     mainPin: MAIN_PIN,

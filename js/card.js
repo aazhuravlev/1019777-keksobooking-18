@@ -104,6 +104,7 @@
     var mapCard = NODES.map.querySelector('.map__card');
     if (mapCard) {
       mapCard.remove();
+      window.pin.activeRemove();
     }
   };
 
