@@ -71,6 +71,7 @@
     change: 'change',
     click: 'click',
     submit: 'submit',
+    keydown: 'keydown',
     mousedown: 'mousedown'
   };
 

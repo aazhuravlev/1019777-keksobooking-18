@@ -85,7 +85,6 @@
   var pinClickHandler = function (evt) {
     var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
     if (idx) {
-      // debugger;
       window.card.remove();
       window.card.render(window.data.updateData()[idx]);
       NODES.pins.querySelectorAll('[type]')[idx].classList.add('map__pin--active');
@@ -138,14 +137,14 @@
 
       document.removeEventListener('mousemove', mouseMoveHandler);
       document.removeEventListener('mouseup', mouseUpHandler);
-
     };
+
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
   };
 
   var addHandlers = function () {
-    NODES.mainPin.removeEventListener('click', window.dom.openMap);
+    NODES.mainPin.removeEventListener('mousedown', window.dom.openMap);
     NODES.mainPin.addEventListener('mousedown', dragHandler);
     NODES.pins.addEventListener('click', pinClickHandler);
   };

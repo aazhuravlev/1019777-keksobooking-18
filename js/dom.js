@@ -20,10 +20,12 @@
   };
 
   var openMap = function () {
-    window.card.nodes.map.classList.remove('map--faded');
-    window.form.setStatusFieldsets(window.form.nodes.formFieldsets, 'remove');
-    window.data.updateData();
-    window.form.nodes.inputAddress.value = window.pin.calcActiveMainPinCoordinates();
+    if (document.querySelector('.map--faded')) {
+      window.card.nodes.map.classList.remove('map--faded');
+      window.form.setStatusFieldsets(window.form.nodes.formFieldsets, 'remove');
+      window.data.updateData();
+      window.form.nodes.inputAddress.value = window.pin.calcActiveMainPinCoordinates();
+    }
   };
 
   var renderSuccessPopup = function () {
