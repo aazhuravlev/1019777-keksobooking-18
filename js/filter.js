@@ -67,7 +67,6 @@
   };
 
   var filterCheckboxes = function (item) {
-    console.log(getHousingFeatures());
     return compareFeatures(item.offer.features, getHousingFeatures()) ? item : false;
   };
 
