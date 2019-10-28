@@ -10,8 +10,9 @@
 
   var updateData = function () {
     var cloneData = getData().slice();
-    window.pin.render(window.filter.getFilteringData(cloneData));
-    return window.filter.getFilteringData(cloneData);
+    var filteredData = window.filter.getFilteringData(cloneData);
+    window.pin.render(filteredData);
+    return filteredData;
   };
 
   var loadData = function () {
