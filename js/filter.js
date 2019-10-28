@@ -22,17 +22,14 @@
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
-  NODES.housingFeaturesInput = NODES.housingFeatures.querySelectorAll('input');
 
   var checkPriceRange = function (value) {
     if (value <= PRICE_RANGE.low) {
       return PRICE_LEVEL.low;
     } else if (value > PRICE_RANGE.high) {
       return PRICE_LEVEL.high;
-    } else if (value > PRICE_RANGE.low && value <= PRICE_RANGE.high) {
-      return PRICE_LEVEL.middle;
     }
-    return ANY_OPTION;
+    return PRICE_LEVEL.middle;
   };
 
   var checkHousingType = function (item) {
@@ -51,19 +48,18 @@
     return NODES.housingGuests.value === ANY_OPTION ? item : String(item.offer.guests) === NODES.housingGuests.value;
   };
 
-  var checkHousinFeatures = function () {
+  var getHousingFeatures = function () {
     var features = [];
-    NODES.housingFeaturesInput.forEach(function (input) {
-      if (input.checked) {
-        features.push(input.value);
-      }
+    var checkedInputs = NODES.housingFeatures.querySelectorAll('input:checked');
+    checkedInputs.forEach(function (input) {
+      features.push(input.value);
     });
     return features;
   };
 
   var compareFeatures = function (arr1, arr2) {
     for (var i = 0; i < arr2.length; i++) {
-      if (arr1.indexOf(arr2[i]) === -1) {
+      if (!arr1.includes(arr2[i])) {
         return false;
       }
     }
@@ -71,7 +67,8 @@
   };
 
   var filterCheckboxes = function (item) {
-    return compareFeatures(item.offer.features, checkHousinFeatures()) ? item : false;
+    console.log(getHousingFeatures());
+    return compareFeatures(item.offer.features, getHousingFeatures()) ? item : false;
   };
 
   var getFilteringData = function (loadedData) {
