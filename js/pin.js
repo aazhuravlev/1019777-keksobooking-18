@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var ENTER_KEYCODE = 13;
+
   var MAIN_PIN = {
     width: 62,
     height: 22,
@@ -121,14 +123,14 @@
         y: moveEvt.clientY
       };
 
-      var actualX = window.pin.nodes.mainPin.offsetLeft - shift.x;
-      var actualY = window.pin.nodes.mainPin.offsetTop - shift.y;
+      var actualX = NODES.mainPin.offsetLeft - shift.x;
+      var actualY = NODES.mainPin.offsetTop - shift.y;
 
-      var triangleActualX = setMainPinBorderMoving(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) - shift.x + window.pin.mainPin.width / 2;
-      var triangleActualY = setMainPinBorderMoving(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + window.pin.mainPin.fullHeight;
+      var triangleActualX = setMainPinBorderMoving(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) - shift.x + MAIN_PIN.width / 2;
+      var triangleActualY = setMainPinBorderMoving(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + MAIN_PIN.fullHeight;
 
-      window.pin.nodes.mainPin.style.top = setMainPinBorderMoving(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + 'px';
-      window.pin.nodes.mainPin.style.left = setMainPinBorderMoving(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) + 'px';
+      NODES.mainPin.style.top = setMainPinBorderMoving(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + 'px';
+      NODES.mainPin.style.left = setMainPinBorderMoving(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) + 'px';
       window.form.nodes.inputAddress.value = triangleActualX + ', ' + triangleActualY;
     };
 
@@ -143,10 +145,27 @@
     document.addEventListener('mouseup', mouseUpHandler);
   };
 
-  var addHandlers = function () {
-    NODES.mainPin.removeEventListener('mousedown', window.dom.openMap);
+  var mapEnterPressHandler = function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      window.dom.openMap();
+      NODES.mainPin.removeEventListener('keydown', mapEnterPressHandler);
+    }
+  };
+
+  var mainPinClickHandler = function () {
+    NODES.mainPin.removeEventListener('click', mainPinClickHandler);
+    window.dom.openMap();
     NODES.mainPin.addEventListener('mousedown', dragHandler);
-    NODES.pins.addEventListener('click', pinClickHandler);
+  };
+
+  var HANDLERS_DATA = [
+    [NODES.mainPin, 'click', mainPinClickHandler],
+    [NODES.mainPin, 'keydown', mapEnterPressHandler],
+    [NODES.pins, 'click', pinClickHandler]
+  ];
+
+  var addHandlers = function () {
+    window.util.setHandlers(HANDLERS_DATA);
   };
 
   window.pin = {
@@ -156,6 +175,8 @@
     calcActiveMainPinCoordinates: calcActiveMainPinCoordinates,
     mainPin: MAIN_PIN,
     nodes: NODES,
-    addHandlers: addHandlers
+    addHandlers: addHandlers,
+    mainPinClickHandler: mainPinClickHandler,
+    mapEnterPressHandler: mapEnterPressHandler
   };
 })();

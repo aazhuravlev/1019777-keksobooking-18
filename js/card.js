@@ -97,7 +97,7 @@
   var renderCard = function (arr) {
     removeCard();
     NODES.map.insertBefore(prepareCard(arr), NODES.filters);
-    window.card.nodes.map.querySelector('.popup__close').addEventListener('click', removeCard);
+    NODES.map.querySelector('.popup__close').addEventListener('click', removeCard);
   };
 
   var removeCard = function () {
@@ -119,7 +119,6 @@
   };
 
   window.card = {
-    prepare: prepareCard,
     render: renderCard,
     remove: removeCard,
     nodes: NODES,

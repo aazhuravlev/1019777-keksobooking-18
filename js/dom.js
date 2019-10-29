@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var ENTER_KEYCODE = 13;
-
   var SELECTORS_DATA = {
     errorTemplate: '#error',
     successTemplate: '#success',
@@ -13,19 +11,11 @@
   var ERROR_POPUP = NODES.errorTemplate.content.querySelector('.error');
   var SUCCESS_POPUP = NODES.successTemplate.content.querySelector('.success');
 
-  var mapEnterPressHandler = function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      openMap();
-    }
-  };
-
   var openMap = function () {
-    if (document.querySelector('.map--faded')) {
-      window.card.nodes.map.classList.remove('map--faded');
-      window.form.setStatusFieldsets(window.form.nodes.formFieldsets, 'remove');
-      window.data.updateData();
-      window.form.nodes.inputAddress.value = window.pin.calcActiveMainPinCoordinates();
-    }
+    window.card.nodes.map.classList.remove('map--faded');
+    window.form.setStatusFieldsets(window.form.nodes.formFieldsets, 'remove');
+    window.pin.render(window.data.updateData());
+    window.form.nodes.inputAddress.value = window.pin.calcActiveMainPinCoordinates();
   };
 
   var renderSuccessPopup = function () {
@@ -94,21 +84,10 @@
     errorButton.addEventListener('click', windowReloadHandler);
   };
 
-  var HANDLERS_DATA = [
-    [window.pin.nodes.mainPin, window.form.eventHandlers.mousedown, openMap],
-    [window.pin.nodes.mainPin, window.form.eventHandlers.keydown, mapEnterPressHandler]
-  ];
-
-  var addHandlers = function () {
-    window.util.setHandlers(HANDLERS_DATA);
-  };
-
   window.dom = {
     openMap: openMap,
-    addHandlers: addHandlers,
     errorHandler: errorHandler,
     saveErrorHandler: saveErrorHandler,
-    saveSuccessHandler: saveSuccessHandler,
-    nodes: NODES
+    saveSuccessHandler: saveSuccessHandler
   };
 })();

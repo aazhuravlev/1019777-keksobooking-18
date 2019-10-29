@@ -11,7 +11,6 @@
   var updateData = function () {
     var cloneData = getData().slice();
     var filteredData = window.filter.getFilteringData(cloneData);
-    window.pin.render(filteredData);
     return filteredData;
   };
 
@@ -21,7 +20,7 @@
     }
     var onLoad = function (result) {
       data = result;
-      window.dom.addHandlers();
+      window.pin.addHandlers();
       return data;
     };
     isLoading = true;
@@ -29,7 +28,6 @@
   };
 
   window.data = {
-    getData: getData,
     loadData: loadData,
     updateData: updateData
   };

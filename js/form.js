@@ -67,14 +67,6 @@
     [NODES.inputAddress, DISABLED_STATUS, true]
   ];
 
-  var EVENTS_HANDLERS = {
-    change: 'change',
-    click: 'click',
-    submit: 'submit',
-    keydown: 'keydown',
-    mousedown: 'mousedown'
-  };
-
   var setStatusFormFieldsets = function (selector, action) {
     NODES.form.classList[action]('ad-form--disabled');
     selector.forEach(function (item) {
@@ -148,6 +140,8 @@
     window.pin.nodes.mainPin.style.top = window.pin.mainPin.startY + 'px';
     window.pin.nodes.mainPin.style.left = window.pin.mainPin.startX + 'px';
     setStandartValues(STANDART_DATA);
+    window.pin.nodes.mainPin.addEventListener('click', window.pin.mainPinClickHandler);
+    window.pin.nodes.mainPin.addEventListener('keydown', window.pin.mapEnterPressHandler);
   };
 
   var sendFormHandler = function () {
@@ -167,15 +161,15 @@
   };
 
   var HANDLERS_DATA = [
-    [NODES.adTitle, EVENTS_HANDLERS.change, fieldValidate(NODES.adTitle)],
-    [NODES.typeSelect, EVENTS_HANDLERS.change, typeSelectChangeHandler],
-    [NODES.pricePerNight, EVENTS_HANDLERS.change, fieldValidate(NODES.pricePerNight)],
-    [NODES.roomSelect, EVENTS_HANDLERS.change, changeRoomsHandler],
-    [NODES.timeInSelect, EVENTS_HANDLERS.change, timeInSelectHandler],
-    [NODES.timeOutSelect, EVENTS_HANDLERS.change, timeOutSelectHandler],
-    [NODES.formReset, EVENTS_HANDLERS.click, formReset],
-    [NODES.submitBtn, EVENTS_HANDLERS.click, checkValidationHandler],
-    [NODES.form, EVENTS_HANDLERS.submit, submitHandler]
+    [NODES.adTitle, 'change', fieldValidate(NODES.adTitle)],
+    [NODES.typeSelect, 'change', typeSelectChangeHandler],
+    [NODES.pricePerNight, 'change', fieldValidate(NODES.pricePerNight)],
+    [NODES.roomSelect, 'change', changeRoomsHandler],
+    [NODES.timeInSelect, 'change', timeInSelectHandler],
+    [NODES.timeOutSelect, 'change', timeOutSelectHandler],
+    [NODES.formReset, 'click', formReset],
+    [NODES.submitBtn, 'click', checkValidationHandler],
+    [NODES.form, 'submit', submitHandler]
   ];
 
   var addHandlers = function () {
@@ -187,7 +181,6 @@
   window.form = {
     setStatusFieldsets: setStatusFormFieldsets,
     nodes: NODES,
-    addHandlers: addHandlers,
-    eventHandlers: EVENTS_HANDLERS
+    addHandlers: addHandlers
   };
 })();

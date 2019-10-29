@@ -77,7 +77,7 @@
   };
 
   var debouncedFilterHandler = window.util.debounce(function () {
-    window.data.updateData();
+    window.pin.render(window.data.updateData());
     window.card.remove();
   });
 
