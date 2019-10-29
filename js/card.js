@@ -95,14 +95,16 @@
   };
 
   var renderCard = function (arr) {
+    removeCard();
     NODES.map.insertBefore(prepareCard(arr), NODES.filters);
-    window.card.nodes.map.querySelector('.popup__close').addEventListener('click', window.card.remove);
+    window.card.nodes.map.querySelector('.popup__close').addEventListener('click', removeCard);
   };
 
   var removeCard = function () {
     var mapCard = NODES.map.querySelector('.map__card');
     if (mapCard) {
       mapCard.remove();
+      window.pin.activeRemove();
     }
   };
 
@@ -113,7 +115,7 @@
   };
 
   var addHandlers = function () {
-    NODES.map.addEventListener('keydown', removeMapCardKeydownHandler);
+    document.addEventListener('keydown', removeMapCardKeydownHandler);
   };
 
   window.card = {

@@ -38,7 +38,8 @@
     timeInSelect: '#timein',
     timeOutSelect: '#timeout',
     pricePerNight: '#price',
-    description: '#description'
+    description: '#description',
+    submitBtn: '.ad-form__submit'
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
@@ -68,7 +69,10 @@
 
   var EVENTS_HANDLERS = {
     change: 'change',
-    click: 'click'
+    click: 'click',
+    submit: 'submit',
+    keydown: 'keydown',
+    mousedown: 'mousedown'
   };
 
   var setStatusFormFieldsets = function (selector, action) {
@@ -92,15 +96,6 @@
     node.removeAttribute('style');
   };
 
-  var adTitleChangeHandler = function () {
-    if (!NODES.adTitle.checkValidity()) {
-      NODES.adTitle.reportValidity();
-      addShadow(NODES.adTitle);
-    } else {
-      removeShadow(NODES.adTitle);
-    }
-  };
-
   var typeSelectChangeHandler = function () {
     NODES.pricePerNight.placeholder = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
     NODES.pricePerNight.min = TYPE_SELECT_OPTIONS[NODES.typeSelect.value];
@@ -109,13 +104,15 @@
     }
   };
 
-  var pricePerNightHandler = function () {
-    if (!NODES.pricePerNight.checkValidity()) {
-      NODES.pricePerNight.reportValidity();
-      addShadow(NODES.pricePerNight);
-    } else {
-      removeShadow(NODES.pricePerNight);
-    }
+  var fieldValidate = function (node) {
+    return function () {
+      if (!node.checkValidity()) {
+        node.reportValidity();
+        addShadow(node);
+      } else {
+        removeShadow(node);
+      }
+    };
   };
 
   var changeRoomsHandler = function () {
@@ -158,33 +155,39 @@
     window.dom.saveSuccessHandler();
   };
 
-  var HANDLERS_DATA = [
-    [NODES.adTitle, EVENTS_HANDLERS.change, adTitleChangeHandler],
-    [NODES.typeSelect, EVENTS_HANDLERS.change, typeSelectChangeHandler],
-    [NODES.pricePerNight, EVENTS_HANDLERS.change, pricePerNightHandler],
-    [NODES.roomSelect, EVENTS_HANDLERS.change, changeRoomsHandler],
-    [NODES.timeInSelect, EVENTS_HANDLERS.change, timeInSelectHandler],
-    [NODES.timeOutSelect, EVENTS_HANDLERS.change, timeOutSelectHandler],
-    [NODES.formReset, EVENTS_HANDLERS.click, formReset]
-  ];
-
   var submitHandler = function (evt) {
     NODES.inputAddress.disabled = false;
     window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.saveErrorHandler);
     evt.preventDefault();
   };
 
+  var checkValidationHandler = function () {
+    fieldValidate(NODES.adTitle)();
+    fieldValidate(NODES.pricePerNight)();
+  };
+
+  var HANDLERS_DATA = [
+    [NODES.adTitle, EVENTS_HANDLERS.change, fieldValidate(NODES.adTitle)],
+    [NODES.typeSelect, EVENTS_HANDLERS.change, typeSelectChangeHandler],
+    [NODES.pricePerNight, EVENTS_HANDLERS.change, fieldValidate(NODES.pricePerNight)],
+    [NODES.roomSelect, EVENTS_HANDLERS.change, changeRoomsHandler],
+    [NODES.timeInSelect, EVENTS_HANDLERS.change, timeInSelectHandler],
+    [NODES.timeOutSelect, EVENTS_HANDLERS.change, timeOutSelectHandler],
+    [NODES.formReset, EVENTS_HANDLERS.click, formReset],
+    [NODES.submitBtn, EVENTS_HANDLERS.click, checkValidationHandler],
+    [NODES.form, EVENTS_HANDLERS.submit, submitHandler]
+  ];
+
   var addHandlers = function () {
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
     NODES.inputAddress.value = window.pin.calcMainPinCoordinates();
     window.util.setHandlers(HANDLERS_DATA);
-    NODES.form.addEventListener('submit', submitHandler);
   };
 
   window.form = {
     setStatusFieldsets: setStatusFormFieldsets,
     nodes: NODES,
     addHandlers: addHandlers,
-    submitHandler: submitHandler
+    eventHandlers: EVENTS_HANDLERS
   };
 })();

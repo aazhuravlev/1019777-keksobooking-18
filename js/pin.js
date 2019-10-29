@@ -8,6 +8,14 @@
     startX: 570,
     startY: 375
   };
+
+  var MAP_BORDER = {
+    minX: -31,
+    maxX: 1169,
+    minY: 130,
+    maxY: 630
+  };
+
   MAIN_PIN.fullHeight = MAIN_PIN.height + MAIN_PIN.triangleHeight;
 
   var SELECTORS_DATA = {
@@ -15,6 +23,8 @@
     pins: '.map__pins',
     pinTemplate: '#pin',
   };
+
+  var PINS_QUANTITY = 5;
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
   NODES.mapPin = NODES.pinTemplate.content.querySelector('.map__pin');
@@ -46,28 +56,102 @@
     return pinElement;
   };
 
+  var removePins = function () {
+    var mapPins = NODES.pins.querySelectorAll('[type]');
+    if (mapPins) {
+      mapPins.forEach(function (pin) {
+        pin.remove();
+      });
+    }
+  };
+
   var renderPins = function (arr) {
-    var fragment = document.createDocumentFragment();
+    removePins();
+    if (arr.length > PINS_QUANTITY) {
+      arr.length = PINS_QUANTITY;
+    }
     arr.forEach(function (item, i) {
-      fragment.appendChild(preparePin(item, i));
+      NODES.pins.appendChild(preparePin(item, i));
     });
-    return NODES.pins.appendChild(fragment);
+  };
+
+  var activePinRemove = function () {
+    var activeMapPin = NODES.pins.querySelector('.map__pin--active');
+    if (activeMapPin) {
+      activeMapPin.classList.remove('map__pin--active');
+    }
   };
 
   var pinClickHandler = function (evt) {
     var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
     if (idx) {
       window.card.remove();
-      window.card.render(window.data.getData()[idx]);
+      window.card.render(window.data.updateData()[idx]);
+      NODES.pins.querySelectorAll('[type]')[idx].classList.add('map__pin--active');
     }
   };
 
+  var setMainPinBorderMoving = function (coordinate, min, max) {
+    if (coordinate <= min) {
+      coordinate = min;
+    } else if (coordinate >= max) {
+      coordinate = max;
+    }
+    return coordinate;
+  };
+
+  var dragHandler = function (evt) {
+    evt.preventDefault();
+
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    var mouseMoveHandler = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      var actualX = window.pin.nodes.mainPin.offsetLeft - shift.x;
+      var actualY = window.pin.nodes.mainPin.offsetTop - shift.y;
+
+      var triangleActualX = setMainPinBorderMoving(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) - shift.x + window.pin.mainPin.width / 2;
+      var triangleActualY = setMainPinBorderMoving(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + window.pin.mainPin.fullHeight;
+
+      window.pin.nodes.mainPin.style.top = setMainPinBorderMoving(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + 'px';
+      window.pin.nodes.mainPin.style.left = setMainPinBorderMoving(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) + 'px';
+      window.form.nodes.inputAddress.value = triangleActualX + ', ' + triangleActualY;
+    };
+
+    var mouseUpHandler = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
+    };
+
+    document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+  };
+
   var addHandlers = function () {
+    NODES.mainPin.removeEventListener('mousedown', window.dom.openMap);
+    NODES.mainPin.addEventListener('mousedown', dragHandler);
     NODES.pins.addEventListener('click', pinClickHandler);
   };
 
   window.pin = {
     render: renderPins,
+    activeRemove: activePinRemove,
     calcMainPinCoordinates: calcMainPinCoordinates,
     calcActiveMainPinCoordinates: calcActiveMainPinCoordinates,
     mainPin: MAIN_PIN,

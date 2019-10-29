@@ -3,8 +3,16 @@
 (function () {
   var data = [];
   var isLoading;
+
   var getData = function () {
     return data;
+  };
+
+  var updateData = function () {
+    var cloneData = getData().slice();
+    var filteredData = window.filter.getFilteringData(cloneData);
+    window.pin.render(filteredData);
+    return filteredData;
   };
 
   var loadData = function () {
@@ -22,6 +30,7 @@
 
   window.data = {
     getData: getData,
-    loadData: loadData
+    loadData: loadData,
+    updateData: updateData
   };
 })();

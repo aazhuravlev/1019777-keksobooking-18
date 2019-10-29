@@ -3,17 +3,10 @@
 (function () {
   var ENTER_KEYCODE = 13;
 
-  var MAP_BORDER = {
-    minX: 0,
-    maxX: 1138,
-    minY: 130,
-    maxY: 630
-  };
-
   var SELECTORS_DATA = {
     errorTemplate: '#error',
     successTemplate: '#success',
-    main: 'main'
+    main: 'main',
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
@@ -27,69 +20,12 @@
   };
 
   var openMap = function () {
-    window.card.nodes.map.classList.remove('map--faded');
-    window.form.setStatusFieldsets(window.form.nodes.formFieldsets, 'remove');
-    window.pin.render(window.data.getData());
-    window.form.nodes.inputAddress.value = window.pin.calcActiveMainPinCoordinates();
-    window.pin.nodes.mainPin.removeEventListener('click', openMap);
-    window.pin.nodes.mainPin.addEventListener('mousedown', dragHandler);
-  };
-
-  var setMainPinBorderMoving = function (coordinate, min, max) {
-    if (coordinate <= min) {
-      coordinate = min;
-    } else if (coordinate >= max) {
-      coordinate = max;
+    if (document.querySelector('.map--faded')) {
+      window.card.nodes.map.classList.remove('map--faded');
+      window.form.setStatusFieldsets(window.form.nodes.formFieldsets, 'remove');
+      window.data.updateData();
+      window.form.nodes.inputAddress.value = window.pin.calcActiveMainPinCoordinates();
     }
-    return coordinate;
-  };
-
-  var dragHandler = function (evt) {
-    evt.preventDefault();
-
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-
-    var mouseMoveHandler = function (moveEvt) {
-      moveEvt.preventDefault();
-
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
-
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
-
-      var actualX = window.pin.nodes.mainPin.offsetLeft - shift.x;
-      var actualY = window.pin.nodes.mainPin.offsetTop - shift.y;
-
-      var triangleActualX = setMainPinBorderMoving(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) - shift.x + window.pin.mainPin.width / 2;
-      var triangleActualY = setMainPinBorderMoving(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + window.pin.mainPin.fullHeight;
-
-      window.pin.nodes.mainPin.style.top = setMainPinBorderMoving(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + 'px';
-      window.pin.nodes.mainPin.style.left = setMainPinBorderMoving(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) + 'px';
-      window.form.nodes.inputAddress.value = triangleActualX + ', ' + triangleActualY;
-    };
-
-    var mouseUpHandler = function (upEvt) {
-      upEvt.preventDefault();
-
-      document.removeEventListener('mousemove', mouseMoveHandler);
-      document.removeEventListener('mouseup', mouseUpHandler);
-
-    };
-    document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('mouseup', mouseUpHandler);
-  };
-
-  var addHandlers = function () {
-    window.pin.nodes.mainPin.addEventListener('mousedown', openMap);
-    window.pin.nodes.mainPin.addEventListener('keydown', mapEnterPressHandler);
   };
 
   var renderSuccessPopup = function () {
@@ -110,8 +46,8 @@
   };
 
   var successPopupRemoveKeydownHandler = function (evt) {
-    var renderedSuccessPopup = document.querySelector('.success');
     if (evt.keyCode === window.card.escKeycode) {
+      var renderedSuccessPopup = document.querySelector('.success');
       if (renderedSuccessPopup) {
         renderedSuccessPopup.remove();
       }
@@ -132,8 +68,8 @@
   };
 
   var errorPopupRemoveKeydownHandler = function (evt) {
-    var renderedErrorPopup = document.querySelector('.error');
     if (evt.keyCode === window.card.escKeycode) {
+      var renderedErrorPopup = document.querySelector('.error');
       if (renderedErrorPopup) {
         renderedErrorPopup.remove();
       }
@@ -158,10 +94,21 @@
     errorButton.addEventListener('click', windowReloadHandler);
   };
 
+  var HANDLERS_DATA = [
+    [window.pin.nodes.mainPin, window.form.eventHandlers.mousedown, openMap],
+    [window.pin.nodes.mainPin, window.form.eventHandlers.keydown, mapEnterPressHandler]
+  ];
+
+  var addHandlers = function () {
+    window.util.setHandlers(HANDLERS_DATA);
+  };
+
   window.dom = {
+    openMap: openMap,
     addHandlers: addHandlers,
     errorHandler: errorHandler,
     saveErrorHandler: saveErrorHandler,
-    saveSuccessHandler: saveSuccessHandler
+    saveSuccessHandler: saveSuccessHandler,
+    nodes: NODES
   };
 })();
