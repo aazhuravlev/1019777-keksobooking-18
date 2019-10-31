@@ -8,7 +8,7 @@
     return data;
   };
 
-  var updateData = function () {
+  var filterData = function () {
     var cloneData = getData().slice();
     var filteredData = window.filter.getFilteringData(cloneData);
     return filteredData;
@@ -29,6 +29,6 @@
 
   window.data = {
     loadData: loadData,
-    updateData: updateData
+    filterData: filterData
   };
 })();

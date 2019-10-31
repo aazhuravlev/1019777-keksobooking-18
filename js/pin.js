@@ -12,8 +12,8 @@
   };
 
   var MAP_BORDER = {
-    minX: -31,
-    maxX: 1169,
+    minX: 0 - (MAIN_PIN.width / 2),
+    maxX: 1200 - (MAIN_PIN.width / 2),
     minY: 130,
     maxY: 630
   };
@@ -31,16 +31,13 @@
   var NODES = window.util.findNodes(SELECTORS_DATA);
   NODES.mapPin = NODES.pinTemplate.content.querySelector('.map__pin');
 
-  var calcPinX = NODES.mainPin.offsetLeft + MAIN_PIN.width / 2;
-  var calcPinY = NODES.mainPin.offsetTop + MAIN_PIN.height / 2;
-  var calcActivePinY = NODES.mainPin.offsetTop + MAIN_PIN.fullHeight;
-
-  var calcMainPinCoordinates = function () {
-    return calcPinX + ', ' + calcPinY;
-  };
-
-  var calcActiveMainPinCoordinates = function () {
-    return calcPinX + ', ' + calcActivePinY;
+  var mainPinCoordinates = function () {
+    var x = NODES.mainPin.offsetLeft + MAIN_PIN.width / 2;
+    var y = NODES.mainPin.offsetTop + MAIN_PIN.height / 2;
+    if (!document.querySelector('.map--faded')) {
+      x = NODES.mainPin.offsetTop + MAIN_PIN.fullHeight;
+    }
+    return x + ', ' + y;
   };
 
   var getLocation = function (location) {
@@ -77,7 +74,7 @@
     });
   };
 
-  var activePinRemove = function () {
+  var removeActivePin = function () {
     var activeMapPin = NODES.pins.querySelector('.map__pin--active');
     if (activeMapPin) {
       activeMapPin.classList.remove('map__pin--active');
@@ -88,12 +85,12 @@
     var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
     if (idx) {
       window.card.remove();
-      window.card.render(window.data.updateData()[idx]);
+      window.card.render(window.data.filterData()[idx]);
       NODES.pins.querySelectorAll('[type]')[idx].classList.add('map__pin--active');
     }
   };
 
-  var setMainPinBorderMoving = function (coordinate, min, max) {
+  var getBorderMovingMainPin = function (coordinate, min, max) {
     if (coordinate <= min) {
       coordinate = min;
     } else if (coordinate >= max) {
@@ -126,11 +123,11 @@
       var actualX = NODES.mainPin.offsetLeft - shift.x;
       var actualY = NODES.mainPin.offsetTop - shift.y;
 
-      var triangleActualX = setMainPinBorderMoving(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) - shift.x + MAIN_PIN.width / 2;
-      var triangleActualY = setMainPinBorderMoving(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + MAIN_PIN.fullHeight;
+      var triangleActualX = getBorderMovingMainPin(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) - shift.x + MAIN_PIN.width / 2;
+      var triangleActualY = getBorderMovingMainPin(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + MAIN_PIN.fullHeight;
 
-      NODES.mainPin.style.top = setMainPinBorderMoving(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + 'px';
-      NODES.mainPin.style.left = setMainPinBorderMoving(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) + 'px';
+      NODES.mainPin.style.top = getBorderMovingMainPin(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + 'px';
+      NODES.mainPin.style.left = getBorderMovingMainPin(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) + 'px';
       window.form.nodes.inputAddress.value = triangleActualX + ', ' + triangleActualY;
     };
 
@@ -170,9 +167,8 @@
 
   window.pin = {
     render: renderPins,
-    activeRemove: activePinRemove,
-    calcMainPinCoordinates: calcMainPinCoordinates,
-    calcActiveMainPinCoordinates: calcActiveMainPinCoordinates,
+    removeActive: removeActivePin,
+    mainPinCoordinates: mainPinCoordinates,
     mainPin: MAIN_PIN,
     nodes: NODES,
     addHandlers: addHandlers,

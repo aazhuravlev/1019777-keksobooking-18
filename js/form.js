@@ -10,7 +10,7 @@
     '100': [3]
   };
 
-  var STANDART_VALUES = {
+  var DEFAULT_VALUES = {
     roomSelect: '1',
     capacitySelect: '1',
     timeInSelect: TIME[0],
@@ -53,16 +53,16 @@
     value: '2'
   };
 
-  var STANDART_DATA = [
+  var DEFAULT_DATA = [
     [NODES.adTitle, VALUE_FIELD, ''],
     [NODES.typeSelect, VALUE_FIELD, Object.keys(window.card.types)[INDEXES.flat]],
     [NODES.pricePerNight, VALUE_FIELD, ''],
     [NODES.pricePerNight, PLACEHOLDER_FIELD, TYPE_SELECT_OPTIONS.flat],
     [NODES.pricePerNight, PLACEHOLDER_FIELD, TYPE_SELECT_OPTIONS.flat],
-    [NODES.roomSelect, VALUE_FIELD, STANDART_VALUES.roomSelect],
-    [NODES.capacitySelect, VALUE_FIELD, STANDART_VALUES.capacitySelect],
-    [NODES.timeInSelect, VALUE_FIELD, STANDART_VALUES.timeInSelect],
-    [NODES.timeOutSelect, VALUE_FIELD, STANDART_VALUES.timeOutSelect],
+    [NODES.roomSelect, VALUE_FIELD, DEFAULT_VALUES.roomSelect],
+    [NODES.capacitySelect, VALUE_FIELD, DEFAULT_VALUES.capacitySelect],
+    [NODES.timeInSelect, VALUE_FIELD, DEFAULT_VALUES.timeInSelect],
+    [NODES.timeOutSelect, VALUE_FIELD, DEFAULT_VALUES.timeOutSelect],
     [NODES.description, VALUE_FIELD, ''],
     [NODES.inputAddress, DISABLED_STATUS, true]
   ];
@@ -134,12 +134,12 @@
   var formReset = function () {
     window.card.nodes.map.classList.add('map--faded');
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
-    NODES.inputAddress.value = window.pin.calcMainPinCoordinates();
+    NODES.inputAddress.value = window.pin.mainPinCoordinates();
     removeNode(window.pin.nodes.pins.querySelectorAll('[type]'));
     window.card.remove();
     window.pin.nodes.mainPin.style.top = window.pin.mainPin.startY + 'px';
     window.pin.nodes.mainPin.style.left = window.pin.mainPin.startX + 'px';
-    setStandartValues(STANDART_DATA);
+    setStandartValues(DEFAULT_DATA);
     window.pin.nodes.mainPin.addEventListener('click', window.pin.mainPinClickHandler);
     window.pin.nodes.mainPin.addEventListener('keydown', window.pin.mapEnterPressHandler);
   };
@@ -174,7 +174,7 @@
 
   var addHandlers = function () {
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
-    NODES.inputAddress.value = window.pin.calcMainPinCoordinates();
+    NODES.inputAddress.value = window.pin.mainPinCoordinates();
     window.util.setHandlers(HANDLERS_DATA);
   };
 
