@@ -92,9 +92,9 @@
 
   var getBorderMovingMainPin = function (coordinate, min, max) {
     if (coordinate <= min) {
-      coordinate = min;
+      return min;
     } else if (coordinate >= max) {
-      coordinate = max;
+      return max;
     }
     return coordinate;
   };
