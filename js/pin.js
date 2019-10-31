@@ -146,11 +146,13 @@
     if (evt.keyCode === ENTER_KEYCODE) {
       window.dom.openMap();
       NODES.mainPin.removeEventListener('keydown', mapEnterPressHandler);
+      NODES.mainPin.removeEventListener('click', mainPinClickHandler);
     }
   };
 
   var mainPinClickHandler = function () {
     NODES.mainPin.removeEventListener('click', mainPinClickHandler);
+    NODES.mainPin.removeEventListener('keydown', mapEnterPressHandler);
     window.dom.openMap();
     NODES.mainPin.addEventListener('mousedown', dragHandler);
   };
