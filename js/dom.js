@@ -18,14 +18,26 @@
     window.form.nodes.inputAddress.value = window.pin.mainPinCoordinates();
   };
 
-  var renderSuccessPopup = function () {
+  var successPopupRenderHandler = function () {
     var successPopup = SUCCESS_POPUP.cloneNode(true);
     NODES.main.appendChild(successPopup);
+    document.addEventListener('click', successPopupRemoveClickHandler);
+    document.addEventListener('keydown', successPopupRemoveKeydownHandler);
   };
 
-  var renderErrorPopup = function () {
-    var errorPopup = ERROR_POPUP.cloneNode(true);
-    NODES.main.appendChild(errorPopup);
+  var errorPopupRenderHandler = function (action) {
+    return function () {
+      var errorPopup = ERROR_POPUP.cloneNode(true);
+      NODES.main.appendChild(errorPopup);
+      var errorButton = document.querySelector('.error__button');
+      if (action === 'save') {
+        errorButton.addEventListener('click', errorPopupRemoveClickHandler);
+        document.addEventListener('click', errorPopupRemoveClickHandler);
+        document.addEventListener('keydown', errorPopupRemoveKeydownHandler);
+      } else if (action === 'load') {
+        errorButton.addEventListener('click', windowReloadHandler);
+      }
+    };
   };
 
   var successPopupRemoveClickHandler = function () {
@@ -44,12 +56,6 @@
     }
   };
 
-  var saveSuccessHandler = function () {
-    renderSuccessPopup();
-    document.addEventListener('click', successPopupRemoveClickHandler);
-    document.addEventListener('keydown', successPopupRemoveKeydownHandler);
-  };
-
   var errorPopupRemoveClickHandler = function () {
     var renderedErrorPopup = document.querySelector('.error');
     if (renderedErrorPopup) {
@@ -66,28 +72,13 @@
     }
   };
 
-  var saveErrorHandler = function () {
-    renderErrorPopup();
-    var errorButton = document.querySelector('.error__button');
-    errorButton.addEventListener('click', errorPopupRemoveClickHandler);
-    document.addEventListener('click', errorPopupRemoveClickHandler);
-    document.addEventListener('keydown', errorPopupRemoveKeydownHandler);
-  };
-
   var windowReloadHandler = function () {
     location.reload();
   };
 
-  var errorHandler = function () {
-    renderErrorPopup();
-    var errorButton = document.querySelector('.error__button');
-    errorButton.addEventListener('click', windowReloadHandler);
-  };
-
   window.dom = {
     openMap: openMap,
-    errorHandler: errorHandler,
-    saveErrorHandler: saveErrorHandler,
-    saveSuccessHandler: saveSuccessHandler
+    successPopupRenderHandler: successPopupRenderHandler,
+    errorPopupRenderHandler: errorPopupRenderHandler
   };
 })();

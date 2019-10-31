@@ -146,12 +146,12 @@
 
   var sendFormHandler = function () {
     formReset();
-    window.dom.saveSuccessHandler();
+    window.dom.successPopupRenderHandler();
   };
 
   var submitHandler = function (evt) {
     NODES.inputAddress.disabled = false;
-    window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.saveErrorHandler);
+    window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.errorPopupRenderHandler('save'));
     evt.preventDefault();
   };
 
