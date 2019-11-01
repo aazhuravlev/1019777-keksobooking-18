@@ -131,10 +131,14 @@
     });
   };
 
+  var setInputAddressValue = function (value) {
+    NODES.inputAddress.value = value;
+  };
+
   var formReset = function () {
     window.card.nodes.map.classList.add('map--faded');
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
-    NODES.inputAddress.value = window.pin.mainPinCoordinates();
+    setInputAddressValue(window.pin.mainPinCoordinates());
     removeNode(window.pin.nodes.pins.querySelectorAll('[type]'));
     window.card.remove();
     window.pin.nodes.mainPin.style.top = window.pin.mainPin.startY + 'px';
@@ -174,7 +178,7 @@
 
   var addHandlers = function () {
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
-    NODES.inputAddress.value = window.pin.mainPinCoordinates();
+    setInputAddressValue(window.pin.mainPinCoordinates());
     window.util.setHandlers(HANDLERS_DATA);
   };
 
