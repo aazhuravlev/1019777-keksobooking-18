@@ -67,6 +67,8 @@
     arr.forEach(function (item, i) {
       NODES.pins.appendChild(preparePin(item, i));
     });
+    NODES.renderedPins = NODES.pins.querySelectorAll('[type]');
+    return NODES.renderedPins;
   };
 
   var removeActivePin = function () {
@@ -81,7 +83,7 @@
     if (idx) {
       window.card.remove();
       window.card.render(window.data.getFilter()[idx]);
-      NODES.pins.querySelectorAll('[type]')[idx].classList.add('map__pin--active');
+      NODES.renderedPins[idx].classList.add('map__pin--active');
     }
   };
 

@@ -139,7 +139,7 @@
     window.card.nodes.map.classList.add('map--faded');
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
     setInputAddressValue(window.pin.mainPinCoordinates());
-    removeNode(window.pin.nodes.pins.querySelectorAll('[type]'));
+    removeNode(window.pin.nodes.renderedPins);
     window.card.remove();
     window.pin.nodes.mainPin.style.top = window.pin.mainPin.startY + 'px';
     window.pin.nodes.mainPin.style.left = window.pin.mainPin.startX + 'px';
