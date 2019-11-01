@@ -125,7 +125,7 @@
     NODES.timeInSelect[TIME.indexOf(NODES.timeOutSelect.value)].selected = true;
   };
 
-  var setStandartValues = function (arr) {
+  var setDefaultValues = function (arr) {
     arr.forEach(function (key) {
       key[INDEXES.node][key[INDEXES.attribute]] = key[INDEXES.value];
     });
@@ -139,19 +139,19 @@
     window.card.remove();
     window.pin.nodes.mainPin.style.top = window.pin.mainPin.startY + 'px';
     window.pin.nodes.mainPin.style.left = window.pin.mainPin.startX + 'px';
-    setStandartValues(DEFAULT_DATA);
+    setDefaultValues(DEFAULT_DATA);
     window.pin.nodes.mainPin.addEventListener('click', window.pin.mainPinClickHandler);
     window.pin.nodes.mainPin.addEventListener('keydown', window.pin.mapEnterPressHandler);
   };
 
   var sendFormHandler = function () {
     formReset();
-    window.dom.successPopupRenderHandler();
+    window.dom.renderSuccessPopupHandler();
   };
 
   var submitHandler = function (evt) {
     NODES.inputAddress.disabled = false;
-    window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.errorPopupRenderHandler('save'));
+    window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.renderErrorPopupHandler('save'));
     evt.preventDefault();
   };
 

@@ -18,14 +18,14 @@
     window.form.nodes.inputAddress.value = window.pin.mainPinCoordinates();
   };
 
-  var successPopupRenderHandler = function () {
+  var renderSuccessPopupHandler = function () {
     var successPopup = SUCCESS_POPUP.cloneNode(true);
     NODES.main.appendChild(successPopup);
     document.addEventListener('click', removeSuccessPopupHandler('click'));
     document.addEventListener('keydown', removeSuccessPopupHandler('keydown'));
   };
 
-  var errorPopupRenderHandler = function (action) {
+  var renderErrorPopupHandler = function (action) {
     return function () {
       var errorPopup = ERROR_POPUP.cloneNode(true);
       NODES.main.appendChild(errorPopup);
@@ -76,7 +76,7 @@
 
   window.dom = {
     openMap: openMap,
-    successPopupRenderHandler: successPopupRenderHandler,
-    errorPopupRenderHandler: errorPopupRenderHandler
+    renderSuccessPopupHandler: renderSuccessPopupHandler,
+    renderErrorPopupHandler: renderErrorPopupHandler
   };
 })();
