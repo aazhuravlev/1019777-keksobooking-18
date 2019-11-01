@@ -2,6 +2,7 @@
 
 (function () {
   var data = [];
+  var filteredData = [];
   var isLoading;
 
   var getData = function () {
@@ -10,7 +11,11 @@
 
   var filterData = function () {
     var cloneData = getData().slice();
-    var filteredData = window.filter.getFilteringData(cloneData);
+    filteredData = window.filter.getFilteringData(cloneData);
+    return filteredData;
+  };
+
+  var getFilterData = function () {
     return filteredData;
   };
 
@@ -28,7 +33,9 @@
   };
 
   window.data = {
-    loadData: loadData,
-    filterData: filterData
+    load: loadData,
+    get: getData,
+    filter: filterData,
+    getFilter: getFilterData
   };
 })();

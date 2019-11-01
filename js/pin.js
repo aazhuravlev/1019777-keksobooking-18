@@ -80,7 +80,7 @@
     var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
     if (idx) {
       window.card.remove();
-      window.card.render(window.data.filterData()[idx]);
+      window.card.render(window.data.getFilter()[idx]);
       NODES.pins.querySelectorAll('[type]')[idx].classList.add('map__pin--active');
     }
   };

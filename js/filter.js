@@ -79,7 +79,7 @@
   };
 
   var debouncedFilterHandler = window.util.debounce(function () {
-    window.pin.render(window.data.filterData());
+    window.pin.render(window.data.filter());
     window.card.remove();
   });
 

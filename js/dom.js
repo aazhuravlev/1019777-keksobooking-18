@@ -14,7 +14,7 @@
   var openMap = function () {
     window.card.nodes.map.classList.remove('map--faded');
     window.form.setStatusFieldsets(window.form.nodes.formFieldsets, 'remove');
-    window.pin.render(window.data.filterData());
+    window.pin.render(window.data.filter());
     window.form.nodes.inputAddress.value = window.pin.mainPinCoordinates();
   };
 
