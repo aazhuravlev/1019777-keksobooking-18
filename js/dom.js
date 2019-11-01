@@ -21,8 +21,8 @@
   var successPopupRenderHandler = function () {
     var successPopup = SUCCESS_POPUP.cloneNode(true);
     NODES.main.appendChild(successPopup);
-    document.addEventListener('click', successPopupRemoveClickHandler);
-    document.addEventListener('keydown', successPopupRemoveKeydownHandler);
+    document.addEventListener('click', removeSuccessPopupHandler('click'));
+    document.addEventListener('keydown', removeSuccessPopupHandler('keydown'));
   };
 
   var errorPopupRenderHandler = function (action) {
@@ -31,45 +31,43 @@
       NODES.main.appendChild(errorPopup);
       var errorButton = document.querySelector('.error__button');
       if (action === 'save') {
-        errorButton.addEventListener('click', errorPopupRemoveClickHandler);
-        document.addEventListener('click', errorPopupRemoveClickHandler);
-        document.addEventListener('keydown', errorPopupRemoveKeydownHandler);
+        errorButton.addEventListener('click', removeErrorPopupHandler('click'));
+        document.addEventListener('click', removeErrorPopupHandler('click'));
+        document.addEventListener('keydown', removeErrorPopupHandler('keydown'));
       } else if (action === 'load') {
         errorButton.addEventListener('click', windowReloadHandler);
       }
     };
   };
 
-  var successPopupRemoveClickHandler = function () {
-    var renderedSuccessPopup = document.querySelector('.success');
-    if (renderedSuccessPopup) {
-      renderedSuccessPopup.remove();
-    }
-  };
-
-  var successPopupRemoveKeydownHandler = function (evt) {
-    if (evt.keyCode === window.card.escKeycode) {
-      var renderedSuccessPopup = document.querySelector('.success');
-      if (renderedSuccessPopup) {
-        renderedSuccessPopup.remove();
+  var removeSuccessPopupHandler = function (action) {
+    return function (evt) {
+      var successPopup = document.querySelector('.success');
+      if (successPopup) {
+        if (action === 'click') {
+          successPopup.remove();
+        } else if (action === 'keydown') {
+          if (evt.keyCode === window.card.escKeycode) {
+            successPopup.remove();
+          }
+        }
       }
-    }
+    };
   };
 
-  var errorPopupRemoveClickHandler = function () {
-    var renderedErrorPopup = document.querySelector('.error');
-    if (renderedErrorPopup) {
-      renderedErrorPopup.remove();
-    }
-  };
-
-  var errorPopupRemoveKeydownHandler = function (evt) {
-    if (evt.keyCode === window.card.escKeycode) {
-      var renderedErrorPopup = document.querySelector('.error');
-      if (renderedErrorPopup) {
-        renderedErrorPopup.remove();
+  var removeErrorPopupHandler = function (action) {
+    return function (evt) {
+      var errorPopup = document.querySelector('.error');
+      if (errorPopup) {
+        if (action === 'click') {
+          errorPopup.remove();
+        } else if (action === 'keydown') {
+          if (evt.keyCode === window.card.escKeycode) {
+            errorPopup.remove();
+          }
+        }
       }
-    }
+    };
   };
 
   var windowReloadHandler = function () {
