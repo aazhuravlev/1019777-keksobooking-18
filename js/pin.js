@@ -26,8 +26,6 @@
     pinTemplate: '#pin',
   };
 
-  var PINS_QUANTITY = 5;
-
   var NODES = window.util.findNodes(SELECTORS_DATA);
   NODES.mapPin = NODES.pinTemplate.content.querySelector('.map__pin');
 
@@ -66,9 +64,6 @@
 
   var renderPins = function (arr) {
     removePins();
-    if (arr.length > PINS_QUANTITY) {
-      arr.length = PINS_QUANTITY;
-    }
     arr.forEach(function (item, i) {
       NODES.pins.appendChild(preparePin(item, i));
     });
