@@ -30,10 +30,10 @@
   NODES.mapPin = NODES.pinTemplate.content.querySelector('.map__pin');
 
   var mainPinCoordinates = function () {
-    var x = NODES.mainPin.offsetLeft + MAIN_PIN.width / 2;
-    var y = NODES.mainPin.offsetTop + MAIN_PIN.height / 2;
+    var x = MAIN_PIN.startX + MAIN_PIN.width / 2;
+    var y = MAIN_PIN.startY + MAIN_PIN.height / 2;
     if (!document.querySelector('.map--faded')) {
-      x = NODES.mainPin.offsetTop + MAIN_PIN.fullHeight;
+      y = MAIN_PIN.startY + MAIN_PIN.fullHeight;
     }
     return x + ', ' + y;
   };
