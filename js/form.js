@@ -10,7 +10,7 @@
     '100': [3]
   };
 
-  var STANDART_VALUES = {
+  var DEFAULT_VALUES = {
     roomSelect: '1',
     capacitySelect: '1',
     timeInSelect: TIME[0],
@@ -53,27 +53,19 @@
     value: '2'
   };
 
-  var STANDART_DATA = [
+  var DEFAULT_DATA = [
     [NODES.adTitle, VALUE_FIELD, ''],
     [NODES.typeSelect, VALUE_FIELD, Object.keys(window.card.types)[INDEXES.flat]],
     [NODES.pricePerNight, VALUE_FIELD, ''],
     [NODES.pricePerNight, PLACEHOLDER_FIELD, TYPE_SELECT_OPTIONS.flat],
     [NODES.pricePerNight, PLACEHOLDER_FIELD, TYPE_SELECT_OPTIONS.flat],
-    [NODES.roomSelect, VALUE_FIELD, STANDART_VALUES.roomSelect],
-    [NODES.capacitySelect, VALUE_FIELD, STANDART_VALUES.capacitySelect],
-    [NODES.timeInSelect, VALUE_FIELD, STANDART_VALUES.timeInSelect],
-    [NODES.timeOutSelect, VALUE_FIELD, STANDART_VALUES.timeOutSelect],
+    [NODES.roomSelect, VALUE_FIELD, DEFAULT_VALUES.roomSelect],
+    [NODES.capacitySelect, VALUE_FIELD, DEFAULT_VALUES.capacitySelect],
+    [NODES.timeInSelect, VALUE_FIELD, DEFAULT_VALUES.timeInSelect],
+    [NODES.timeOutSelect, VALUE_FIELD, DEFAULT_VALUES.timeOutSelect],
     [NODES.description, VALUE_FIELD, ''],
     [NODES.inputAddress, DISABLED_STATUS, true]
   ];
-
-  var EVENTS_HANDLERS = {
-    change: 'change',
-    click: 'click',
-    submit: 'submit',
-    keydown: 'keydown',
-    mousedown: 'mousedown'
-  };
 
   var setStatusFormFieldsets = function (selector, action) {
     NODES.form.classList[action]('ad-form--disabled');
@@ -133,31 +125,37 @@
     NODES.timeInSelect[TIME.indexOf(NODES.timeOutSelect.value)].selected = true;
   };
 
-  var setStandartValues = function (arr) {
+  var setDefaultValues = function (arr) {
     arr.forEach(function (key) {
       key[INDEXES.node][key[INDEXES.attribute]] = key[INDEXES.value];
     });
   };
 
+  var setInputAddressValue = function (value) {
+    NODES.inputAddress.value = value;
+  };
+
   var formReset = function () {
     window.card.nodes.map.classList.add('map--faded');
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
-    NODES.inputAddress.value = window.pin.calcMainPinCoordinates();
-    removeNode(window.pin.nodes.pins.querySelectorAll('[type]'));
+    setInputAddressValue(window.pin.mainPinCoordinates());
+    removeNode(window.pin.nodes.renderedPins);
     window.card.remove();
     window.pin.nodes.mainPin.style.top = window.pin.mainPin.startY + 'px';
     window.pin.nodes.mainPin.style.left = window.pin.mainPin.startX + 'px';
-    setStandartValues(STANDART_DATA);
+    setDefaultValues(DEFAULT_DATA);
+    window.pin.nodes.mainPin.addEventListener('click', window.pin.mainPinClickHandler);
+    window.pin.nodes.mainPin.addEventListener('keydown', window.pin.mapEnterPressHandler);
   };
 
   var sendFormHandler = function () {
     formReset();
-    window.dom.saveSuccessHandler();
+    window.dom.renderSuccessPopupHandler();
   };
 
   var submitHandler = function (evt) {
     NODES.inputAddress.disabled = false;
-    window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.saveErrorHandler);
+    window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.renderErrorPopupHandler('save'));
     evt.preventDefault();
   };
 
@@ -167,27 +165,26 @@
   };
 
   var HANDLERS_DATA = [
-    [NODES.adTitle, EVENTS_HANDLERS.change, fieldValidate(NODES.adTitle)],
-    [NODES.typeSelect, EVENTS_HANDLERS.change, typeSelectChangeHandler],
-    [NODES.pricePerNight, EVENTS_HANDLERS.change, fieldValidate(NODES.pricePerNight)],
-    [NODES.roomSelect, EVENTS_HANDLERS.change, changeRoomsHandler],
-    [NODES.timeInSelect, EVENTS_HANDLERS.change, timeInSelectHandler],
-    [NODES.timeOutSelect, EVENTS_HANDLERS.change, timeOutSelectHandler],
-    [NODES.formReset, EVENTS_HANDLERS.click, formReset],
-    [NODES.submitBtn, EVENTS_HANDLERS.click, checkValidationHandler],
-    [NODES.form, EVENTS_HANDLERS.submit, submitHandler]
+    [NODES.adTitle, 'change', fieldValidate(NODES.adTitle)],
+    [NODES.typeSelect, 'change', typeSelectChangeHandler],
+    [NODES.pricePerNight, 'change', fieldValidate(NODES.pricePerNight)],
+    [NODES.roomSelect, 'change', changeRoomsHandler],
+    [NODES.timeInSelect, 'change', timeInSelectHandler],
+    [NODES.timeOutSelect, 'change', timeOutSelectHandler],
+    [NODES.formReset, 'click', formReset],
+    [NODES.submitBtn, 'click', checkValidationHandler],
+    [NODES.form, 'submit', submitHandler]
   ];
 
   var addHandlers = function () {
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
-    NODES.inputAddress.value = window.pin.calcMainPinCoordinates();
+    setInputAddressValue(window.pin.mainPinCoordinates());
     window.util.setHandlers(HANDLERS_DATA);
   };
 
   window.form = {
     setStatusFieldsets: setStatusFormFieldsets,
     nodes: NODES,
-    addHandlers: addHandlers,
-    eventHandlers: EVENTS_HANDLERS
+    addHandlers: addHandlers
   };
 })();

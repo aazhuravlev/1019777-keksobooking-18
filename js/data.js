@@ -2,16 +2,20 @@
 
 (function () {
   var data = [];
+  var filteredData = [];
   var isLoading;
 
   var getData = function () {
     return data;
   };
 
-  var updateData = function () {
+  var filterData = function () {
     var cloneData = getData().slice();
-    var filteredData = window.filter.getFilteringData(cloneData);
-    window.pin.render(filteredData);
+    filteredData = window.filter.getFilteringData(cloneData);
+    return filteredData;
+  };
+
+  var getFilterData = function () {
     return filteredData;
   };
 
@@ -21,16 +25,17 @@
     }
     var onLoad = function (result) {
       data = result;
-      window.dom.addHandlers();
+      window.pin.addHandlers();
       return data;
     };
     isLoading = true;
-    window.backend.load(onLoad, window.dom.errorHandler);
+    window.backend.load(onLoad, window.dom.renderErrorPopupHandler('load'));
   };
 
   window.data = {
-    getData: getData,
-    loadData: loadData,
-    updateData: updateData
+    load: loadData,
+    get: getData,
+    filter: filterData,
+    getFilter: getFilterData
   };
 })();

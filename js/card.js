@@ -97,14 +97,14 @@
   var renderCard = function (arr) {
     removeCard();
     NODES.map.insertBefore(prepareCard(arr), NODES.filters);
-    window.card.nodes.map.querySelector('.popup__close').addEventListener('click', removeCard);
+    NODES.map.querySelector('.popup__close').addEventListener('click', removeCard);
   };
 
   var removeCard = function () {
     var mapCard = NODES.map.querySelector('.map__card');
     if (mapCard) {
       mapCard.remove();
-      window.pin.activeRemove();
+      window.pin.removeActive();
     }
   };
 
@@ -119,7 +119,6 @@
   };
 
   window.card = {
-    prepare: prepareCard,
     render: renderCard,
     remove: removeCard,
     nodes: NODES,

@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var ENTER_KEYCODE = 13;
-
   var SELECTORS_DATA = {
     errorTemplate: '#error',
     successTemplate: '#success',
@@ -13,102 +11,72 @@
   var ERROR_POPUP = NODES.errorTemplate.content.querySelector('.error');
   var SUCCESS_POPUP = NODES.successTemplate.content.querySelector('.success');
 
-  var mapEnterPressHandler = function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      openMap();
-    }
-  };
-
   var openMap = function () {
-    if (document.querySelector('.map--faded')) {
-      window.card.nodes.map.classList.remove('map--faded');
-      window.form.setStatusFieldsets(window.form.nodes.formFieldsets, 'remove');
-      window.data.updateData();
-      window.form.nodes.inputAddress.value = window.pin.calcActiveMainPinCoordinates();
-    }
+    window.card.nodes.map.classList.remove('map--faded');
+    window.form.setStatusFieldsets(window.form.nodes.formFieldsets, 'remove');
+    window.pin.render(window.data.filter());
+    window.form.nodes.inputAddress.value = window.pin.mainPinCoordinates();
   };
 
-  var renderSuccessPopup = function () {
+  var renderSuccessPopupHandler = function () {
     var successPopup = SUCCESS_POPUP.cloneNode(true);
     NODES.main.appendChild(successPopup);
+    document.addEventListener('click', removeSuccessPopupHandler('click'));
+    document.addEventListener('keydown', removeSuccessPopupHandler('keydown'));
   };
 
-  var renderErrorPopup = function () {
-    var errorPopup = ERROR_POPUP.cloneNode(true);
-    NODES.main.appendChild(errorPopup);
-  };
-
-  var successPopupRemoveClickHandler = function () {
-    var renderedSuccessPopup = document.querySelector('.success');
-    if (renderedSuccessPopup) {
-      renderedSuccessPopup.remove();
-    }
-  };
-
-  var successPopupRemoveKeydownHandler = function (evt) {
-    if (evt.keyCode === window.card.escKeycode) {
-      var renderedSuccessPopup = document.querySelector('.success');
-      if (renderedSuccessPopup) {
-        renderedSuccessPopup.remove();
+  var renderErrorPopupHandler = function (action) {
+    return function () {
+      var errorPopup = ERROR_POPUP.cloneNode(true);
+      NODES.main.appendChild(errorPopup);
+      var errorButton = document.querySelector('.error__button');
+      if (action === 'save') {
+        errorButton.addEventListener('click', removeErrorPopupHandler('click'));
+        document.addEventListener('click', removeErrorPopupHandler('click'));
+        document.addEventListener('keydown', removeErrorPopupHandler('keydown'));
+      } else if (action === 'load') {
+        errorButton.addEventListener('click', windowReloadHandler);
       }
-    }
+    };
   };
 
-  var saveSuccessHandler = function () {
-    renderSuccessPopup();
-    document.addEventListener('click', successPopupRemoveClickHandler);
-    document.addEventListener('keydown', successPopupRemoveKeydownHandler);
-  };
-
-  var errorPopupRemoveClickHandler = function () {
-    var renderedErrorPopup = document.querySelector('.error');
-    if (renderedErrorPopup) {
-      renderedErrorPopup.remove();
-    }
-  };
-
-  var errorPopupRemoveKeydownHandler = function (evt) {
-    if (evt.keyCode === window.card.escKeycode) {
-      var renderedErrorPopup = document.querySelector('.error');
-      if (renderedErrorPopup) {
-        renderedErrorPopup.remove();
+  var removeSuccessPopupHandler = function (action) {
+    return function (evt) {
+      var successPopup = document.querySelector('.success');
+      if (successPopup) {
+        if (action === 'click') {
+          successPopup.remove();
+        } else if (action === 'keydown') {
+          if (evt.keyCode === window.card.escKeycode) {
+            successPopup.remove();
+          }
+        }
       }
-    }
+    };
   };
 
-  var saveErrorHandler = function () {
-    renderErrorPopup();
-    var errorButton = document.querySelector('.error__button');
-    errorButton.addEventListener('click', errorPopupRemoveClickHandler);
-    document.addEventListener('click', errorPopupRemoveClickHandler);
-    document.addEventListener('keydown', errorPopupRemoveKeydownHandler);
+  var removeErrorPopupHandler = function (action) {
+    return function (evt) {
+      var errorPopup = document.querySelector('.error');
+      if (errorPopup) {
+        if (action === 'click') {
+          errorPopup.remove();
+        } else if (action === 'keydown') {
+          if (evt.keyCode === window.card.escKeycode) {
+            errorPopup.remove();
+          }
+        }
+      }
+    };
   };
 
   var windowReloadHandler = function () {
     location.reload();
   };
 
-  var errorHandler = function () {
-    renderErrorPopup();
-    var errorButton = document.querySelector('.error__button');
-    errorButton.addEventListener('click', windowReloadHandler);
-  };
-
-  var HANDLERS_DATA = [
-    [window.pin.nodes.mainPin, window.form.eventHandlers.mousedown, openMap],
-    [window.pin.nodes.mainPin, window.form.eventHandlers.keydown, mapEnterPressHandler]
-  ];
-
-  var addHandlers = function () {
-    window.util.setHandlers(HANDLERS_DATA);
-  };
-
   window.dom = {
     openMap: openMap,
-    addHandlers: addHandlers,
-    errorHandler: errorHandler,
-    saveErrorHandler: saveErrorHandler,
-    saveSuccessHandler: saveSuccessHandler,
-    nodes: NODES
+    renderSuccessPopupHandler: renderSuccessPopupHandler,
+    renderErrorPopupHandler: renderErrorPopupHandler
   };
 })();

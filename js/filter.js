@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var PINS_QUANTITY = 5;
+
   var PRICE_RANGE = {
     low: 10000,
     high: 50000
@@ -73,11 +75,11 @@
   var getFilteringData = function (loadedData) {
     return loadedData.filter(function (item) {
       return checkHousingType(item) && checkHousingPrice(item) && checkHousingRooms(item) && checkHousinGuests(item) && filterCheckboxes(item);
-    });
+    }).slice(0, PINS_QUANTITY);
   };
 
   var debouncedFilterHandler = window.util.debounce(function () {
-    window.data.updateData();
+    window.pin.render(window.data.filter());
     window.card.remove();
   });
 
