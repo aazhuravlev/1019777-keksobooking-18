@@ -23,6 +23,8 @@
     palace: '10000'
   };
 
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
   var VALUE_FIELD = 'value';
   var PLACEHOLDER_FIELD = 'placeholder';
   var DISABLED_STATUS = 'disabled';
@@ -40,7 +42,9 @@
     pricePerNight: '#price',
     description: '#description',
     submitBtn: '.ad-form__submit',
-    features: '.features'
+    features: '.features',
+    avatarChooser: '.ad-form__field input[type=file]',
+    avatarPreview: '.ad-form-header__preview img'
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
@@ -174,6 +178,25 @@
     fieldValidate(NODES.pricePerNight)();
   };
 
+  var fileChooserHandler = function () {
+    var file = NODES.avatarChooser.files[0];
+    var fileName = file.name.toLowerCase();
+
+    var matches = FILE_TYPES.some(function (item) {
+      return fileName.endsWith(item);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        NODES.avatarPreview.src = reader.result;
+      });
+
+      reader.readAsDataURL(file);
+    }
+  };
+
   var HANDLERS_DATA = [
     [NODES.adTitle, 'change', fieldValidate(NODES.adTitle)],
     [NODES.typeSelect, 'change', typeSelectChangeHandler],
@@ -183,7 +206,8 @@
     [NODES.timeOutSelect, 'change', timeOutSelectHandler],
     [NODES.formReset, 'click', formReset],
     [NODES.submitBtn, 'click', checkValidationHandler],
-    [NODES.form, 'submit', submitHandler]
+    [NODES.form, 'submit', submitHandler],
+    [NODES.avatarChooser, 'change', fileChooserHandler]
   ];
 
   var addHandlers = function () {
