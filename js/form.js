@@ -190,21 +190,23 @@
     };
   };
 
-  var avatarChooserHandler = function () {
-    var file = NODES.avatarChooser.files[0];
-    var fileName = file.name.toLowerCase();
+  var сhooserHandler = function (node, handler) {
+    return function () {
+      var file = node.files[0];
+      var fileName = file.name.toLowerCase();
 
-    var matches = FILE_TYPES.some(function (item) {
-      return fileName.endsWith(item);
-    });
+      var matches = FILE_TYPES.some(function (item) {
+        return fileName.endsWith(item);
+      });
 
-    if (matches) {
-      var reader = new FileReader();
+      if (matches) {
+        var reader = new FileReader();
 
-      reader.addEventListener('load', avatarLoadHandler(reader));
+        reader.addEventListener('load', handler(reader));
 
-      reader.readAsDataURL(file);
-    }
+        reader.readAsDataURL(file);
+      }
+    };
   };
 
   var getLoadedPhoto = function (src) {
@@ -227,22 +229,6 @@
     };
   };
 
-  var lodgingPhotoChooserHandler = function () {
-    var file = NODES.lodgingPhotoChooser.files[0];
-
-    var fileName = file.name.toLowerCase();
-    var matches = FILE_TYPES.some(function (item) {
-      return fileName.endsWith(item);
-    });
-
-    if (matches) {
-      var reader = new FileReader();
-      reader.addEventListener('load', lodgingPhotoRenderHandler(reader));
-
-      reader.readAsDataURL(file);
-    }
-  };
-
   var HANDLERS_DATA = [
     [NODES.adTitle, 'change', fieldValidate(NODES.adTitle)],
     [NODES.typeSelect, 'change', typeSelectChangeHandler],
@@ -253,8 +239,8 @@
     [NODES.formReset, 'click', formReset],
     [NODES.submitBtn, 'click', checkValidationHandler],
     [NODES.form, 'submit', submitHandler],
-    [NODES.avatarChooser, 'change', avatarChooserHandler],
-    [NODES.lodgingPhotoChooser, 'change', lodgingPhotoChooserHandler]
+    [NODES.avatarChooser, 'change', сhooserHandler(NODES.avatarChooser, avatarLoadHandler)],
+    [NODES.lodgingPhotoChooser, 'change', сhooserHandler(NODES.lodgingPhotoChooser, lodgingPhotoRenderHandler)]
   ];
 
   var addHandlers = function () {
