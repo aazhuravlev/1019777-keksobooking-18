@@ -124,6 +124,7 @@
     nodes: NODES,
     addHandlers: addHandlers,
     escKeycode: ESC_KEYCODE,
-    types: TYPES
+    types: TYPES,
+    getPhoto: getPhoto
   };
 })();

@@ -44,7 +44,12 @@
     submitBtn: '.ad-form__submit',
     features: '.features',
     avatarChooser: '.ad-form__field input[type=file]',
-    avatarPreview: '.ad-form-header__preview img'
+    avatarPreview: '.ad-form-header__preview img',
+    lodgingPhotoChooser: '.ad-form__upload input[type=file]',
+    lodgingPhotoPreview: '.ad-form__photo img',
+    photoContainer: '.ad-form__photo-container',
+    loadedPhotosContainer: '.ad-form__photo-container',
+    loadedPhotoContainer: '.ad-form__photo'
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
@@ -179,7 +184,13 @@
     fieldValidate(NODES.pricePerNight)();
   };
 
-  var fileChooserHandler = function () {
+  var avatarLoadHandler = function (src) {
+    return function () {
+      NODES.avatarPreview.src = src.result;
+    };
+  };
+
+  var avatarChooserHandler = function () {
     var file = NODES.avatarChooser.files[0];
     var fileName = file.name.toLowerCase();
 
@@ -190,9 +201,43 @@
     if (matches) {
       var reader = new FileReader();
 
-      reader.addEventListener('load', function () {
-        NODES.avatarPreview.src = reader.result;
-      });
+      reader.addEventListener('load', avatarLoadHandler(reader));
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  var getLoadedPhoto = function (src) {
+    var image = document.createElement('img');
+    image.className = 'ad-form__image';
+    image.width = '70';
+    image.height = '70';
+    image.alt = 'Фотография жилья';
+    image.src = src;
+    return image;
+  };
+
+  var lodgingPhotoRenderHandler = function (src) {
+    return function () {
+      var loadedPhotoPreviewContainer = NODES.loadedPhotosContainer.querySelector('.ad-form__photo');
+      var newLoadedPhotoContainer = NODES.loadedPhotoContainer.cloneNode();
+      newLoadedPhotoContainer.classList.add('ad-form__photo--loaded');
+      newLoadedPhotoContainer.appendChild(getLoadedPhoto(src.result));
+      NODES.photoContainer.insertBefore(newLoadedPhotoContainer, loadedPhotoPreviewContainer);
+    };
+  };
+
+  var lodgingPhotoChooserHandler = function () {
+    var file = NODES.lodgingPhotoChooser.files[0];
+
+    var fileName = file.name.toLowerCase();
+    var matches = FILE_TYPES.some(function (item) {
+      return fileName.endsWith(item);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+      reader.addEventListener('load', lodgingPhotoRenderHandler(reader));
 
       reader.readAsDataURL(file);
     }
@@ -208,7 +253,8 @@
     [NODES.formReset, 'click', formReset],
     [NODES.submitBtn, 'click', checkValidationHandler],
     [NODES.form, 'submit', submitHandler],
-    [NODES.avatarChooser, 'change', fileChooserHandler]
+    [NODES.avatarChooser, 'change', avatarChooserHandler],
+    [NODES.lodgingPhotoChooser, 'change', lodgingPhotoChooserHandler]
   ];
 
   var addHandlers = function () {
