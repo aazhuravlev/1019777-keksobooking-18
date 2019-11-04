@@ -157,6 +157,7 @@
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
     setInputAddressValue(window.pin.mainPinCoordinates());
     removeNode(window.pin.nodes.renderedPins);
+    removeNode(NODES.loadedPhotos);
     window.card.remove();
     window.pin.nodes.mainPin.style.top = window.pin.mainPin.startY + 'px';
     window.pin.nodes.mainPin.style.left = window.pin.mainPin.startX + 'px';
@@ -226,6 +227,8 @@
       newLoadedPhotoContainer.classList.add('ad-form__photo--loaded');
       newLoadedPhotoContainer.appendChild(getLoadedPhoto(src.result));
       NODES.photoContainer.insertBefore(newLoadedPhotoContainer, loadedPhotoPreviewContainer);
+      NODES.loadedPhotos = NODES.loadedPhotosContainer.querySelectorAll('.ad-form__photo--loaded');
+      return NODES.loadedPhotos;
     };
   };
 
