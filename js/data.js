@@ -9,13 +9,11 @@
     return data;
   };
 
-  var filterData = function () {
-    var cloneData = getData().slice();
-    filteredData = window.filter.getFilteringData(cloneData);
-    return filteredData;
-  };
-
-  var getFilterData = function () {
+  var getFilteredData = function (shouldFilter) {
+    if (filteredData && !shouldFilter) {
+      return filteredData;
+    }
+    filteredData = window.filter.data(shouldFilter.slice());
     return filteredData;
   };
 
@@ -35,7 +33,6 @@
   window.data = {
     load: loadData,
     get: getData,
-    filter: filterData,
-    getFilter: getFilterData
+    getFiltered: getFilteredData
   };
 })();

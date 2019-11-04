@@ -72,14 +72,14 @@
     return compareFeatures(item.offer.features, getHousingFeatures()) ? item : false;
   };
 
-  var getFilteringData = function (loadedData) {
+  var filterData = function (loadedData) {
     return loadedData.filter(function (item) {
       return checkHousingType(item) && checkHousingPrice(item) && checkHousingRooms(item) && checkHousinGuests(item) && filterCheckboxes(item);
     }).slice(0, PINS_QUANTITY);
   };
 
   var debouncedFilterHandler = window.util.debounce(function () {
-    window.pin.render(window.data.filter());
+    window.pin.render(window.data.getFiltered(window.data.get()));
     window.card.remove();
   });
 
@@ -96,7 +96,7 @@
   };
 
   window.filter = {
-    getFilteringData: getFilteringData,
+    data: filterData,
     addHandlers: addHandlers,
     reset: resetFilter
   };

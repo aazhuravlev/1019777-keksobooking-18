@@ -82,7 +82,7 @@
     var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
     if (idx) {
       window.card.remove();
-      window.card.render(window.data.getFilter()[idx]);
+      window.card.render(window.data.getFiltered()[idx]);
       NODES.renderedPins[idx].classList.add('map__pin--active');
     }
   };
