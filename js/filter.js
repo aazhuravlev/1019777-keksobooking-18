@@ -83,12 +83,21 @@
     window.card.remove();
   });
 
+  var resetFilter = function () {
+    window.form.unCheckInput(NODES.housingFeatures);
+    NODES.housingType.value = ANY_OPTION;
+    NODES.housingPrice.value = ANY_OPTION;
+    NODES.housingRooms.value = ANY_OPTION;
+    NODES.housingGuests.value = ANY_OPTION;
+  };
+
   var addHandlers = function () {
     NODES.mapFilters.addEventListener('change', debouncedFilterHandler);
   };
 
   window.filter = {
     getFilteringData: getFilteringData,
-    addHandlers: addHandlers
+    addHandlers: addHandlers,
+    reset: resetFilter
   };
 })();

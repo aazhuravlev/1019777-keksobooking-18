@@ -39,7 +39,8 @@
     timeOutSelect: '#timeout',
     pricePerNight: '#price',
     description: '#description',
-    submitBtn: '.ad-form__submit'
+    submitBtn: '.ad-form__submit',
+    features: '.features'
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
@@ -135,6 +136,13 @@
     NODES.inputAddress.value = value;
   };
 
+  var unCheckInput = function (nodes) {
+    var features = nodes.querySelectorAll('input:checked');
+    features.forEach(function (node) {
+      node.checked = false;
+    });
+  };
+
   var formReset = function () {
     window.card.nodes.map.classList.add('map--faded');
     setStatusFormFieldsets(NODES.formFieldsets, 'add');
@@ -144,6 +152,8 @@
     window.pin.nodes.mainPin.style.top = window.pin.mainPin.startY + 'px';
     window.pin.nodes.mainPin.style.left = window.pin.mainPin.startX + 'px';
     setDefaultValues(DEFAULT_DATA);
+    unCheckInput(NODES.features);
+    window.filter.reset();
     window.pin.nodes.mainPin.addEventListener('click', window.pin.mainPinClickHandler);
     window.pin.nodes.mainPin.addEventListener('keydown', window.pin.mapEnterPressHandler);
   };
@@ -185,6 +195,7 @@
   window.form = {
     setStatusFieldsets: setStatusFormFieldsets,
     nodes: NODES,
-    addHandlers: addHandlers
+    addHandlers: addHandlers,
+    unCheckInput: unCheckInput
   };
 })();
