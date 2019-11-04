@@ -158,6 +158,7 @@
     setDefaultValues(DEFAULT_DATA);
     unCheckInput(NODES.features);
     window.filter.reset();
+    NODES.avatarPreview.src = 'img/muffin-grey.svg';
     window.pin.nodes.mainPin.addEventListener('click', window.pin.mainPinClickHandler);
     window.pin.nodes.mainPin.addEventListener('keydown', window.pin.mapEnterPressHandler);
   };
