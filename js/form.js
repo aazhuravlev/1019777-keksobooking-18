@@ -40,7 +40,6 @@
     timeOutSelect: '#timeout',
     pricePerNight: '#price',
     description: '#description',
-    submitBtn: '.ad-form__submit',
     features: '.features',
     avatarChooser: '.ad-form__field input[type=file]',
     avatarPreview: '.ad-form-header__preview img',
@@ -109,11 +108,18 @@
   var fieldValidate = function (node) {
     return function () {
       if (!node.checkValidity()) {
+        node.setCustomValidity('');
         node.reportValidity();
         addShadow(node);
-      } else {
-        removeShadow(node);
+        return false;
+      } else if (node.value === '') {
+        addShadow(node);
+        node.setCustomValidity('Заполните поле');
+        node.reportValidity();
+        return false;
       }
+      removeShadow(node);
+      return true;
     };
   };
 
@@ -163,6 +169,8 @@
     window.pin.nodes.mainPin.style.left = window.pin.mainPin.startX + 'px';
     setDefaultValues(DEFAULT_DATA);
     unCheckInput(NODES.features);
+    removeShadow(NODES.adTitle);
+    removeShadow(NODES.pricePerNight);
     window.filter.reset();
     NODES.avatarPreview.src = 'img/muffin-grey.svg';
     window.pin.nodes.mainPin.addEventListener('click', window.pin.mainPinClickHandler);
@@ -174,14 +182,21 @@
     window.dom.renderSuccessPopupHandler();
   };
 
-  var submitHandler = function (evt) {
-    window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.renderErrorPopupHandler('save'));
-    evt.preventDefault();
+  var checkValidationHandler = function () {
+    if (!fieldValidate(NODES.adTitle) || fieldValidate(NODES.pricePerNight)) {
+      fieldValidate(NODES.adTitle)();
+      fieldValidate(NODES.pricePerNight)();
+      return false;
+    }
+    return true;
   };
 
-  var checkValidationHandler = function () {
-    fieldValidate(NODES.adTitle)();
-    fieldValidate(NODES.pricePerNight)();
+  var submitHandler = function (evt) {
+    checkValidationHandler();
+    if (checkValidationHandler()) {
+      window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.renderErrorPopupHandler('save'));
+    }
+    evt.preventDefault();
   };
 
   var avatarLoadHandler = function (src) {
@@ -239,7 +254,6 @@
     [NODES.timeInSelect, 'change', timeInSelectHandler],
     [NODES.timeOutSelect, 'change', timeOutSelectHandler],
     [NODES.formReset, 'click', formReset],
-    [NODES.submitBtn, 'click', checkValidationHandler],
     [NODES.form, 'submit', submitHandler],
     [NODES.avatarChooser, 'change', сhooserHandler(NODES.avatarChooser, avatarLoadHandler)],
     [NODES.lodgingPhotoChooser, 'change', сhooserHandler(NODES.lodgingPhotoChooser, lodgingPhotoRenderHandler)]
