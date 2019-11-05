@@ -20,6 +20,19 @@
 
   MAIN_PIN.fullHeight = MAIN_PIN.height + MAIN_PIN.triangleHeight;
 
+  var Coordinate = function (x, y) {
+    this.x = x;
+    this.y = y;
+  };
+
+  Coordinate.prototype.setX = function (x) {
+    this.x = x;
+  };
+
+  Coordinate.prototype.setY = function (y) {
+    this.y = y;
+  };
+
   var SELECTORS_DATA = {
     mainPin: '.map__pin--main',
     pins: '.map__pins',
@@ -99,33 +112,22 @@
   var dragHandler = function (evt) {
     evt.preventDefault();
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
+    var startCoords = new Coordinate(evt.clientX, evt.clientY);
 
     var mouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
 
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
+      var shift = new Coordinate(startCoords.x - moveEvt.clientX, startCoords.y - moveEvt.clientY);
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
+      startCoords.setX(moveEvt.clientX);
+      startCoords.setY(moveEvt.clientY);
 
-      var actualX = NODES.mainPin.offsetLeft - shift.x;
-      var actualY = NODES.mainPin.offsetTop - shift.y;
+      var actualCoords = new Coordinate(getBorderMovingMainPin(NODES.mainPin.offsetLeft - shift.x, MAP_BORDER.minX, MAP_BORDER.maxX), getBorderMovingMainPin(NODES.mainPin.offsetTop - shift.y, MAP_BORDER.minY, MAP_BORDER.maxY));
+      var triangleCoords = new Coordinate(actualCoords.x - shift.x + MAIN_PIN.width / 2, actualCoords.y + MAIN_PIN.fullHeight);
 
-      var triangleActualX = getBorderMovingMainPin(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) - shift.x + MAIN_PIN.width / 2;
-      var triangleActualY = getBorderMovingMainPin(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + MAIN_PIN.fullHeight;
-
-      NODES.mainPin.style.top = getBorderMovingMainPin(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + 'px';
-      NODES.mainPin.style.left = getBorderMovingMainPin(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) + 'px';
-      window.form.nodes.inputAddress.value = triangleActualX + ', ' + triangleActualY;
+      NODES.mainPin.style.top = actualCoords.y + 'px';
+      NODES.mainPin.style.left = actualCoords.x + 'px';
+      window.form.nodes.inputAddress.value = triangleCoords.x + ', ' + triangleCoords.y;
     };
 
     var mouseUpHandler = function (upEvt) {
