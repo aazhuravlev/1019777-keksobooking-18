@@ -27,7 +27,6 @@
 
   var VALUE_FIELD = 'value';
   var PLACEHOLDER_FIELD = 'placeholder';
-  var DISABLED_STATUS = 'disabled';
 
   var SELECTORS_DATA = {
     form: '.ad-form',
