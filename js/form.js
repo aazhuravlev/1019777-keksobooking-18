@@ -73,8 +73,7 @@
     [NODES.capacitySelect, VALUE_FIELD, DEFAULT_VALUES.capacitySelect],
     [NODES.timeInSelect, VALUE_FIELD, DEFAULT_VALUES.timeInSelect],
     [NODES.timeOutSelect, VALUE_FIELD, DEFAULT_VALUES.timeOutSelect],
-    [NODES.description, VALUE_FIELD, ''],
-    [NODES.inputAddress, DISABLED_STATUS, true]
+    [NODES.description, VALUE_FIELD, '']
   ];
 
   var setStatusFormFieldsets = function (selector, action) {
@@ -85,9 +84,11 @@
   };
 
   var removeNode = function (node) {
-    node.forEach(function (item) {
-      item.remove();
-    });
+    if (node) {
+      node.forEach(function (item) {
+        item.remove();
+      });
+    }
   };
 
   var addShadow = function (node) {
@@ -175,7 +176,6 @@
   };
 
   var submitHandler = function (evt) {
-    NODES.inputAddress.disabled = false;
     window.backend.save(new FormData(NODES.form), sendFormHandler, window.dom.renderErrorPopupHandler('save'));
     evt.preventDefault();
   };
