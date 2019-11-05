@@ -98,6 +98,7 @@
     removeCard();
     NODES.map.insertBefore(prepareCard(arr), NODES.filters);
     NODES.map.querySelector('.popup__close').addEventListener('click', removeCard);
+    document.addEventListener('keydown', removeMapCardKeydownHandler);
   };
 
   var removeCard = function () {
@@ -105,6 +106,7 @@
     if (mapCard) {
       mapCard.remove();
       window.pin.removeActive();
+      document.removeEventListener('keydown', removeMapCardKeydownHandler);
     }
   };
 
@@ -114,15 +116,11 @@
     }
   };
 
-  var addHandlers = function () {
-    document.addEventListener('keydown', removeMapCardKeydownHandler);
-  };
 
   window.card = {
     render: renderCard,
     remove: removeCard,
     nodes: NODES,
-    addHandlers: addHandlers,
     escKeycode: ESC_KEYCODE,
     types: TYPES,
     getPhoto: getPhoto

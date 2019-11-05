@@ -60,7 +60,7 @@
     return nodes;
   };
 
-  var debounce = function (callback) {
+  var debounce = function (cb) {
     var lastTimeout = null;
     return function () {
       var parameters = arguments;
@@ -68,7 +68,7 @@
         clearTimeout(lastTimeout);
       }
       lastTimeout = setTimeout(function () {
-        callback.apply(null, parameters);
+        cb.apply(null, parameters);
       }, DEBOUNCE_INTERVAL);
     };
   };
