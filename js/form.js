@@ -208,19 +208,19 @@
 
   var сhooserHandler = function (node, handler) {
     return function () {
-      var file = node.files[0];
-      var fileName = file.name.toLowerCase();
+      var files = node.files;
+      for (var i = 0; i < files.length; i++) {
+        var fileName = files[i].name.toLowerCase();
 
-      var matches = FILE_TYPES.some(function (item) {
-        return fileName.endsWith(item);
-      });
+        var matches = FILE_TYPES.some(function (item) {
+          return fileName.endsWith(item);
+        });
 
-      if (matches) {
-        var reader = new FileReader();
-
-        reader.addEventListener('load', handler(reader));
-
-        reader.readAsDataURL(file);
+        if (matches) {
+          var reader = new FileReader();
+          reader.addEventListener('load', handler(reader));
+          reader.readAsDataURL(files[i]);
+        }
       }
     };
   };

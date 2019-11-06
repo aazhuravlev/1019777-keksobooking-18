@@ -82,7 +82,6 @@
   var prepareCard = function (item) {
     var cardElement = NODES.mapCard.cloneNode(true);
     var values = getCardValues(item);
-
     CONTENT_KEYS.forEach(function (key) {
       var keyItem = CONTENT[key];
       if (!values[key]) {
