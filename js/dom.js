@@ -24,8 +24,9 @@
 
   var renderSuccessPopupHandler = function () {
     var successPopup = SUCCESS_POPUP.cloneNode(true);
+    console.log(successPopup.parent);
     NODES.main.appendChild(successPopup);
-    document.addEventListener('click', removeSuccessPopupHandler('click'));
+    successPopup.addEventListener('click', removeSuccessPopupHandler('click'));
     document.addEventListener('keydown', removeSuccessPopupHandler('keydown'));
   };
 
@@ -49,8 +50,11 @@
     return function (evt) {
       var successPopup = document.querySelector('.success');
       if (successPopup) {
+        var successPopupText = successPopup.querySelector('p');
         if (action === 'click') {
-          successPopup.remove();
+          if (evt.target !== successPopupText) {
+            successPopup.remove();
+          }
         } else if (action === 'keydown') {
           if (evt.keyCode === window.card.escKeycode) {
             successPopup.remove();
@@ -66,8 +70,11 @@
     return function (evt) {
       var errorPopup = document.querySelector('.error');
       if (errorPopup) {
+        var errorPopupText = errorPopup.querySelector('p');
         if (action === 'click') {
-          errorPopup.remove();
+          if (evt.target !== errorPopupText) {
+            errorPopup.remove();
+          }
         } else if (action === 'keydown') {
           if (evt.keyCode === window.card.escKeycode) {
             errorPopup.remove();
