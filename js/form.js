@@ -248,9 +248,9 @@
   };
 
   var HANDLERS_DATA = [
-    [NODES.adTitle, 'change', fieldValidate(NODES.adTitle)],
+    [NODES.adTitle, 'blur', fieldValidate(NODES.adTitle)],
     [NODES.typeSelect, 'change', typeSelectChangeHandler],
-    [NODES.pricePerNight, 'change', fieldValidate(NODES.pricePerNight)],
+    [NODES.pricePerNight, 'blur', fieldValidate(NODES.pricePerNight)],
     [NODES.roomSelect, 'change', changeRoomsHandler],
     [NODES.timeInSelect, 'change', timeInSelectHandler],
     [NODES.timeOutSelect, 'change', timeOutSelectHandler],
