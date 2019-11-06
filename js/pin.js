@@ -158,8 +158,7 @@
 
   var HANDLERS_DATA = [
     [NODES.mainPin, 'click', mainPinClickHandler],
-    [NODES.mainPin, 'keydown', mapEnterPressHandler],
-    [NODES.pins, 'click', pinClickHandler]
+    [NODES.mainPin, 'keydown', mapEnterPressHandler]
   ];
 
   var addHandlers = function () {
@@ -174,6 +173,7 @@
     nodes: NODES,
     addHandlers: addHandlers,
     mainPinClickHandler: mainPinClickHandler,
-    mapEnterPressHandler: mapEnterPressHandler
+    mapEnterPressHandler: mapEnterPressHandler,
+    clickHandler: pinClickHandler
   };
 })();

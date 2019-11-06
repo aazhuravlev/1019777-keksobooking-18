@@ -107,6 +107,7 @@
       mapCard.remove();
       window.pin.removeActive();
       document.removeEventListener('keydown', removeMapCardKeydownHandler);
+      mapCard.querySelector('.popup__close').removeEventListener('click', removeCard);
     }
   };
 

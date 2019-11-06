@@ -173,8 +173,9 @@
     removeShadow(NODES.pricePerNight);
     window.filter.reset();
     NODES.avatarPreview.src = 'img/muffin-grey.svg';
-    window.pin.nodes.mainPin.addEventListener('click', window.pin.mainPinClickHandler);
+    window.pin.nodes.pins.removeEventListener('click', window.pin.clickHandler);
     window.pin.nodes.mainPin.addEventListener('keydown', window.pin.mapEnterPressHandler);
+    window.pin.nodes.mainPin.addEventListener('click', window.pin.mainPinClickHandler);
   };
 
   var sendFormHandler = function () {
