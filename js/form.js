@@ -3,6 +3,7 @@
 (function () {
   var TIME = ['12:00', '13:00', '14:00'];
   var INPUT_SHADOW_COLOR = '0 0 2px 2px #ff0000';
+  var FILE_LOADER_HOVER_COLOR = '#ff5635';
   var CAPACITY_VALUES = {
     '1': [2],
     '2': [1, 2],
@@ -47,7 +48,9 @@
     lodgingPhotoPreview: '.ad-form__photo img',
     photoContainer: '.ad-form__photo-container',
     loadedPhotosContainer: '.ad-form__photo-container',
-    loadedPhotoContainer: '.ad-form__photo'
+    loadedPhotoContainer: '.ad-form__photo',
+    avatarDropZone: '.ad-form-header__drop-zone',
+    lodgingDropZone: '.ad-form__drop-zone'
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
@@ -206,9 +209,14 @@
     };
   };
 
-  var сhooserHandler = function (node, handler) {
-    return function () {
-      var files = node.files;
+  var сhooserHandler = function (handler) {
+    return function (evt) {
+      if (evt.target.files) {
+        var files = evt.target.files;
+      } else if (evt.dataTransfer.files) {
+        files = evt.dataTransfer.files;
+        evt.preventDefault();
+      }
       for (var i = 0; i < files.length; i++) {
         var fileName = files[i].name.toLowerCase();
 
@@ -220,6 +228,7 @@
           var reader = new FileReader();
           reader.addEventListener('load', handler(reader));
           reader.readAsDataURL(files[i]);
+          dragleaveFileLoaderHandler(evt);
         }
       }
     };
@@ -247,6 +256,16 @@
     };
   };
 
+  var dragoverFileLoaderHandler = function (evt) {
+    evt.target.style.color = FILE_LOADER_HOVER_COLOR;
+    evt.target.style.borderColor = FILE_LOADER_HOVER_COLOR;
+    evt.preventDefault();
+  };
+
+  var dragleaveFileLoaderHandler = function (evt) {
+    evt.target.removeAttribute('style');
+  };
+
   var HANDLERS_DATA = [
     [NODES.adTitle, 'blur', fieldValidate(NODES.adTitle)],
     [NODES.typeSelect, 'change', typeSelectChangeHandler],
@@ -256,12 +275,18 @@
     [NODES.timeOutSelect, 'change', timeOutSelectHandler],
     [NODES.formReset, 'click', formReset],
     [NODES.form, 'submit', submitHandler],
-    [NODES.avatarChooser, 'change', сhooserHandler(NODES.avatarChooser, avatarLoadHandler)],
-    [NODES.lodgingPhotoChooser, 'change', сhooserHandler(NODES.lodgingPhotoChooser, lodgingPhotoRenderHandler)]
+    [NODES.avatarChooser, 'change', сhooserHandler(avatarLoadHandler)],
+    [NODES.lodgingPhotoChooser, 'change', сhooserHandler(lodgingPhotoRenderHandler)],
+    [NODES.avatarDropZone, 'dragover', dragoverFileLoaderHandler],
+    [NODES.lodgingDropZone, 'dragover', dragoverFileLoaderHandler],
+    [NODES.avatarDropZone, 'dragleave', dragleaveFileLoaderHandler],
+    [NODES.lodgingDropZone, 'dragleave', dragleaveFileLoaderHandler],
+    [NODES.avatarDropZone, 'drop', сhooserHandler(avatarLoadHandler)],
+    [NODES.lodgingDropZone, 'drop', сhooserHandler(lodgingPhotoRenderHandler)]
   ];
 
   var addHandlers = function () {
-    setStatusFormFieldsets(NODES.formFieldsets, 'add');
+    setStatusFormFieldsets(NODES.formFieldsets, 'remove');
     setInputAddressValue(window.pin.mainPinCoordinates());
     window.util.setHandlers(HANDLERS_DATA);
   };
