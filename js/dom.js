@@ -16,6 +16,7 @@
     window.form.setStatusFieldsets(window.form.nodes.formFieldsets, 'remove');
     window.pin.render(window.data.getFiltered(window.data.get()));
     window.form.nodes.inputAddress.value = window.pin.mainPinCoordinates();
+    window.pin.nodes.mainPin.addEventListener('mousedown', window.pin.dragHandler);
     window.pin.nodes.pins.addEventListener('click', window.pin.clickHandler);
   };
 

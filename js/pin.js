@@ -153,7 +153,6 @@
     NODES.mainPin.removeEventListener('click', mainPinClickHandler);
     NODES.mainPin.removeEventListener('keydown', mapEnterPressHandler);
     window.dom.openMap();
-    NODES.mainPin.addEventListener('mousedown', dragHandler);
   };
 
   var HANDLERS_DATA = [
@@ -174,6 +173,7 @@
     addHandlers: addHandlers,
     mainPinClickHandler: mainPinClickHandler,
     mapEnterPressHandler: mapEnterPressHandler,
-    clickHandler: pinClickHandler
+    clickHandler: pinClickHandler,
+    dragHandler: dragHandler
   };
 })();
