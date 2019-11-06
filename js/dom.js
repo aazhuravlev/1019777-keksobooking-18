@@ -18,6 +18,8 @@
     window.form.nodes.inputAddress.value = window.pin.mainPinCoordinates();
     window.pin.nodes.mainPin.addEventListener('mousedown', window.pin.dragHandler);
     window.pin.nodes.pins.addEventListener('click', window.pin.clickHandler);
+    window.form.addHandlers();
+    window.filter.addHandlers();
   };
 
   var renderSuccessPopupHandler = function () {
@@ -31,14 +33,15 @@
     return function () {
       var errorPopup = ERROR_POPUP.cloneNode(true);
       NODES.main.appendChild(errorPopup);
-      var errorButton = document.querySelector('.error__button');
+      NODES.errorButton = document.querySelector('.error__button');
       if (action === 'save') {
-        errorButton.addEventListener('click', removeErrorPopupHandler('click'));
+        NODES.errorButton.addEventListener('click', removeErrorPopupHandler('click'));
         document.addEventListener('click', removeErrorPopupHandler('click'));
         document.addEventListener('keydown', removeErrorPopupHandler('keydown'));
       } else if (action === 'load') {
-        errorButton.addEventListener('click', windowReloadHandler);
+        NODES.errorButton.addEventListener('click', windowReloadHandler);
       }
+      return NODES.errorButton;
     };
   };
 
@@ -53,6 +56,8 @@
             successPopup.remove();
           }
         }
+        document.removeEventListener('click', removeSuccessPopupHandler('click'));
+        document.removeEventListener('keydown', removeSuccessPopupHandler('keydown'));
       }
     };
   };
@@ -68,12 +73,16 @@
             errorPopup.remove();
           }
         }
+        NODES.errorButton.removeEventListener('click', removeErrorPopupHandler('click'));
+        document.removeEventListener('click', removeErrorPopupHandler('click'));
+        document.removeEventListener('keydown', removeErrorPopupHandler('keydown'));
       }
     };
   };
 
   var windowReloadHandler = function () {
     location.reload();
+    NODES.errorButton.removeEventListener('click', windowReloadHandler);
   };
 
   window.dom = {

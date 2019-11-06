@@ -29,6 +29,12 @@
     });
   };
 
+  var removeHandlers = function (arr) {
+    arr.forEach(function (key) {
+      key[INDEX.node].removeEventListener(key[INDEX.typeListener], key[INDEX.handler]);
+    });
+  };
+
   var findNodes = function (obj) {
     var nodes = {};
     var keys = Object.keys(obj);
@@ -55,6 +61,7 @@
     pluralize: pluralize,
     findNodes: findNodes,
     setHandlers: setHandlers,
-    debounce: debounce
+    debounce: debounce,
+    removeHandlers: removeHandlers
   };
 })();

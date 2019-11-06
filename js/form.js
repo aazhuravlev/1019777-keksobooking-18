@@ -179,20 +179,23 @@
     window.pin.nodes.pins.removeEventListener('click', window.pin.clickHandler);
     window.pin.nodes.mainPin.addEventListener('keydown', window.pin.mapEnterPressHandler);
     window.pin.nodes.mainPin.addEventListener('click', window.pin.mainPinClickHandler);
+    window.util.removeHandlers(HANDLERS_DATA);
+    window.filter.nodes.mapFilters.removeEventListener('change', window.filter.debouncedHandler);
   };
 
   var sendFormHandler = function () {
     formReset();
     window.dom.renderSuccessPopupHandler();
+    NODES.form.removeEventListener('submit', submitHandler);
   };
 
   var checkValidationHandler = function () {
-    if (!fieldValidate(NODES.adTitle) || fieldValidate(NODES.pricePerNight)) {
-      fieldValidate(NODES.adTitle)();
-      fieldValidate(NODES.pricePerNight)();
-      return false;
+    if (fieldValidate(NODES.adTitle)() && fieldValidate(NODES.pricePerNight)()) {
+      return true;
     }
-    return true;
+    fieldValidate(NODES.adTitle)();
+    fieldValidate(NODES.pricePerNight)();
+    return false;
   };
 
   var submitHandler = function (evt) {
@@ -274,7 +277,6 @@
     [NODES.timeInSelect, 'change', timeInSelectHandler],
     [NODES.timeOutSelect, 'change', timeOutSelectHandler],
     [NODES.formReset, 'click', formReset],
-    [NODES.form, 'submit', submitHandler],
     [NODES.avatarChooser, 'change', сhooserHandler(avatarLoadHandler)],
     [NODES.lodgingPhotoChooser, 'change', сhooserHandler(lodgingPhotoRenderHandler)],
     [NODES.avatarDropZone, 'dragover', dragoverFileLoaderHandler],
@@ -286,6 +288,7 @@
   ];
 
   var addHandlers = function () {
+    NODES.form.addEventListener('submit', submitHandler);
     setStatusFormFieldsets(NODES.formFieldsets, 'remove');
     setInputAddressValue(window.pin.mainPinCoordinates());
     window.util.setHandlers(HANDLERS_DATA);

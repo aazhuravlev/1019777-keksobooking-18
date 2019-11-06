@@ -98,6 +98,8 @@
   window.filter = {
     data: filterData,
     addHandlers: addHandlers,
-    reset: resetFilter
+    reset: resetFilter,
+    nodes: NODES,
+    debouncedHandler: debouncedFilterHandler
   };
 })();
