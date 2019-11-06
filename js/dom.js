@@ -24,9 +24,8 @@
 
   var renderSuccessPopupHandler = function () {
     var successPopup = SUCCESS_POPUP.cloneNode(true);
-    console.log(successPopup.parent);
     NODES.main.appendChild(successPopup);
-    successPopup.addEventListener('click', removeSuccessPopupHandler('click'));
+    document.addEventListener('click', removeSuccessPopupHandler('click'));
     document.addEventListener('keydown', removeSuccessPopupHandler('keydown'));
   };
 
