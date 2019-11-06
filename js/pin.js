@@ -78,7 +78,9 @@
   var renderPins = function (arr) {
     removePins();
     arr.forEach(function (item, i) {
-      NODES.pins.appendChild(preparePin(item, i));
+      if (item.offer) {
+        NODES.pins.appendChild(preparePin(item, i));
+      }
     });
     NODES.renderedPins = NODES.pins.querySelectorAll('[type]');
     return NODES.renderedPins;
