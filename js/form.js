@@ -234,7 +234,6 @@
           reader.addEventListener('load', handler(reader));
           reader.readAsDataURL(file);
           dragleaveFileLoaderHandler(evt);
-          LOADED_IMG_PARAMETERS.src = reader.result;
         }
       });
     };
