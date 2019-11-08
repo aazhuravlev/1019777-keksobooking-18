@@ -24,7 +24,7 @@
     palace: '10000'
   };
 
-  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var FILE_TYPES = /\.(?:jp(?:e?g|e|2)|gif|png|tiff?|bmp|ico)$/i;
 
   var LOADED_IMG_PARAMETERS = {
     className: 'ad-form__image',
@@ -229,13 +229,7 @@
         evt.preventDefault();
       }
       Array.prototype.forEach.call(files, function (file) {
-        var fileName = file.name.toLowerCase();
-
-        var matches = FILE_TYPES.some(function (item) {
-          return fileName.endsWith(item);
-        });
-
-        if (matches) {
+        if (FILE_TYPES.test(file.name)) {
           var reader = new FileReader();
           reader.addEventListener('load', handler(reader));
           reader.readAsDataURL(file);
