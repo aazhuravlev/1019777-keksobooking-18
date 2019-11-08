@@ -226,6 +226,7 @@
         files = evt.target.files;
       } else if (evt.dataTransfer.files) {
         files = evt.dataTransfer.files;
+        evt.dataTransfer.dropEffect = 'copy';
         evt.preventDefault();
       }
       Array.prototype.forEach.call(files, function (file) {
@@ -268,6 +269,9 @@
     evt.target.removeAttribute('style');
   };
 
+  var AVATAR_PHOTO_CHOOSER_HANDLER = photoChooserHandler(avatarLoadHandler);
+  var LODGING_PHOTO_CHOOSER_HANDLER = photoChooserHandler(lodgingPhotoRenderHandler);
+
   var HANDLERS_DATA = [
     [NODES.adTitle, 'blur', validateInput(NODES.adTitle)],
     [NODES.typeSelect, 'change', typeSelectChangeHandler],
@@ -276,14 +280,14 @@
     [NODES.timeInSelect, 'change', timeInSelectHandler],
     [NODES.timeOutSelect, 'change', timeOutSelectHandler],
     [NODES.formReset, 'click', formReset],
-    [NODES.avatarChooser, 'change', photoChooserHandler(avatarLoadHandler)],
-    [NODES.lodgingPhotoChooser, 'change', photoChooserHandler(lodgingPhotoRenderHandler)],
+    [NODES.avatarChooser, 'change', AVATAR_PHOTO_CHOOSER_HANDLER],
+    [NODES.lodgingPhotoChooser, 'change', LODGING_PHOTO_CHOOSER_HANDLER],
     [NODES.avatarDropZone, 'dragover', dragoverFileLoaderHandler],
     [NODES.lodgingDropZone, 'dragover', dragoverFileLoaderHandler],
     [NODES.avatarDropZone, 'dragleave', dragleaveFileLoaderHandler],
     [NODES.lodgingDropZone, 'dragleave', dragleaveFileLoaderHandler],
-    [NODES.avatarDropZone, 'drop', photoChooserHandler(avatarLoadHandler)],
-    [NODES.lodgingDropZone, 'drop', photoChooserHandler(lodgingPhotoRenderHandler)]
+    [NODES.avatarDropZone, 'drop', AVATAR_PHOTO_CHOOSER_HANDLER],
+    [NODES.lodgingDropZone, 'drop', LODGING_PHOTO_CHOOSER_HANDLER]
   ];
 
   var addHandlers = function () {
