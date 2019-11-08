@@ -101,12 +101,12 @@
   };
 
   var removeCard = function () {
-    var mapCard = NODES.map.querySelector('.map__card');
-    if (mapCard) {
-      mapCard.remove();
-      window.pin.removeActive();
+    NODES.renderedMapCard = NODES.map.querySelector('.map__card');
+    if (NODES.renderedMapCard) {
       document.removeEventListener('keydown', removeMapCardKeydownHandler);
-      mapCard.querySelector('.popup__close').removeEventListener('click', removeCard);
+      NODES.map.querySelector('.popup__close').removeEventListener('click', removeCard);
+      NODES.renderedMapCard.remove();
+      window.pin.removeActive();
     }
   };
 
