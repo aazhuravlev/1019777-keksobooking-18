@@ -226,7 +226,6 @@
         files = evt.target.files;
       } else if (evt.dataTransfer.files) {
         files = evt.dataTransfer.files;
-        evt.preventDefault();
       }
       Array.prototype.forEach.call(files, function (file) {
         if (FILE_TYPES.test(file.name)) {
@@ -266,6 +265,7 @@
 
   var dragleaveFileLoaderHandler = function (evt) {
     evt.target.removeAttribute('style');
+    evt.preventDefault();
   };
 
   var AVATAR_PHOTO_CHOOSER_HANDLER = photoChooserHandler(avatarLoadHandler);
