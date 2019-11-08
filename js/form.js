@@ -219,7 +219,7 @@
     };
   };
 
-  var chooserHandler = function (handler) {
+  var photoChooserHandler = function (handler) {
     return function (evt) {
       var files;
       if (evt.target.files) {
@@ -284,14 +284,14 @@
     [NODES.timeInSelect, 'change', timeInSelectHandler],
     [NODES.timeOutSelect, 'change', timeOutSelectHandler],
     [NODES.formReset, 'click', formReset],
-    [NODES.avatarChooser, 'change', chooserHandler(avatarLoadHandler)],
-    [NODES.lodgingPhotoChooser, 'change', chooserHandler(lodgingPhotoRenderHandler)],
+    [NODES.avatarChooser, 'change', photoChooserHandler(avatarLoadHandler)],
+    [NODES.lodgingPhotoChooser, 'change', photoChooserHandler(lodgingPhotoRenderHandler)],
     [NODES.avatarDropZone, 'dragover', dragoverFileLoaderHandler],
     [NODES.lodgingDropZone, 'dragover', dragoverFileLoaderHandler],
     [NODES.avatarDropZone, 'dragleave', dragleaveFileLoaderHandler],
     [NODES.lodgingDropZone, 'dragleave', dragleaveFileLoaderHandler],
-    [NODES.avatarDropZone, 'drop', chooserHandler(avatarLoadHandler)],
-    [NODES.lodgingDropZone, 'drop', chooserHandler(lodgingPhotoRenderHandler)]
+    [NODES.avatarDropZone, 'drop', photoChooserHandler(avatarLoadHandler)],
+    [NODES.lodgingDropZone, 'drop', photoChooserHandler(lodgingPhotoRenderHandler)]
   ];
 
   var addHandlers = function () {
