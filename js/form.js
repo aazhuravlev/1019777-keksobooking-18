@@ -226,7 +226,6 @@
         files = evt.target.files;
       } else if (evt.dataTransfer.files) {
         files = evt.dataTransfer.files;
-        evt.dataTransfer.dropEffect = 'copy';
         evt.preventDefault();
       }
       Array.prototype.forEach.call(files, function (file) {
@@ -242,8 +241,7 @@
 
   var getLoadedPhoto = function (src) {
     var image = document.createElement('img');
-    Object.assign(image, LOADED_IMG_PARAMETERS);
-    image.src = src;
+    Object.assign(image, LOADED_IMG_PARAMETERS, {src: src});
     return image;
   };
 
@@ -262,6 +260,7 @@
   var dragoverFileLoaderHandler = function (evt) {
     evt.target.style.color = FILE_LOADER_HOVER_COLOR;
     evt.target.style.borderColor = FILE_LOADER_HOVER_COLOR;
+    evt.dataTransfer.dropEffect = 'copy';
     evt.preventDefault();
   };
 
