@@ -26,6 +26,13 @@
 
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
+  var LOADED_IMG_PARAMETERS = {
+    className: 'ad-form__image',
+    width: '70',
+    height: '70',
+    alt: 'Фотография жилья',
+  };
+
   var VALUE_FIELD = 'value';
   var PLACEHOLDER_FIELD = 'placeholder';
 
@@ -110,15 +117,15 @@
 
   var validateInput = function (node) {
     return function () {
-      if (!node.checkValidity()) {
-        node.setCustomValidity('');
-        node.reportValidity();
-        addShadow(node);
-        return false;
-      } else if (node.value === '') {
+      if (node.value === '') {
         addShadow(node);
         node.setCustomValidity('Заполните поле');
         node.reportValidity();
+        return false;
+      } else if (!node.checkValidity()) {
+        node.setCustomValidity('');
+        node.reportValidity();
+        addShadow(node);
         return false;
       }
       removeShadow(node);
@@ -190,11 +197,11 @@
   };
 
   var checkValidationHandler = function () {
-    if (validateInput(NODES.adTitle)() && validateInput(NODES.pricePerNight)()) {
+    var adTilteValidationResult = validateInput(NODES.adTitle)();
+    var pricePerNightValidationResult = validateInput(NODES.pricePerNight)();
+    if (adTilteValidationResult && pricePerNightValidationResult) {
       return true;
     }
-    validateInput(NODES.adTitle)();
-    validateInput(NODES.pricePerNight)();
     return false;
   };
 
@@ -212,16 +219,17 @@
     };
   };
 
-  var сhooserHandler = function (handler) {
+  var chooserHandler = function (handler) {
     return function (evt) {
+      var files;
       if (evt.target.files) {
-        var files = evt.target.files;
+        files = evt.target.files;
       } else if (evt.dataTransfer.files) {
         files = evt.dataTransfer.files;
         evt.preventDefault();
       }
-      for (var i = 0; i < files.length; i++) {
-        var fileName = files[i].name.toLowerCase();
+      Array.prototype.forEach.call(files, function (file) {
+        var fileName = file.name.toLowerCase();
 
         var matches = FILE_TYPES.some(function (item) {
           return fileName.endsWith(item);
@@ -230,30 +238,29 @@
         if (matches) {
           var reader = new FileReader();
           reader.addEventListener('load', handler(reader));
-          reader.readAsDataURL(files[i]);
+          reader.readAsDataURL(file);
           dragleaveFileLoaderHandler(evt);
+          LOADED_IMG_PARAMETERS.src = reader.result;
         }
-      }
+        return LOADED_IMG_PARAMETERS.src;
+      });
     };
   };
 
   var getLoadedPhoto = function (src) {
     var image = document.createElement('img');
-    image.className = 'ad-form__image';
-    image.width = '70';
-    image.height = '70';
-    image.alt = 'Фотография жилья';
+    Object.assign(image, LOADED_IMG_PARAMETERS);
     image.src = src;
     return image;
   };
 
   var lodgingPhotoRenderHandler = function (src) {
     return function () {
-      var loadedPhotoPreviewContainer = NODES.loadedPhotosContainer.querySelector('.ad-form__photo');
+      NODES.loadedPhotoPreviewContainer = NODES.loadedPhotosContainer.querySelector('.ad-form__photo');
       var newLoadedPhotoContainer = NODES.loadedPhotoContainer.cloneNode();
       newLoadedPhotoContainer.classList.add('ad-form__photo--loaded');
       newLoadedPhotoContainer.appendChild(getLoadedPhoto(src.result));
-      NODES.photoContainer.insertBefore(newLoadedPhotoContainer, loadedPhotoPreviewContainer);
+      NODES.photoContainer.insertBefore(newLoadedPhotoContainer, NODES.loadedPhotoPreviewContainer);
       NODES.loadedPhotos = NODES.loadedPhotosContainer.querySelectorAll('.ad-form__photo--loaded');
       return NODES.loadedPhotos;
     };
@@ -277,14 +284,14 @@
     [NODES.timeInSelect, 'change', timeInSelectHandler],
     [NODES.timeOutSelect, 'change', timeOutSelectHandler],
     [NODES.formReset, 'click', formReset],
-    [NODES.avatarChooser, 'change', сhooserHandler(avatarLoadHandler)],
-    [NODES.lodgingPhotoChooser, 'change', сhooserHandler(lodgingPhotoRenderHandler)],
+    [NODES.avatarChooser, 'change', chooserHandler(avatarLoadHandler)],
+    [NODES.lodgingPhotoChooser, 'change', chooserHandler(lodgingPhotoRenderHandler)],
     [NODES.avatarDropZone, 'dragover', dragoverFileLoaderHandler],
     [NODES.lodgingDropZone, 'dragover', dragoverFileLoaderHandler],
     [NODES.avatarDropZone, 'dragleave', dragleaveFileLoaderHandler],
     [NODES.lodgingDropZone, 'dragleave', dragleaveFileLoaderHandler],
-    [NODES.avatarDropZone, 'drop', сhooserHandler(avatarLoadHandler)],
-    [NODES.lodgingDropZone, 'drop', сhooserHandler(lodgingPhotoRenderHandler)]
+    [NODES.avatarDropZone, 'drop', chooserHandler(avatarLoadHandler)],
+    [NODES.lodgingDropZone, 'drop', chooserHandler(lodgingPhotoRenderHandler)]
   ];
 
   var addHandlers = function () {
@@ -294,10 +301,15 @@
     window.util.setHandlers(HANDLERS_DATA);
   };
 
+  var setDisabledStatusForm = function () {
+    setStatusFormFieldsets(NODES.formFieldsets, 'add');
+  };
+
   window.form = {
     setStatusFieldsets: setStatusFormFieldsets,
     nodes: NODES,
     addHandlers: addHandlers,
-    unCheckInput: unCheckInput
+    unCheckInput: unCheckInput,
+    setDisabledStatus: setDisabledStatusForm
   };
 })();
