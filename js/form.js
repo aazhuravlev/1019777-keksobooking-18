@@ -236,7 +236,6 @@
           dragleaveFileLoaderHandler(evt);
           LOADED_IMG_PARAMETERS.src = reader.result;
         }
-        return LOADED_IMG_PARAMETERS.src;
       });
     };
   };
