@@ -108,7 +108,7 @@
     }
   };
 
-  var fieldValidate = function (node) {
+  var validateInput = function (node) {
     return function () {
       if (!node.checkValidity()) {
         node.setCustomValidity('');
@@ -190,11 +190,11 @@
   };
 
   var checkValidationHandler = function () {
-    if (fieldValidate(NODES.adTitle)() && fieldValidate(NODES.pricePerNight)()) {
+    if (validateInput(NODES.adTitle)() && validateInput(NODES.pricePerNight)()) {
       return true;
     }
-    fieldValidate(NODES.adTitle)();
-    fieldValidate(NODES.pricePerNight)();
+    validateInput(NODES.adTitle)();
+    validateInput(NODES.pricePerNight)();
     return false;
   };
 
@@ -270,9 +270,9 @@
   };
 
   var HANDLERS_DATA = [
-    [NODES.adTitle, 'blur', fieldValidate(NODES.adTitle)],
+    [NODES.adTitle, 'blur', validateInput(NODES.adTitle)],
     [NODES.typeSelect, 'change', typeSelectChangeHandler],
-    [NODES.pricePerNight, 'blur', fieldValidate(NODES.pricePerNight)],
+    [NODES.pricePerNight, 'blur', validateInput(NODES.pricePerNight)],
     [NODES.roomSelect, 'change', changeRoomsHandler],
     [NODES.timeInSelect, 'change', timeInSelectHandler],
     [NODES.timeOutSelect, 'change', timeOutSelectHandler],
