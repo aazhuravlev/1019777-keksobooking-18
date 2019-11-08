@@ -17,13 +17,13 @@
     return filteredData;
   };
 
-  var loadData = function () {
+  var loadData = function (handler) {
     if (data.length > 0 || isLoading) {
       return;
     }
     var onLoad = function (result) {
       data = result;
-      window.pin.addHandlers();
+      handler();
       return data;
     };
     isLoading = true;
