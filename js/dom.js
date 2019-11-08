@@ -47,8 +47,8 @@
 
   var removePopupHandler = function (evt, action, popup) {
     if (popup) {
-      var successPopupText = popup.querySelector('p');
-      if (action === 'click' && evt.target !== successPopupText) {
+      NODES.popupText = popup.querySelector('p');
+      if (action === 'click' && evt.target !== NODES.popupText) {
         popup.remove();
       } else if (action === 'keydown' && evt.keyCode === window.card.escKeycode) {
         popup.remove();
@@ -58,7 +58,8 @@
 
   var removeSuccessPopupHandler = function (action) {
     return function (evt) {
-      removePopupHandler(evt, action, document.querySelector('.success'));
+      NODES.successPopup = document.querySelector('.success');
+      removePopupHandler(evt, action, NODES.successPopup);
       document.removeEventListener('click', removeSuccessPopupHandler('click'));
       document.removeEventListener('keydown', removeSuccessPopupHandler('keydown'));
     };
@@ -66,7 +67,8 @@
 
   var removeErrorPopupHandler = function (action) {
     return function (evt) {
-      removePopupHandler(evt, action, document.querySelector('.error'));
+      NODES.errorPopup = document.querySelector('.error');
+      removePopupHandler(evt, action, NODES.errorPopup);
       NODES.errorButton.removeEventListener('click', removeErrorPopupHandler('click'));
       document.removeEventListener('click', removeErrorPopupHandler('click'));
       document.removeEventListener('keydown', removeErrorPopupHandler('keydown'));
