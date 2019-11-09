@@ -57,7 +57,9 @@
     loadedPhotosContainer: '.ad-form__photo-container',
     loadedPhotoContainer: '.ad-form__photo',
     avatarDropZone: '.ad-form-header__drop-zone',
-    lodgingDropZone: '.ad-form__drop-zone'
+    lodgingDropZone: '.ad-form__drop-zone',
+    avatarInputChooser: '#avatar',
+    imageInputChooser: '#images'
   };
 
   var NODES = window.util.findNodes(SELECTORS_DATA);
@@ -177,6 +179,8 @@
     window.card.remove();
     window.pin.nodes.mainPin.style.top = window.pin.mainPin.startY + 'px';
     window.pin.nodes.mainPin.style.left = window.pin.mainPin.startX + 'px';
+    NODES.imageInputChooser.value = '';
+    NODES.avatarInputChooser.value = '';
     setDefaultValues(DEFAULT_DATA);
     unCheckInput(NODES.features);
     removeShadow(NODES.adTitle);
@@ -219,7 +223,7 @@
     };
   };
 
-  var photoChooserHandler = function (handler) {
+  var photoChooserHandler = function (handler, input) {
     return function (evt) {
       var files;
       if (evt.target.files) {
@@ -234,6 +238,7 @@
           reader.readAsDataURL(file);
           dragleaveFileLoaderHandler(evt);
         }
+        input.files = files;
       });
     };
   };
@@ -268,8 +273,8 @@
     evt.preventDefault();
   };
 
-  var AVATAR_PHOTO_CHOOSER_HANDLER = photoChooserHandler(avatarLoadHandler);
-  var LODGING_PHOTO_CHOOSER_HANDLER = photoChooserHandler(lodgingPhotoRenderHandler);
+  var AVATAR_PHOTO_CHOOSER_HANDLER = photoChooserHandler(avatarLoadHandler, NODES.avatarInputChooser);
+  var LODGING_PHOTO_CHOOSER_HANDLER = photoChooserHandler(lodgingPhotoRenderHandler, NODES.imageInputChooser);
 
   var HANDLERS_DATA = [
     [NODES.adTitle, 'blur', validateInput(NODES.adTitle)],
