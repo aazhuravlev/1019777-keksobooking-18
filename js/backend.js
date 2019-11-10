@@ -1,8 +1,10 @@
 'use strict';
 
 (function () {
-  var URL_SAVE = 'https://js.dump.academy/keksobooking';
-  var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
+  var Url = {
+    SAVE: 'https://js.dump.academy/keksobooking',
+    LOAD: 'https://js.dump.academy/keksobooking/data'
+  };
 
   var xhrHandler = function (xhr, onLoad, onError) {
     xhr.responseType = 'json';
@@ -28,14 +30,14 @@
   var save = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhrHandler(xhr, onLoad, onError);
-    xhr.open('POST', URL_SAVE);
+    xhr.open('POST', Url.SAVE);
     xhr.send(data);
   };
 
   var load = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhrHandler(xhr, onLoad, onError);
-    xhr.open('GET', URL_LOAD);
+    xhr.open('GET', Url.LOAD);
     xhr.send();
   };
 
