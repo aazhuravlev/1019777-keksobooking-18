@@ -2,10 +2,8 @@
 
 (function () {
   var main = function () {
-    window.addEventListener('load', window.data.load);
-    window.card.addHandlers();
-    window.form.addHandlers();
-    window.filter.addHandlers();
+    window.addEventListener('load', window.data.load(window.pin.addHandlers));
+    window.form.setDisabledStatus();
   };
 
   main();

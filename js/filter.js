@@ -3,56 +3,58 @@
 (function () {
   var PINS_QUANTITY = 5;
 
-  var PRICE_RANGE = {
-    low: 10000,
-    high: 50000
+  var PriceRange = {
+    LOW: 10000,
+    HIGH: 50000
   };
-  var PRICE_LEVEL = {
-    low: 'low',
-    middle: 'middle',
-    high: 'high'
+
+  var PriceLevel = {
+    LOW: 'low',
+    MIDDLE: 'middle',
+    HIGH: 'high'
   };
+
   var ANY_OPTION = 'any';
 
-  var SELECTORS_DATA = {
-    housingType: '#housing-type',
-    housingPrice: '#housing-price',
-    housingRooms: '#housing-rooms',
-    housingGuests: '#housing-guests',
-    housingFeatures: '#housing-features',
-    mapFilters: '.map__filters'
+  var SelectorsData = {
+    HOUSING_TYPE: '#housing-type',
+    HOUSING_PRICE: '#housing-price',
+    HOUSING_ROOMS: '#housing-rooms',
+    HOUSING_GUESTS: '#housing-guests',
+    HOUSING_FEATURES: '#housing-features',
+    MAP_FILTERS: '.map__filters'
   };
 
-  var NODES = window.util.findNodes(SELECTORS_DATA);
+  var Nodes = window.util.findNodes(SelectorsData);
 
   var checkPriceRange = function (value) {
-    if (value <= PRICE_RANGE.low) {
-      return PRICE_LEVEL.low;
-    } else if (value > PRICE_RANGE.high) {
-      return PRICE_LEVEL.high;
+    if (value <= PriceRange.LOW) {
+      return PriceLevel.LOW;
+    } else if (value > PriceRange.HIGH) {
+      return PriceLevel.HIGH;
     }
-    return PRICE_LEVEL.middle;
+    return PriceLevel.MIDDLE;
   };
 
   var checkHousingType = function (item) {
-    return NODES.housingType.value === ANY_OPTION ? item : item.offer.type === NODES.housingType.value;
+    return Nodes.HOUSING_TYPE.value === ANY_OPTION ? item : item.offer.type === Nodes.HOUSING_TYPE.value;
   };
 
   var checkHousingPrice = function (item) {
-    return NODES.housingPrice.value === ANY_OPTION ? item : checkPriceRange(item.offer.price) === NODES.housingPrice.value;
+    return Nodes.HOUSING_PRICE.value === ANY_OPTION ? item : checkPriceRange(item.offer.price) === Nodes.HOUSING_PRICE.value;
   };
 
   var checkHousingRooms = function (item) {
-    return NODES.housingRooms.value === ANY_OPTION ? item : String(item.offer.rooms) === NODES.housingRooms.value;
+    return Nodes.HOUSING_ROOMS.value === ANY_OPTION ? item : String(item.offer.rooms) === Nodes.HOUSING_ROOMS.value;
   };
 
   var checkHousinGuests = function (item) {
-    return NODES.housingGuests.value === ANY_OPTION ? item : String(item.offer.guests) === NODES.housingGuests.value;
+    return Nodes.HOUSING_GUESTS.value === ANY_OPTION ? item : String(item.offer.guests) === Nodes.HOUSING_GUESTS.value;
   };
 
   var getHousingFeatures = function () {
     var features = [];
-    var checkedInputs = NODES.housingFeatures.querySelectorAll('input:checked');
+    var checkedInputs = Nodes.HOUSING_FEATURES.querySelectorAll('input:checked');
     checkedInputs.forEach(function (input) {
       features.push(input.value);
     });
@@ -72,23 +74,34 @@
     return compareFeatures(item.offer.features, getHousingFeatures()) ? item : false;
   };
 
-  var getFilteringData = function (loadedData) {
+  var filterData = function (loadedData) {
     return loadedData.filter(function (item) {
       return checkHousingType(item) && checkHousingPrice(item) && checkHousingRooms(item) && checkHousinGuests(item) && filterCheckboxes(item);
     }).slice(0, PINS_QUANTITY);
   };
 
   var debouncedFilterHandler = window.util.debounce(function () {
-    window.pin.render(window.data.filter());
+    window.pin.render(window.data.getFiltered(window.data.get()));
     window.card.remove();
   });
 
+  var resetFilter = function () {
+    window.form.unCheckInput(Nodes.HOUSING_FEATURES);
+    Nodes.HOUSING_TYPE.value = ANY_OPTION;
+    Nodes.HOUSING_PRICE.value = ANY_OPTION;
+    Nodes.HOUSING_ROOMS.value = ANY_OPTION;
+    Nodes.HOUSING_GUESTS.value = ANY_OPTION;
+  };
+
   var addHandlers = function () {
-    NODES.mapFilters.addEventListener('change', debouncedFilterHandler);
+    Nodes.MAP_FILTERS.addEventListener('change', debouncedFilterHandler);
   };
 
   window.filter = {
-    getFilteringData: getFilteringData,
-    addHandlers: addHandlers
+    data: filterData,
+    addHandlers: addHandlers,
+    reset: resetFilter,
+    nodes: Nodes,
+    debouncedHandler: debouncedFilterHandler
   };
 })();

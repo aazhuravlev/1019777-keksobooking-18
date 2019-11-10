@@ -9,23 +9,21 @@
     return data;
   };
 
-  var filterData = function () {
-    var cloneData = getData().slice();
-    filteredData = window.filter.getFilteringData(cloneData);
+  var getFilteredData = function (shouldFilter) {
+    if (filteredData && !shouldFilter) {
+      return filteredData;
+    }
+    filteredData = window.filter.data(shouldFilter.slice());
     return filteredData;
   };
 
-  var getFilterData = function () {
-    return filteredData;
-  };
-
-  var loadData = function () {
+  var loadData = function (handler) {
     if (data.length > 0 || isLoading) {
       return;
     }
     var onLoad = function (result) {
       data = result;
-      window.pin.addHandlers();
+      handler();
       return data;
     };
     isLoading = true;
@@ -35,7 +33,6 @@
   window.data = {
     load: loadData,
     get: getData,
-    filter: filterData,
-    getFilter: getFilterData
+    getFiltered: getFilteredData
   };
 })();

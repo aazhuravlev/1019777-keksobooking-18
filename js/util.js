@@ -8,28 +8,6 @@
   };
   var DEBOUNCE_INTERVAL = 500;
 
-  var getRandomBetween = function (min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
-  var getRandomIndex = function (max) {
-    return getRandomBetween(0, max - 1);
-  };
-
-  var spliceRandomItem = function (arr) {
-    return arr.splice(getRandomIndex(arr.length - 1), 1);
-  };
-
-  var getRandomItem = function (arr) {
-    return arr[getRandomIndex(arr.length)];
-  };
-
-  var getRandomSlice = function (arr) {
-    return arr.slice(0, 2 + getRandomIndex(arr.length - 2));
-  };
-
   var pluralize = function (number, arr) {
     var remainder = number % 100;
     if (remainder >= 5 && remainder <= 20) {
@@ -51,6 +29,12 @@
     });
   };
 
+  var removeHandlers = function (arr) {
+    arr.forEach(function (key) {
+      key[INDEX.node].removeEventListener(key[INDEX.typeListener], key[INDEX.handler]);
+    });
+  };
+
   var findNodes = function (obj) {
     var nodes = {};
     var keys = Object.keys(obj);
@@ -60,7 +44,7 @@
     return nodes;
   };
 
-  var debounce = function (callback) {
+  var debounce = function (cb) {
     var lastTimeout = null;
     return function () {
       var parameters = arguments;
@@ -68,19 +52,16 @@
         clearTimeout(lastTimeout);
       }
       lastTimeout = setTimeout(function () {
-        callback.apply(null, parameters);
+        cb.apply(null, parameters);
       }, DEBOUNCE_INTERVAL);
     };
   };
 
   window.util = {
-    getRandomBetween: getRandomBetween,
-    spliceRandomItem: spliceRandomItem,
-    getRandomItem: getRandomItem,
-    getRandomSlice: getRandomSlice,
     pluralize: pluralize,
     findNodes: findNodes,
     setHandlers: setHandlers,
-    debounce: debounce
+    debounce: debounce,
+    removeHandlers: removeHandlers
   };
 })();

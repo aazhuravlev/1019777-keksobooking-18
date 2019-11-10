@@ -3,37 +3,50 @@
 (function () {
   var ENTER_KEYCODE = 13;
 
-  var MAIN_PIN = {
-    width: 62,
-    height: 22,
-    triangleHeight: 22,
-    startX: 570,
-    startY: 375
+  var MainPin = {
+    WIDTH: 62,
+    HEIGHT: 22,
+    TRIANGLE_HEIGHT: 22,
+    START_X: 570,
+    START_Y: 375
   };
 
-  var MAP_BORDER = {
-    minX: 0 - (MAIN_PIN.width / 2),
-    maxX: 1200 - (MAIN_PIN.width / 2),
-    minY: 130,
-    maxY: 630
+  var MapBorder = {
+    MIN_X: 0 - (MainPin.WIDTH / 2),
+    MAX_X: 1200 - (MainPin.WIDTH / 2),
+    MIN_Y: 130,
+    MAX_Y: 630
   };
 
-  MAIN_PIN.fullHeight = MAIN_PIN.height + MAIN_PIN.triangleHeight;
+  MainPin.FULL_HEIGHT = MainPin.HEIGHT + MainPin.TRIANGLE_HEIGHT;
 
-  var SELECTORS_DATA = {
-    mainPin: '.map__pin--main',
-    pins: '.map__pins',
-    pinTemplate: '#pin',
+  var Coordinate = function (x, y) {
+    this.x = x;
+    this.y = y;
   };
 
-  var NODES = window.util.findNodes(SELECTORS_DATA);
-  NODES.mapPin = NODES.pinTemplate.content.querySelector('.map__pin');
+  Coordinate.prototype.setX = function (x) {
+    this.x = x;
+  };
+
+  Coordinate.prototype.setY = function (y) {
+    this.y = y;
+  };
+
+  var SelectorsData = {
+    MAIN_PIN: '.map__pin--main',
+    PINS: '.map__pins',
+    PIN_TEMPLATE: '#pin',
+  };
+
+  var Nodes = window.util.findNodes(SelectorsData);
+  Nodes.MAP_PIN = Nodes.PIN_TEMPLATE.content.querySelector('.map__pin');
 
   var mainPinCoordinates = function () {
-    var x = MAIN_PIN.startX + MAIN_PIN.width / 2;
-    var y = MAIN_PIN.startY + MAIN_PIN.height / 2;
+    var x = MainPin.START_X + MainPin.WIDTH / 2;
+    var y = MainPin.START_Y + MainPin.HEIGHT / 2;
     if (!document.querySelector('.map--faded')) {
-      y = MAIN_PIN.startY + MAIN_PIN.fullHeight;
+      y = MainPin.START_Y + MainPin.FULL_HEIGHT;
     }
     return x + ', ' + y;
   };
@@ -43,7 +56,7 @@
   };
 
   var preparePin = function (item, i) {
-    var pinElement = NODES.mapPin.cloneNode(true);
+    var pinElement = Nodes.MAP_PIN.cloneNode(true);
     var pinImage = pinElement.querySelector('img');
 
     pinElement.setAttribute('style', getLocation(item.location));
@@ -54,7 +67,7 @@
   };
 
   var removePins = function () {
-    var mapPins = NODES.pins.querySelectorAll('[type]');
+    var mapPins = Nodes.PINS.querySelectorAll('[type]');
     if (mapPins) {
       mapPins.forEach(function (pin) {
         pin.remove();
@@ -65,14 +78,16 @@
   var renderPins = function (arr) {
     removePins();
     arr.forEach(function (item, i) {
-      NODES.pins.appendChild(preparePin(item, i));
+      if (item.offer) {
+        Nodes.PINS.appendChild(preparePin(item, i));
+      }
     });
-    NODES.renderedPins = NODES.pins.querySelectorAll('[type]');
-    return NODES.renderedPins;
+    Nodes.RENDERED_PINS = Nodes.PINS.querySelectorAll('[type]');
+    return Nodes.RENDERED_PINS;
   };
 
   var removeActivePin = function () {
-    var activeMapPin = NODES.pins.querySelector('.map__pin--active');
+    var activeMapPin = Nodes.PINS.querySelector('.map__pin--active');
     if (activeMapPin) {
       activeMapPin.classList.remove('map__pin--active');
     }
@@ -82,8 +97,8 @@
     var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
     if (idx) {
       window.card.remove();
-      window.card.render(window.data.getFilter()[idx]);
-      NODES.renderedPins[idx].classList.add('map__pin--active');
+      window.card.render(window.data.getFiltered()[idx]);
+      Nodes.RENDERED_PINS[idx].classList.add('map__pin--active');
     }
   };
 
@@ -99,33 +114,22 @@
   var dragHandler = function (evt) {
     evt.preventDefault();
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
+    var startCoords = new Coordinate(evt.clientX, evt.clientY);
 
     var mouseMoveHandler = function (moveEvt) {
       moveEvt.preventDefault();
 
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
+      var shift = new Coordinate(startCoords.x - moveEvt.clientX, startCoords.y - moveEvt.clientY);
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
+      startCoords.setX(moveEvt.clientX);
+      startCoords.setY(moveEvt.clientY);
 
-      var actualX = NODES.mainPin.offsetLeft - shift.x;
-      var actualY = NODES.mainPin.offsetTop - shift.y;
+      var actualCoords = new Coordinate(getBorderMovingMainPin(Nodes.MAIN_PIN.offsetLeft - shift.x, MapBorder.MIN_X, MapBorder.MAX_X), getBorderMovingMainPin(Nodes.MAIN_PIN.offsetTop - shift.y, MapBorder.MIN_Y, MapBorder.MAX_Y));
+      var triangleCoords = new Coordinate(actualCoords.x - shift.x + MainPin.WIDTH / 2, actualCoords.y + MainPin.FULL_HEIGHT);
 
-      var triangleActualX = getBorderMovingMainPin(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) - shift.x + MAIN_PIN.width / 2;
-      var triangleActualY = getBorderMovingMainPin(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + MAIN_PIN.fullHeight;
-
-      NODES.mainPin.style.top = getBorderMovingMainPin(actualY, MAP_BORDER.minY, MAP_BORDER.maxY) + 'px';
-      NODES.mainPin.style.left = getBorderMovingMainPin(actualX, MAP_BORDER.minX, MAP_BORDER.maxX) + 'px';
-      window.form.nodes.inputAddress.value = triangleActualX + ', ' + triangleActualY;
+      Nodes.MAIN_PIN.style.top = actualCoords.y + 'px';
+      Nodes.MAIN_PIN.style.left = actualCoords.x + 'px';
+      window.form.nodes.INPUT_ADDRESS.value = triangleCoords.x + ', ' + triangleCoords.y;
     };
 
     var mouseUpHandler = function (upEvt) {
@@ -142,22 +146,20 @@
   var mapEnterPressHandler = function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       window.dom.openMap();
-      NODES.mainPin.removeEventListener('keydown', mapEnterPressHandler);
-      NODES.mainPin.removeEventListener('click', mainPinClickHandler);
+      Nodes.MAIN_PIN.removeEventListener('keydown', mapEnterPressHandler);
+      Nodes.MAIN_PIN.removeEventListener('click', mainPinClickHandler);
     }
   };
 
   var mainPinClickHandler = function () {
-    NODES.mainPin.removeEventListener('click', mainPinClickHandler);
-    NODES.mainPin.removeEventListener('keydown', mapEnterPressHandler);
+    Nodes.MAIN_PIN.removeEventListener('click', mainPinClickHandler);
+    Nodes.MAIN_PIN.removeEventListener('keydown', mapEnterPressHandler);
     window.dom.openMap();
-    NODES.mainPin.addEventListener('mousedown', dragHandler);
   };
 
   var HANDLERS_DATA = [
-    [NODES.mainPin, 'click', mainPinClickHandler],
-    [NODES.mainPin, 'keydown', mapEnterPressHandler],
-    [NODES.pins, 'click', pinClickHandler]
+    [Nodes.MAIN_PIN, 'click', mainPinClickHandler],
+    [Nodes.MAIN_PIN, 'keydown', mapEnterPressHandler]
   ];
 
   var addHandlers = function () {
@@ -168,10 +170,12 @@
     render: renderPins,
     removeActive: removeActivePin,
     mainPinCoordinates: mainPinCoordinates,
-    mainPin: MAIN_PIN,
-    nodes: NODES,
+    main: MainPin,
+    nodes: Nodes,
     addHandlers: addHandlers,
     mainPinClickHandler: mainPinClickHandler,
-    mapEnterPressHandler: mapEnterPressHandler
+    mapEnterPressHandler: mapEnterPressHandler,
+    clickHandler: pinClickHandler,
+    dragHandler: dragHandler
   };
 })();
