@@ -30,6 +30,8 @@
     this.y = y;
   };
 
+  var startCoords;
+
   var SelectorsData = {
     MAIN_PIN: '.map__pin--main',
     PINS: '.map__pins',
@@ -108,35 +110,45 @@
     return coordinate;
   };
 
+  var startCoordsHandler = function (evt) {
+    startCoords = new Coordinate(evt.clientX, evt.clientY);
+    return startCoords;
+  };
+
+  var mouseMoveHandler = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = new Coordinate(startCoords.x - moveEvt.clientX, startCoords.y - moveEvt.clientY);
+
+    startCoords.setXY(moveEvt.clientX, moveEvt.clientY);
+
+    var actualCoords = new Coordinate(getBorderMovingMainPin(Nodes.MAIN_PIN.offsetLeft - shift.x, MapBorder.MIN_X, MapBorder.MAX_X), getBorderMovingMainPin(Nodes.MAIN_PIN.offsetTop - shift.y, MapBorder.MIN_Y, MapBorder.MAX_Y));
+    var triangleCoords = new Coordinate(actualCoords.x - shift.x + MainPin.WIDTH / 2, actualCoords.y + MainPin.FULL_HEIGHT);
+
+    Nodes.MAIN_PIN.style.top = actualCoords.y + 'px';
+    Nodes.MAIN_PIN.style.left = actualCoords.x + 'px';
+    window.form.nodes.INPUT_ADDRESS.value = triangleCoords.x + ', ' + triangleCoords.y;
+  };
+
+  var mouseUpHandler = function (upEvt) {
+    upEvt.preventDefault();
+    window.util.removeHandlers(DRAG_HANDLER_DATA);
+  };
+
+  var DRAG_HANDLER_DATA = [
+    [document, 'mousemove', mouseMoveHandler],
+    [document, 'mouseup', mouseUpHandler]
+  ];
+
   var dragHandler = function (evt) {
+    var prevEvt = evt;
     evt.preventDefault();
 
-    var startCoords = new Coordinate(evt.clientX, evt.clientY);
+    startCoordsHandler(evt);
+    mouseMoveHandler(prevEvt);
+    mouseUpHandler(prevEvt);
 
-    var mouseMoveHandler = function (moveEvt) {
-      moveEvt.preventDefault();
-
-      var shift = new Coordinate(startCoords.x - moveEvt.clientX, startCoords.y - moveEvt.clientY);
-
-      startCoords.setXY(moveEvt.clientX, moveEvt.clientY);
-
-      var actualCoords = new Coordinate(getBorderMovingMainPin(Nodes.MAIN_PIN.offsetLeft - shift.x, MapBorder.MIN_X, MapBorder.MAX_X), getBorderMovingMainPin(Nodes.MAIN_PIN.offsetTop - shift.y, MapBorder.MIN_Y, MapBorder.MAX_Y));
-      var triangleCoords = new Coordinate(actualCoords.x - shift.x + MainPin.WIDTH / 2, actualCoords.y + MainPin.FULL_HEIGHT);
-
-      Nodes.MAIN_PIN.style.top = actualCoords.y + 'px';
-      Nodes.MAIN_PIN.style.left = actualCoords.x + 'px';
-      window.form.nodes.INPUT_ADDRESS.value = triangleCoords.x + ', ' + triangleCoords.y;
-    };
-
-    var mouseUpHandler = function (upEvt) {
-      upEvt.preventDefault();
-
-      document.removeEventListener('mousemove', mouseMoveHandler);
-      document.removeEventListener('mouseup', mouseUpHandler);
-    };
-
-    document.addEventListener('mousemove', mouseMoveHandler);
-    document.addEventListener('mouseup', mouseUpHandler);
+    window.util.setHandlers(DRAG_HANDLER_DATA);
   };
 
   var mapEnterPressHandler = function (evt) {
