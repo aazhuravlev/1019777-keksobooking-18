@@ -27,6 +27,8 @@
 
   var Nodes = window.util.findNodes(SelectorsData);
 
+  var FILTER_HOUSING_FIELDS = [Nodes.HOUSING_TYPE, Nodes.HOUSING_PRICE, Nodes.HOUSING_ROOMS, Nodes.HOUSING_GUESTS];
+
   var checkPriceRange = function (value) {
     if (value <= PriceRange.LOW) {
       return PriceLevel.LOW;
@@ -85,12 +87,15 @@
     window.card.remove();
   });
 
+  var setDefaultFilterFieldsOptions = function (arr) {
+    arr.forEach(function (item) {
+      item.value = ANY_OPTION;
+    });
+  };
+
   var resetFilter = function () {
     window.form.unCheckInput(Nodes.HOUSING_FEATURES);
-    Nodes.HOUSING_TYPE.value = ANY_OPTION;
-    Nodes.HOUSING_PRICE.value = ANY_OPTION;
-    Nodes.HOUSING_ROOMS.value = ANY_OPTION;
-    Nodes.HOUSING_GUESTS.value = ANY_OPTION;
+    setDefaultFilterFieldsOptions(FILTER_HOUSING_FIELDS);
   };
 
   var addHandlers = function () {

@@ -27,22 +27,23 @@
     xhr.timeout = 10000;
   };
 
-  var save = function (data, onLoad, onError) {
+  var save = function (data, onLoad, onError, url) {
     var xhr = new XMLHttpRequest();
     xhrHandler(xhr, onLoad, onError);
-    xhr.open('POST', Url.SAVE);
+    xhr.open('POST', url);
     xhr.send(data);
   };
 
-  var load = function (onLoad, onError) {
+  var load = function (onLoad, onError, url) {
     var xhr = new XMLHttpRequest();
     xhrHandler(xhr, onLoad, onError);
-    xhr.open('GET', Url.LOAD);
+    xhr.open('GET', url);
     xhr.send();
   };
 
   window.backend = {
     load: load,
     save: save,
+    url: Url
   };
 })();

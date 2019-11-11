@@ -27,7 +27,7 @@
       return data;
     };
     isLoading = true;
-    window.backend.load(onLoad, window.dom.renderErrorPopupHandler('load'));
+    window.backend.load(onLoad, window.dom.renderErrorPopupHandler('load'), window.backend.url.LOAD);
   };
 
   window.data = {

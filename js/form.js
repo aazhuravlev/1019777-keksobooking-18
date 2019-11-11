@@ -187,10 +187,9 @@
     removeShadow(Nodes.PRICE_PER_NIGHT);
     window.filter.reset();
     Nodes.AVATAR_PREWIEV.src = 'img/muffin-grey.svg';
-    window.pin.nodes.PINS.removeEventListener('click', window.pin.clickHandler);
-    window.pin.nodes.MAIN_PIN.addEventListener('keydown', window.pin.mapEnterPressHandler);
-    window.pin.nodes.MAIN_PIN.addEventListener('click', window.pin.mainPinClickHandler);
+    window.pin.addHandlers();
     window.util.removeHandlers(HANDLERS_DATA);
+    window.pin.nodes.PINS.removeEventListener('click', window.pin.clickHandler);
     window.filter.nodes.MAP_FILTERS.removeEventListener('change', window.filter.debouncedHandler);
   };
 
@@ -212,7 +211,7 @@
   var submitHandler = function (evt) {
     checkValidationHandler();
     if (checkValidationHandler()) {
-      window.backend.save(new FormData(Nodes.FORM), sendFormHandler, window.dom.renderErrorPopupHandler('save'));
+      window.backend.save(new FormData(Nodes.FORM), sendFormHandler, window.dom.renderErrorPopupHandler('save'), window.backend.url.SAVE);
     }
     evt.preventDefault();
   };
@@ -277,9 +276,9 @@
   var LODGING_PHOTO_CHOOSER_HANDLER = photoChooserHandler(lodgingPhotoRenderHandler, Nodes.IMAGE_INPUT_CHOOSER);
 
   var HANDLERS_DATA = [
-    [Nodes.AD_TITLE, 'blur', validateInput(Nodes.AD_TITLE)],
+    [Nodes.AD_TITLE, 'input', validateInput(Nodes.AD_TITLE)],
     [Nodes.TYPE_SELECT, 'change', typeSelectChangeHandler],
-    [Nodes.PRICE_PER_NIGHT, 'blur', validateInput(Nodes.PRICE_PER_NIGHT)],
+    [Nodes.PRICE_PER_NIGHT, 'input', validateInput(Nodes.PRICE_PER_NIGHT)],
     [Nodes.ROOM_SELECT, 'change', changeRoomsHandler],
     [Nodes.TIME_IN_SELECT, 'change', timeInSelectHandler],
     [Nodes.TIME_OUT_SELECT, 'change', timeOutSelectHandler],
