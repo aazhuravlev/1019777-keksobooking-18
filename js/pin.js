@@ -13,12 +13,12 @@
 
   var MapBorder = {
     MIN_X: 0 - (MainPin.WIDTH / 2),
-    MAX_X: 1200 - (MainPin.WIDTH / 2),
-    MIN_Y: 130,
-    MAX_Y: 630
+    MAX_X: 1200 - (MainPin.WIDTH / 2)
   };
 
   MainPin.FULL_HEIGHT = MainPin.HEIGHT + MainPin.TRIANGLE_HEIGHT;
+  MapBorder.MIN_Y = 130 - MainPin.FULL_HEIGHT;
+  MapBorder.MAX_Y = 630 - MainPin.FULL_HEIGHT;
 
   var Coordinate = function (x, y) {
     this.x = x;
