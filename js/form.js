@@ -76,7 +76,6 @@
   var Nodes = window.util.findNodes(SelectorsData);
   Nodes.FORM_FIELDSETS = Nodes.FORM.querySelectorAll('fieldset');
   Nodes.CAPACITY_OPTIONS = Nodes.CAPACITY_SELECT.querySelectorAll('option');
-  Nodes.LOADED_PHOTO_PREVIEW_CONTAINER = Nodes.LOADED_PHOTOS_CONTAINER.querySelector('.ad-form__photo');
 
   var DEFAULT_DATA = [
     [Nodes.AD_TITLE, VALUE_FIELD, ''],
@@ -258,7 +257,7 @@
       var newLoadedPhotoContainer = Nodes.LOADED_PHOTO_CONTAINER.cloneNode();
       newLoadedPhotoContainer.classList.add('ad-form__photo--loaded');
       newLoadedPhotoContainer.appendChild(getLoadedPhoto(src.result));
-      Nodes.PHOTO_CONTAINER.insertBefore(newLoadedPhotoContainer, Nodes.LOADED_PHOTO_PREVIEW_CONTAINER);
+      Nodes.PHOTO_CONTAINER.insertBefore(newLoadedPhotoContainer, Nodes.LOADED_PHOTO_CONTAINER);
       loadedPhotos = Nodes.LOADED_PHOTOS_CONTAINER.querySelectorAll('.ad-form__photo--loaded');
     };
   };
