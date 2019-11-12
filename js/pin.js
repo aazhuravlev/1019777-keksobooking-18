@@ -30,6 +30,7 @@
     this.y = y;
   };
 
+  var renderedPins;
   var startCoords;
 
   var SelectorsData = {
@@ -66,9 +67,8 @@
   };
 
   var removePins = function () {
-    var mapPins = Nodes.PINS.querySelectorAll('[type]');
-    if (mapPins) {
-      mapPins.forEach(function (pin) {
+    if (renderedPins) {
+      renderedPins.forEach(function (pin) {
         pin.remove();
       });
     }
@@ -76,13 +76,14 @@
 
   var renderPins = function (arr) {
     removePins();
+    var fragment = document.createDocumentFragment();
     arr.forEach(function (item, i) {
       if (item.offer) {
-        Nodes.PINS.appendChild(preparePin(item, i));
+        fragment.appendChild(preparePin(item, i));
       }
     });
-    Nodes.RENDERED_PINS = Nodes.PINS.querySelectorAll('[type]');
-    return Nodes.RENDERED_PINS;
+    Nodes.PINS.appendChild(fragment);
+    renderedPins = Nodes.PINS.querySelectorAll('[type]');
   };
 
   var removeActivePin = function () {
@@ -95,9 +96,9 @@
   var pinClickHandler = function (evt) {
     var idx = evt.target.getAttribute('data-id') || evt.target.parentNode.getAttribute('data-id');
     if (idx) {
-      window.card.remove();
+      window.card.removeHandler();
       window.card.render(window.data.getFiltered()[idx]);
-      Nodes.RENDERED_PINS[idx].classList.add('map__pin--active');
+      renderedPins[idx].classList.add('map__pin--active');
     }
   };
 
@@ -174,6 +175,7 @@
 
   window.pin = {
     render: renderPins,
+    remove: removePins,
     removeActive: removeActivePin,
     mainPinCoordinates: mainPinCoordinates,
     main: MainPin,

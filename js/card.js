@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var AccomodationTypes = {PALACE: 'Дворец', FLAT: 'Квартира', HOUSE: 'Дом', BUNGALO: 'Бунгало'};
+  var AccomodationType = {PALACE: 'Дворец', FLAT: 'Квартира', HOUSE: 'Дом', BUNGALO: 'Бунгало'};
   var ROOM_DECLINATION_VALUES = [' комната', ' комнаты', ' комнат'];
   var GUEST_DECLINATION_VALUES = [' гостя', ' гостей', ' гостей'];
   var ESC_KEYCODE = 27;
@@ -69,7 +69,7 @@
       title: item.title,
       address: item.address,
       price: item.price + '₽/ночь',
-      type: AccomodationTypes[item.type.toUpperCase()],
+      type: AccomodationType[item.type.toUpperCase()],
       capacity: getCapacity(item),
       time: 'Заезд после ' + item.checkin + ', выезд до ' + item.checkout,
       features: getFeatures(item.features),
@@ -94,35 +94,34 @@
   };
 
   var renderCard = function (arr) {
-    removeCard();
+    removeCardHandler();
     Nodes.MAP.insertBefore(prepareCard(arr), Nodes.FILTERS);
-    Nodes.MAP.querySelector('.popup__close').addEventListener('click', removeCard);
+    Nodes.MAP.querySelector('.popup__close').addEventListener('click', removeCardHandler);
     document.addEventListener('keydown', removeMapCardKeydownHandler);
   };
 
-  var removeCard = function () {
-    Nodes.RENDERED_MAP_CARD = Nodes.MAP.querySelector('.map__card');
-    if (Nodes.RENDERED_MAP_CARD) {
+  var removeCardHandler = function () {
+    var renderedMapCard = Nodes.MAP.querySelector('.map__card');
+    if (renderedMapCard) {
       document.removeEventListener('keydown', removeMapCardKeydownHandler);
-      Nodes.MAP.querySelector('.popup__close').removeEventListener('click', removeCard);
-      Nodes.RENDERED_MAP_CARD.remove();
+      Nodes.MAP.querySelector('.popup__close').removeEventListener('click', removeCardHandler);
+      renderedMapCard.remove();
       window.pin.removeActive();
     }
   };
 
   var removeMapCardKeydownHandler = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
-      removeCard();
+      removeCardHandler();
     }
   };
 
-
   window.card = {
     render: renderCard,
-    remove: removeCard,
+    removeHandler: removeCardHandler,
     nodes: Nodes,
     escKeycode: ESC_KEYCODE,
-    accomodationTypes: AccomodationTypes,
+    accomodationType: AccomodationType,
     getPhoto: getPhoto
   };
 })();

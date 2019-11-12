@@ -1,10 +1,10 @@
 'use strict';
 
 (function () {
-  var INDEX = {
-    node: 0,
-    typeListener: 1,
-    handler: 2
+  var Index = {
+    NODE: 0,
+    TYPE_LISTENER: 1,
+    HANDLER: 2
   };
   var DEBOUNCE_INTERVAL = 500;
 
@@ -25,13 +25,13 @@
 
   var setHandlers = function (arr) {
     arr.forEach(function (key) {
-      key[INDEX.node].addEventListener(key[INDEX.typeListener], key[INDEX.handler]);
+      key[Index.NODE].addEventListener(key[Index.TYPE_LISTENER], key[Index.HANDLER]);
     });
   };
 
   var removeHandlers = function (arr) {
     arr.forEach(function (key) {
-      key[INDEX.node].removeEventListener(key[INDEX.typeListener], key[INDEX.handler]);
+      key[Index.NODE].removeEventListener(key[Index.TYPE_LISTENER], key[Index.HANDLER]);
     });
   };
 

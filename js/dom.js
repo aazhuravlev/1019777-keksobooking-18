@@ -7,6 +7,8 @@
     MAIN: 'main',
   };
 
+  var errorButton;
+
   var Nodes = window.util.findNodes(SelectorsData);
   Nodes.ERROR_POPUP = Nodes.ERROR_POPUP_TEMPLATE.content.querySelector('.error');
   Nodes.SUCCESS_POPUP = Nodes.SUCCESS_POPUP_TEMPLATE.content.querySelector('.success');
@@ -33,22 +35,21 @@
     return function () {
       var errorPopup = Nodes.ERROR_POPUP.cloneNode(true);
       Nodes.MAIN.appendChild(errorPopup);
-      Nodes.ERROR_BUTTON = document.querySelector('.error__button');
+      errorButton = document.querySelector('.error__button');
       if (action === 'save') {
-        Nodes.ERROR_BUTTON.addEventListener('click', removeErrorPopupHandler('click'));
+        errorButton.addEventListener('click', removeErrorPopupHandler('click'));
         document.addEventListener('click', removeErrorPopupHandler('click'));
         document.addEventListener('keydown', removeErrorPopupHandler('keydown'));
       } else if (action === 'load') {
-        Nodes.ERROR_BUTTON.addEventListener('click', windowReloadHandler);
+        errorButton.addEventListener('click', windowReloadHandler);
       }
-      return Nodes.ERROR_BUTTON;
     };
   };
 
-  var removePopupHandler = function (evt, action, popup) {
+  var removePopup = function (evt, action, popup) {
     if (popup) {
-      Nodes.POPUP_TEXT = popup.querySelector('p');
-      if (action === 'click' && evt.target !== Nodes.POPUP_TEXT) {
+      var popupText = popup.querySelector('p');
+      if (action === 'click' && evt.target !== popupText) {
         popup.remove();
       } else if (action === 'keydown' && evt.keyCode === window.card.escKeycode) {
         popup.remove();
@@ -58,8 +59,8 @@
 
   var removeSuccessPopupHandler = function (action) {
     return function (evt) {
-      Nodes.RENDERED_SUCCESS_POPUP = document.querySelector('.success');
-      removePopupHandler(evt, action, Nodes.RENDERED_SUCCESS_POPUP);
+      var renderedSuccessPopup = document.querySelector('.success');
+      removePopup(evt, action, renderedSuccessPopup);
       document.removeEventListener('click', removeSuccessPopupHandler('click'));
       document.removeEventListener('keydown', removeSuccessPopupHandler('keydown'));
     };
@@ -67,9 +68,9 @@
 
   var removeErrorPopupHandler = function (action) {
     return function (evt) {
-      Nodes.RENDERED_ERROR_POPUP = document.querySelector('.error');
-      removePopupHandler(evt, action, Nodes.RENDERED_ERROR_POPUP);
-      Nodes.ERROR_BUTTON.removeEventListener('click', removeErrorPopupHandler('click'));
+      var renderedErrorPopup = document.querySelector('.error');
+      removePopup(evt, action, renderedErrorPopup);
+      errorButton.removeEventListener('click', removeErrorPopupHandler('click'));
       document.removeEventListener('click', removeErrorPopupHandler('click'));
       document.removeEventListener('keydown', removeErrorPopupHandler('keydown'));
     };
@@ -77,7 +78,7 @@
 
   var windowReloadHandler = function () {
     location.reload();
-    Nodes.ERROR_BUTTON.removeEventListener('click', windowReloadHandler);
+    errorButton.removeEventListener('click', windowReloadHandler);
   };
 
   window.dom = {

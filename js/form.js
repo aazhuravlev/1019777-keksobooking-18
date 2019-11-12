@@ -4,18 +4,20 @@
   var TIME = ['12:00', '13:00', '14:00'];
   var INPUT_SHADOW_COLOR = '0 0 2px 2px #ff0000';
   var FILE_LOADER_HOVER_COLOR = '#ff5635';
-  var CapacityValues = {
+  var CapacityValue = {
     '1': [2],
     '2': [1, 2],
     '3': [0, 1, 2],
     '100': [3]
   };
 
-  var DefaultValues = {
+  var DefaultValue = {
     ROOM_SELECT: '1',
     CAPACITY_SELECT: '1',
     TIME_IN_SELECT: TIME[0],
-    TIME_OUT_SELECT: TIME[0]
+    TIME_OUT_SELECT: TIME[0],
+    AVATAR_PREWIEV_IMAGE: 'img/muffin-grey.svg',
+    EMPTY: ''
   };
 
   var TypeSelectOptions = {
@@ -23,6 +25,13 @@
     FLAT: '1000',
     HOUSE: '5000',
     PALACE: '10000'
+  };
+
+  var Index = {
+    FLAT: '1',
+    NODE: '0',
+    ATTRIBUTE: '1',
+    VALUE: '2'
   };
 
   var FILE_TYPES = /\.(?:jp(?:e?g|e|2)|gif|png|tiff?|bmp|ico)$/i;
@@ -62,27 +71,23 @@
     IMAGE_INPUT_CHOOSER: '#images'
   };
 
+  var loadedPhotos;
+
   var Nodes = window.util.findNodes(SelectorsData);
   Nodes.FORM_FIELDSETS = Nodes.FORM.querySelectorAll('fieldset');
   Nodes.CAPACITY_OPTIONS = Nodes.CAPACITY_SELECT.querySelectorAll('option');
-
-  var Indexes = {
-    FLAT: '1',
-    NODE: '0',
-    ATTRIBUTE: '1',
-    VALUE: '2'
-  };
+  Nodes.LOADED_PHOTO_PREVIEW_CONTAINER = Nodes.LOADED_PHOTOS_CONTAINER.querySelector('.ad-form__photo');
 
   var DEFAULT_DATA = [
     [Nodes.AD_TITLE, VALUE_FIELD, ''],
-    [Nodes.TYPE_SELECT, VALUE_FIELD, Object.keys(window.card.accomodationTypes)[Indexes.FLAT].toLowerCase()],
+    [Nodes.TYPE_SELECT, VALUE_FIELD, Object.keys(window.card.accomodationType)[Index.FLAT].toLowerCase()],
     [Nodes.PRICE_PER_NIGHT, VALUE_FIELD, ''],
     [Nodes.PRICE_PER_NIGHT, PLACEHOLDER_FIELD, TypeSelectOptions.FLAT],
     [Nodes.PRICE_PER_NIGHT, PLACEHOLDER_FIELD, TypeSelectOptions.FLAT],
-    [Nodes.ROOM_SELECT, VALUE_FIELD, DefaultValues.ROOM_SELECT],
-    [Nodes.CAPACITY_SELECT, VALUE_FIELD, DefaultValues.CAPACITY_SELECT],
-    [Nodes.TIME_IN_SELECT, VALUE_FIELD, DefaultValues.TIME_IN_SELECT],
-    [Nodes.TIME_OUT_SELECT, VALUE_FIELD, DefaultValues.TIME_OUT_SELECT],
+    [Nodes.ROOM_SELECT, VALUE_FIELD, DefaultValue.ROOM_SELECT],
+    [Nodes.CAPACITY_SELECT, VALUE_FIELD, DefaultValue.CAPACITY_SELECT],
+    [Nodes.TIME_IN_SELECT, VALUE_FIELD, DefaultValue.TIME_IN_SELECT],
+    [Nodes.TIME_OUT_SELECT, VALUE_FIELD, DefaultValue.TIME_OUT_SELECT],
     [Nodes.DESCRIPTION, VALUE_FIELD, '']
   ];
 
@@ -117,7 +122,7 @@
     }
   };
 
-  var validateInput = function (node) {
+  var validateInputHandler = function (node) {
     return function () {
       if (node.value === '') {
         addShadow(node);
@@ -139,10 +144,10 @@
     Nodes.CAPACITY_OPTIONS.forEach(function (item) {
       item.disabled = true;
     });
-    CapacityValues[Nodes.ROOM_SELECT.value].forEach(function (item) {
+    CapacityValue[Nodes.ROOM_SELECT.value].forEach(function (item) {
       Nodes.CAPACITY_OPTIONS[item].disabled = false;
     });
-    Nodes.CAPACITY_OPTIONS[CapacityValues[Nodes.ROOM_SELECT.value][0]].selected = true;
+    Nodes.CAPACITY_OPTIONS[CapacityValue[Nodes.ROOM_SELECT.value][0]].selected = true;
   };
 
   var timeInSelectHandler = function () {
@@ -155,7 +160,7 @@
 
   var setDefaultValues = function (arr) {
     arr.forEach(function (key) {
-      key[Indexes.NODE][key[Indexes.ATTRIBUTE]] = key[Indexes.VALUE];
+      key[Index.NODE][key[Index.ATTRIBUTE]] = key[Index.VALUE];
     });
   };
 
@@ -163,30 +168,30 @@
     Nodes.INPUT_ADDRESS.value = value;
   };
 
-  var unCheckInput = function (nodes) {
+  var unCheckInputs = function (nodes) {
     var features = nodes.querySelectorAll('input:checked');
     features.forEach(function (node) {
       node.checked = false;
     });
   };
 
-  var formReset = function () {
+  var formResetHandler = function () {
     window.card.nodes.MAP.classList.add('map--faded');
     setStatusFormFieldsets(Nodes.FORM_FIELDSETS, 'add');
     setInputAddressValue(window.pin.mainPinCoordinates());
-    removeNode(window.pin.nodes.RENDERED_PINS);
-    removeNode(Nodes.LOADED_PHOTOS);
-    window.card.remove();
+    window.pin.remove();
+    removeNode(loadedPhotos);
+    window.card.removeHandler();
     window.pin.nodes.MAIN_PIN.style.top = window.pin.main.START_Y + 'px';
     window.pin.nodes.MAIN_PIN.style.left = window.pin.main.START_X + 'px';
-    Nodes.IMAGE_INPUT_CHOOSER.value = '';
-    Nodes.AVATAR_INPUT_CHOOSER.value = '';
+    Nodes.IMAGE_INPUT_CHOOSER.value = DefaultValue.EMPTY;
+    Nodes.AVATAR_INPUT_CHOOSER.value = DefaultValue.EMPTY;
     setDefaultValues(DEFAULT_DATA);
-    unCheckInput(Nodes.FEATURES);
+    unCheckInputs(Nodes.FEATURES);
     removeShadow(Nodes.AD_TITLE);
     removeShadow(Nodes.PRICE_PER_NIGHT);
     window.filter.reset();
-    Nodes.AVATAR_PREWIEV.src = 'img/muffin-grey.svg';
+    Nodes.AVATAR_PREWIEV.src = DefaultValue.AVATAR_PREWIEV_IMAGE;
     window.pin.addHandlers();
     window.util.removeHandlers(HANDLERS_DATA);
     window.pin.nodes.PINS.removeEventListener('click', window.pin.clickHandler);
@@ -194,14 +199,14 @@
   };
 
   var sendFormHandler = function () {
-    formReset();
+    formResetHandler();
     window.dom.renderSuccessPopupHandler();
     Nodes.FORM.removeEventListener('submit', submitHandler);
   };
 
-  var checkValidationHandler = function () {
-    var adTilteValidationResult = validateInput(Nodes.AD_TITLE)();
-    var pricePerNightValidationResult = validateInput(Nodes.PRICE_PER_NIGHT)();
+  var checkValidation = function () {
+    var adTilteValidationResult = validateInputHandler(Nodes.AD_TITLE)();
+    var pricePerNightValidationResult = validateInputHandler(Nodes.PRICE_PER_NIGHT)();
     if (adTilteValidationResult && pricePerNightValidationResult) {
       return true;
     }
@@ -209,8 +214,8 @@
   };
 
   var submitHandler = function (evt) {
-    checkValidationHandler();
-    if (checkValidationHandler()) {
+    checkValidation();
+    if (checkValidation()) {
       window.backend.save(new FormData(Nodes.FORM), sendFormHandler, window.dom.renderErrorPopupHandler('save'), window.backend.url.SAVE);
     }
     evt.preventDefault();
@@ -222,7 +227,7 @@
     };
   };
 
-  var photoChooserHandler = function (handler, input) {
+  var photoChooserHandler = function (loadHandler, input) {
     return function (evt) {
       var files;
       if (evt.target.files) {
@@ -233,7 +238,7 @@
       Array.prototype.forEach.call(files, function (file) {
         if (FILE_TYPES.test(file.name)) {
           var reader = new FileReader();
-          reader.addEventListener('load', handler(reader));
+          reader.addEventListener('load', loadHandler(reader));
           reader.readAsDataURL(file);
           dragleaveFileLoaderHandler(evt);
         }
@@ -250,20 +255,17 @@
 
   var lodgingPhotoRenderHandler = function (src) {
     return function () {
-      Nodes.LOADED_PHOTO_PREVIEW_CONTAINER = Nodes.LOADED_PHOTOS_CONTAINER.querySelector('.ad-form__photo');
       var newLoadedPhotoContainer = Nodes.LOADED_PHOTO_CONTAINER.cloneNode();
       newLoadedPhotoContainer.classList.add('ad-form__photo--loaded');
       newLoadedPhotoContainer.appendChild(getLoadedPhoto(src.result));
       Nodes.PHOTO_CONTAINER.insertBefore(newLoadedPhotoContainer, Nodes.LOADED_PHOTO_PREVIEW_CONTAINER);
-      Nodes.LOADED_PHOTOS = Nodes.LOADED_PHOTOS_CONTAINER.querySelectorAll('.ad-form__photo--loaded');
-      return Nodes.LOADED_PHOTOS;
+      loadedPhotos = Nodes.LOADED_PHOTOS_CONTAINER.querySelectorAll('.ad-form__photo--loaded');
     };
   };
 
   var dragoverFileLoaderHandler = function (evt) {
     evt.target.style.color = FILE_LOADER_HOVER_COLOR;
     evt.target.style.borderColor = FILE_LOADER_HOVER_COLOR;
-    evt.dataTransfer.dropEffect = 'copy';
     evt.preventDefault();
   };
 
@@ -276,13 +278,13 @@
   var LODGING_PHOTO_CHOOSER_HANDLER = photoChooserHandler(lodgingPhotoRenderHandler, Nodes.IMAGE_INPUT_CHOOSER);
 
   var HANDLERS_DATA = [
-    [Nodes.AD_TITLE, 'input', validateInput(Nodes.AD_TITLE)],
+    [Nodes.AD_TITLE, 'input', validateInputHandler(Nodes.AD_TITLE)],
     [Nodes.TYPE_SELECT, 'change', typeSelectChangeHandler],
-    [Nodes.PRICE_PER_NIGHT, 'input', validateInput(Nodes.PRICE_PER_NIGHT)],
+    [Nodes.PRICE_PER_NIGHT, 'input', validateInputHandler(Nodes.PRICE_PER_NIGHT)],
     [Nodes.ROOM_SELECT, 'change', changeRoomsHandler],
     [Nodes.TIME_IN_SELECT, 'change', timeInSelectHandler],
     [Nodes.TIME_OUT_SELECT, 'change', timeOutSelectHandler],
-    [Nodes.FORM_RESET, 'click', formReset],
+    [Nodes.FORM_RESET, 'click', formResetHandler],
     [Nodes.AVATAR_CHOOSER, 'change', AVATAR_PHOTO_CHOOSER_HANDLER],
     [Nodes.LODGING_PHOTO_CHOOSER, 'change', LODGING_PHOTO_CHOOSER_HANDLER],
     [Nodes.AVATAR_DROP_ZONE, 'dragover', dragoverFileLoaderHandler],
@@ -308,7 +310,7 @@
     setStatusFieldsets: setStatusFormFieldsets,
     nodes: Nodes,
     addHandlers: addHandlers,
-    unCheckInput: unCheckInput,
+    unCheckInputs: unCheckInputs,
     setDisabledStatus: setDisabledStatusForm
   };
 })();

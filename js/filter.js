@@ -84,7 +84,7 @@
 
   var debouncedFilterHandler = window.util.debounce(function () {
     window.pin.render(window.data.getFiltered(window.data.get()));
-    window.card.remove();
+    window.card.removeHandler();
   });
 
   var setDefaultFilterFieldsOptions = function (arr) {
@@ -94,7 +94,7 @@
   };
 
   var resetFilter = function () {
-    window.form.unCheckInput(Nodes.HOUSING_FEATURES);
+    window.form.unCheckInputs(Nodes.HOUSING_FEATURES);
     setDefaultFilterFieldsOptions(FILTER_HOUSING_FIELDS);
   };
 
