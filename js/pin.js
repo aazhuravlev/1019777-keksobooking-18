@@ -33,13 +33,12 @@
   var renderedPins;
   var startCoords;
 
-  var SelectorsData = {
-    MAIN_PIN: '.map__pin--main',
-    PINS: '.map__pins',
-    PIN_TEMPLATE: '#pin',
+  var Nodes = {
+    MAIN_PIN: document.querySelector('.map__pin--main'),
+    PINS: document.querySelector('.map__pins'),
+    PIN_TEMPLATE: document.querySelector('#pin'),
   };
 
-  var Nodes = window.util.findNodes(SelectorsData);
   Nodes.MAP_PIN = Nodes.PIN_TEMPLATE.content.querySelector('.map__pin');
 
   var mainPinCoordinates = function () {
@@ -133,10 +132,10 @@
 
   var mouseUpHandler = function (upEvt) {
     upEvt.preventDefault();
-    window.util.removeHandlers(DRAG_HANDLER_DATA);
+    window.util.removeHandlers(dragHandlersData);
   };
 
-  var DRAG_HANDLER_DATA = [
+  var dragHandlersData = [
     [document, 'mousemove', mouseMoveHandler],
     [document, 'mouseup', mouseUpHandler]
   ];
@@ -149,28 +148,28 @@
     mouseMoveHandler(prevEvt);
     mouseUpHandler(prevEvt);
 
-    window.util.setHandlers(DRAG_HANDLER_DATA);
+    window.util.setHandlers(dragHandlersData);
   };
 
   var mapEnterPressHandler = function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
-      window.util.removeHandlers(HANDLERS_DATA);
+      window.util.removeHandlers(handlersData);
       window.dom.openMap();
     }
   };
 
   var mainPinClickHandler = function () {
-    window.util.removeHandlers(HANDLERS_DATA);
+    window.util.removeHandlers(handlersData);
     window.dom.openMap();
   };
 
-  var HANDLERS_DATA = [
+  var handlersData = [
     [Nodes.MAIN_PIN, 'click', mainPinClickHandler],
     [Nodes.MAIN_PIN, 'keydown', mapEnterPressHandler]
   ];
 
   var addHandlers = function () {
-    window.util.setHandlers(HANDLERS_DATA);
+    window.util.setHandlers(handlersData);
   };
 
   window.pin = {

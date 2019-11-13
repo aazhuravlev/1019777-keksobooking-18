@@ -24,13 +24,11 @@
 
   var CONTENT_KEYS = Object.keys(Content);
 
-  var SelectorsData = {
-    MAP: '.map',
-    SIMILAR_CARDS_TEMPLATE: '#card',
-    FILTERS: '.map__filters-container'
+  var Nodes = {
+    MAP: document.querySelector('.map'),
+    SIMILAR_CARDS_TEMPLATE: document.querySelector('#card'),
+    FILTERS: document.querySelector('.map__filters-container')
   };
-
-  var Nodes = window.util.findNodes(SelectorsData);
 
   Nodes.MAP_CARD_TEMPLATE = Nodes.SIMILAR_CARDS_TEMPLATE.content.querySelector('.map__card');
 

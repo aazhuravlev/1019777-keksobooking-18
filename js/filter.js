@@ -16,16 +16,14 @@
 
   var ANY_OPTION = 'any';
 
-  var SelectorsData = {
-    HOUSING_TYPE: '#housing-type',
-    HOUSING_PRICE: '#housing-price',
-    HOUSING_ROOMS: '#housing-rooms',
-    HOUSING_GUESTS: '#housing-guests',
-    HOUSING_FEATURES: '#housing-features',
-    MAP_FILTERS: '.map__filters'
+  var Nodes = {
+    HOUSING_TYPE: document.querySelector('#housing-type'),
+    HOUSING_PRICE: document.querySelector('#housing-price'),
+    HOUSING_ROOMS: document.querySelector('#housing-rooms'),
+    HOUSING_GUESTS: document.querySelector('#housing-guests'),
+    HOUSING_FEATURES: document.querySelector('#housing-features'),
+    MAP_FILTERS: document.querySelector('.map__filters')
   };
-
-  var Nodes = window.util.findNodes(SelectorsData);
 
   var FILTER_HOUSING_FIELDS = [Nodes.HOUSING_TYPE, Nodes.HOUSING_PRICE, Nodes.HOUSING_ROOMS, Nodes.HOUSING_GUESTS];
 

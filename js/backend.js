@@ -8,11 +8,12 @@
 
   var Xhr = {
     TIMEOUT: 10000,
-    SUCCESS: 200
+    SUCCESS: 200,
+    JSON_RESPONSE_TYPE: 'json'
   };
 
   var xhrHandler = function (xhr, onLoad, onError) {
-    xhr.responseType = 'json';
+    xhr.responseType = Xhr.JSON_RESPONSE_TYPE;
     xhr.addEventListener('load', function () {
       if (xhr.status === Xhr.SUCCESS) {
         onLoad(xhr.response);

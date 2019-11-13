@@ -46,36 +46,35 @@
   var VALUE_FIELD = 'value';
   var PLACEHOLDER_FIELD = 'placeholder';
 
-  var SelectorsData = {
-    FORM: '.ad-form',
-    FORM_RESET: '.ad-form__reset',
-    INPUT_ADDRESS: '#address',
-    AD_TITLE: '#title',
-    TYPE_SELECT: '#type',
-    ROOM_SELECT: '#room_number',
-    CAPACITY_SELECT: '#capacity',
-    TIME_IN_SELECT: '#timein',
-    TIME_OUT_SELECT: '#timeout',
-    PRICE_PER_NIGHT: '#price',
-    DESCRIPTION: '#description',
-    FEATURES: '.features',
-    AVATAR_CHOOSER: '.ad-form__field input[type=file]',
-    AVATAR_PREWIEV: '.ad-form-header__preview img',
-    LODGING_PHOTO_CHOOSER: '.ad-form__upload input[type=file]',
-    PHOTO_CONTAINER: '.ad-form__photo-container',
-    LOADED_PHOTOS_CONTAINER: '.ad-form__photo-container',
-    LOADED_PHOTO_CONTAINER: '.ad-form__photo',
-    AVATAR_DROP_ZONE: '.ad-form-header__drop-zone',
-    LODGING_DROP_ZONE: '.ad-form__drop-zone',
-    AVATAR_INPUT_CHOOSER: '#avatar',
-    IMAGE_INPUT_CHOOSER: '#images'
+  var Nodes = {
+    FORM: document.querySelector('.ad-form'),
+    FORM_RESET: document.querySelector('.ad-form__reset'),
+    INPUT_ADDRESS: document.querySelector('#address'),
+    AD_TITLE: document.querySelector('#title'),
+    TYPE_SELECT: document.querySelector('#type'),
+    ROOM_SELECT: document.querySelector('#room_number'),
+    CAPACITY_SELECT: document.querySelector('#capacity'),
+    TIME_IN_SELECT: document.querySelector('#timein'),
+    TIME_OUT_SELECT: document.querySelector('#timeout'),
+    PRICE_PER_NIGHT: document.querySelector('#price'),
+    DESCRIPTION: document.querySelector('#description'),
+    FEATURES: document.querySelector('.features'),
+    AVATAR_CHOOSER: document.querySelector('.ad-form__field input[type=file]'),
+    AVATAR_PREWIEV: document.querySelector('.ad-form-header__preview img'),
+    LODGING_PHOTO_CHOOSER: document.querySelector('.ad-form__upload input[type=file]'),
+    PHOTO_CONTAINER: document.querySelector('.ad-form__photo-container'),
+    LOADED_PHOTOS_CONTAINER: document.querySelector('.ad-form__photo-container'),
+    LOADED_PHOTO_CONTAINER: document.querySelector('.ad-form__photo'),
+    AVATAR_DROP_ZONE: document.querySelector('.ad-form-header__drop-zone'),
+    LODGING_DROP_ZONE: document.querySelector('.ad-form__drop-zone'),
+    AVATAR_INPUT_CHOOSER: document.querySelector('#avatar'),
+    IMAGE_INPUT_CHOOSER: document.querySelector('#images')
   };
 
-  var loadedPhotos;
-
-  var Nodes = window.util.findNodes(SelectorsData);
   Nodes.FORM_FIELDSETS = Nodes.FORM.querySelectorAll('fieldset');
   Nodes.CAPACITY_OPTIONS = Nodes.CAPACITY_SELECT.querySelectorAll('option');
+
+  var loadedPhotos;
 
   var DEFAULT_DATA = [
     [Nodes.AD_TITLE, VALUE_FIELD, ''],
@@ -192,7 +191,7 @@
     window.filter.reset();
     Nodes.AVATAR_PREWIEV.src = DefaultValue.AVATAR_PREWIEV_IMAGE;
     window.pin.addHandlers();
-    window.util.removeHandlers(HANDLERS_DATA);
+    window.util.removeHandlers(handlersData);
     window.pin.nodes.PINS.removeEventListener('click', window.pin.clickHandler);
     window.filter.nodes.MAP_FILTERS.removeEventListener('change', window.filter.debouncedHandler);
   };
@@ -273,10 +272,10 @@
     evt.preventDefault();
   };
 
-  var AVATAR_PHOTO_CHOOSER_HANDLER = photoChooserHandler(avatarLoadHandler, Nodes.AVATAR_INPUT_CHOOSER);
-  var LODGING_PHOTO_CHOOSER_HANDLER = photoChooserHandler(lodgingPhotoRenderHandler, Nodes.IMAGE_INPUT_CHOOSER);
+  var avatarPhotoChooserHandler = photoChooserHandler(avatarLoadHandler, Nodes.AVATAR_INPUT_CHOOSER);
+  var LodgingPhotoChooserHandler = photoChooserHandler(lodgingPhotoRenderHandler, Nodes.IMAGE_INPUT_CHOOSER);
 
-  var HANDLERS_DATA = [
+  var handlersData = [
     [Nodes.AD_TITLE, 'input', validateInputHandler(Nodes.AD_TITLE)],
     [Nodes.TYPE_SELECT, 'change', typeSelectChangeHandler],
     [Nodes.PRICE_PER_NIGHT, 'input', validateInputHandler(Nodes.PRICE_PER_NIGHT)],
@@ -284,21 +283,21 @@
     [Nodes.TIME_IN_SELECT, 'change', timeInSelectHandler],
     [Nodes.TIME_OUT_SELECT, 'change', timeOutSelectHandler],
     [Nodes.FORM_RESET, 'click', formResetHandler],
-    [Nodes.AVATAR_CHOOSER, 'change', AVATAR_PHOTO_CHOOSER_HANDLER],
-    [Nodes.LODGING_PHOTO_CHOOSER, 'change', LODGING_PHOTO_CHOOSER_HANDLER],
+    [Nodes.AVATAR_CHOOSER, 'change', avatarPhotoChooserHandler],
+    [Nodes.LODGING_PHOTO_CHOOSER, 'change', LodgingPhotoChooserHandler],
     [Nodes.AVATAR_DROP_ZONE, 'dragover', dragoverFileLoaderHandler],
     [Nodes.LODGING_DROP_ZONE, 'dragover', dragoverFileLoaderHandler],
     [Nodes.AVATAR_DROP_ZONE, 'dragleave', dragleaveFileLoaderHandler],
     [Nodes.LODGING_DROP_ZONE, 'dragleave', dragleaveFileLoaderHandler],
-    [Nodes.AVATAR_DROP_ZONE, 'drop', AVATAR_PHOTO_CHOOSER_HANDLER],
-    [Nodes.LODGING_DROP_ZONE, 'drop', LODGING_PHOTO_CHOOSER_HANDLER]
+    [Nodes.AVATAR_DROP_ZONE, 'drop', avatarPhotoChooserHandler],
+    [Nodes.LODGING_DROP_ZONE, 'drop', LodgingPhotoChooserHandler]
   ];
 
   var addHandlers = function () {
     Nodes.FORM.addEventListener('submit', submitHandler);
     setStatusFormFieldsets(Nodes.FORM_FIELDSETS, 'remove');
     setInputAddressValue(window.pin.mainPinCoordinates());
-    window.util.setHandlers(HANDLERS_DATA);
+    window.util.setHandlers(handlersData);
   };
 
   var setDisabledStatusForm = function () {
